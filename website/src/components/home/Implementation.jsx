@@ -61,11 +61,7 @@ export default function Implementation() {
             <motion.div
               key={tech.name}
               whileHover={{ y: -4 }}
-              className={`p-6 rounded-2xl text-center ${
-                isDark
-                  ? 'bg-dark-card/60 border border-white/5'
-                  : 'bg-white border border-gray-200'
-              }`}
+              className={`p-6 rounded-2xl text-center ${isDark ? 'card-dark' : 'card-light'}`}
             >
               <tech.icon className="text-primary text-3xl mx-auto mb-3" />
               <h3 className={`text-lg font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{tech.name}</h3>
@@ -90,9 +86,7 @@ export default function Implementation() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.15, type: 'spring' }}
                   whileHover={{ scale: 1.1 }}
-                  className={`group relative px-4 py-3 rounded-xl cursor-default ${
-                    isDark ? 'bg-dark-card border border-primary/20' : 'bg-light-card border border-primary/20'
-                  } hover:border-primary/60 hover:shadow-lg hover:shadow-primary/10 transition-all`}
+                  className={`group relative px-4 py-3 rounded-xl cursor-default ${isDark ? 'card-dark' : 'card-light'} transition-all`}
                 >
                   <span className={`text-sm font-semibold ${isDark ? 'text-neon-purple' : 'text-primary'}`}>
                     {node.label}
@@ -126,8 +120,8 @@ export default function Implementation() {
 
       {/* Code Snippet */}
       <ScrollReveal>
-        <div className={`relative rounded-2xl overflow-hidden ${isDark ? 'border border-white/5' : 'border border-gray-200'}`}>
-          <div className={`flex items-center justify-between px-4 py-2 ${isDark ? 'bg-dark-card' : 'bg-gray-100'}`}>
+          <div className={`relative rounded-2xl overflow-hidden ${isDark ? 'border border-white/8 bg-dark-card/50' : 'border border-primary/10 bg-white shadow-lg shadow-primary/5'}`}>
+          <div className={`flex items-center justify-between px-4 py-2 ${isDark ? 'bg-dark-bg/60' : 'bg-gray-50/80'}`}>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500/80" />
               <div className="w-3 h-3 rounded-full bg-yellow-500/80" />

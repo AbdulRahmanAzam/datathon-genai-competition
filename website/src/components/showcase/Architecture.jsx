@@ -43,8 +43,8 @@ export default function Architecture() {
                   whileHover={{ scale: 1.05 }}
                   className={`relative p-6 rounded-2xl cursor-default transition-all duration-300 ${
                     isDark
-                      ? 'bg-dark-card border-2 hover:shadow-lg'
-                      : 'bg-white border-2 hover:shadow-lg'
+                      ? 'card-dark border-2 hover:shadow-lg'
+                      : 'card-light border-2 hover:shadow-lg'
                   }`}
                   style={{
                     borderColor: activeNode === node.id ? nodeColors[i] : isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.08)',

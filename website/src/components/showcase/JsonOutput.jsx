@@ -106,7 +106,7 @@ export default function JsonOutput() {
 
       <ScrollReveal>
         <div className="max-w-4xl mx-auto">
-          <div className={`rounded-2xl overflow-hidden ${isDark ? 'border border-white/5' : 'border border-gray-200'}`}>
+            <div className={`rounded-2xl overflow-hidden ${isDark ? 'card-dark' : 'card-light'}`}>
             {/* Header */}
             <div className={`flex items-center justify-between px-4 py-2 ${isDark ? 'bg-dark-card' : 'bg-gray-100'}`}>
               <div className="flex items-center gap-2">

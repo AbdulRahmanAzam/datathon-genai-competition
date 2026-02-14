@@ -28,11 +28,11 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? isDark
-            ? 'bg-dark-bg/90 backdrop-blur-lg shadow-lg shadow-primary/5'
-            : 'bg-white/90 backdrop-blur-lg shadow-lg'
+            ? 'bg-dark-bg/80 backdrop-blur-xl shadow-lg shadow-primary/5 border-b border-white/5'
+            : 'bg-white/80 backdrop-blur-xl shadow-lg shadow-primary/5 border-b border-primary/5'
           : 'bg-transparent'
       }`}
     >
@@ -68,8 +68,10 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <button
               onClick={toggle}
-              className={`p-2 rounded-lg transition-all duration-300 ${
-                isDark ? 'text-yellow-400 hover:bg-white/10' : 'text-gray-600 hover:bg-gray-100'
+              className={`p-2.5 rounded-xl transition-all duration-300 ${
+                isDark
+                  ? 'text-amber-300 hover:bg-amber-300/10 hover:text-amber-200'
+                  : 'text-indigo-500 hover:bg-indigo-50 hover:text-indigo-600'
               }`}
               aria-label="Toggle theme"
             >

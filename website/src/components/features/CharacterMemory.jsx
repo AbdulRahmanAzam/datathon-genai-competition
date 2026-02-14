@@ -49,7 +49,7 @@ export default function CharacterMemory() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ scale: 1.05 }}
-              className={`p-4 rounded-xl text-center ${isDark ? 'bg-dark-card border border-white/5' : 'bg-white border border-gray-200'}`}
+              className={`p-4 rounded-xl text-center ${isDark ? 'card-dark' : 'card-light'}`}
             >
               <div
                 className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-xl font-bold text-white"
@@ -86,7 +86,7 @@ export default function CharacterMemory() {
 
               {/* Card */}
               <div className={`ml-14 md:ml-0 ${i % 2 === 0 ? 'md:mr-auto md:pr-12 md:w-1/2' : 'md:ml-auto md:pl-12 md:w-1/2'}`}>
-                <div className={`p-4 rounded-xl ${isDark ? 'bg-dark-card/80 border border-white/5' : 'bg-white border border-gray-200'}`}>
+                <div className={`p-4 rounded-xl ${isDark ? 'card-dark' : 'card-light'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`text-xs font-mono ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Turn {entry.turn}</span>
                     <span

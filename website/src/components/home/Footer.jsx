@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className={`relative py-16 px-4 sm:px-6 lg:px-8 overflow-hidden ${isDark ? 'bg-dark-surface' : 'bg-light-surface'}`}>
       {/* Background pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+      <div className={`absolute inset-0 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'} opacity-50`} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

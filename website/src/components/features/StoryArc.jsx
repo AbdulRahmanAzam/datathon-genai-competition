@@ -124,7 +124,7 @@ export default function StoryArc() {
             <ScrollReveal key={act.label} delay={i * 0.15}>
               <motion.div
                 whileHover={{ y: -4 }}
-                className={`p-6 rounded-2xl ${isDark ? 'bg-dark-card/80 border border-white/5' : 'bg-white border border-gray-200'}`}
+                className={`p-6 rounded-2xl ${isDark ? 'card-dark' : 'card-light'}`}
               >
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: act.color }} />

@@ -48,7 +48,7 @@ export default function SampleNarrative() {
         </div>
 
         {/* Card */}
-        <div className={`relative rounded-2xl overflow-hidden min-h-[200px] ${isDark ? 'bg-dark-card border border-white/5' : 'bg-white border border-gray-200'}`}>
+        <div className={`relative rounded-2xl overflow-hidden min-h-[200px] ${isDark ? 'card-dark' : 'card-light'}`}>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}

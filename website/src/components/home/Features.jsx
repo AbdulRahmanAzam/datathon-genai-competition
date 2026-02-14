@@ -37,10 +37,8 @@ export default function Features() {
               <motion.div
                 whileHover={{ scale: 1.03, y: -4 }}
                 className={`group relative p-6 rounded-2xl transition-all duration-300 cursor-default ${
-                  isDark
-                    ? 'bg-dark-card/80 hover:bg-dark-card border border-white/5 hover:border-primary/30'
-                    : 'bg-white hover:bg-light-card border border-gray-200 hover:border-primary/30'
-                } hover:shadow-lg hover:shadow-primary/10`}
+                  isDark ? 'card-dark' : 'card-light'
+                }`}
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-4 group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300">
                   <Icon className="text-primary text-xl group-hover:text-accent transition-colors duration-300" />

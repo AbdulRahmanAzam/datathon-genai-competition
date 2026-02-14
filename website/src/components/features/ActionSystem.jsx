@@ -29,11 +29,7 @@ export default function ActionSystem() {
               onMouseEnter={() => setHoveredAction(action.name)}
               onMouseLeave={() => setHoveredAction(null)}
               whileHover={{ scale: 1.08, y: -8 }}
-              className={`relative group p-5 rounded-2xl text-center transition-all duration-300 cursor-default ${
-                isDark
-                  ? 'bg-dark-card/80 border border-white/5 hover:border-primary/40'
-                  : 'bg-white border border-gray-200 hover:border-primary/40'
-              } hover:shadow-lg hover:shadow-primary/10`}
+              className={`relative group p-5 rounded-2xl text-center transition-all duration-300 cursor-default ${isDark ? 'card-dark' : 'card-light'}`}
             >
               <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
                 {action.icon}

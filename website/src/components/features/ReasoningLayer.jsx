@@ -73,9 +73,9 @@ export default function ReasoningLayer() {
         </ScrollReveal>
 
         {/* Reasoning steps */}
-        <div className={`rounded-2xl overflow-hidden ${isDark ? 'bg-dark-card border border-white/5' : 'bg-white border border-gray-200'}`}>
+        <div className={`rounded-2xl overflow-hidden ${isDark ? 'card-dark' : 'card-light'}`}>
           {/* Terminal header */}
-          <div className={`flex items-center gap-2 px-4 py-2 ${isDark ? 'bg-dark-bg/50' : 'bg-gray-50'}`}>
+          <div className={`flex items-center gap-2 px-4 py-2 ${isDark ? 'bg-dark-bg/60' : 'bg-gray-50/80'}`}>
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
