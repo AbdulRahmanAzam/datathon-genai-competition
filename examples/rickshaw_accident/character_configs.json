@@ -1,0 +1,20 @@
+{
+    "characters": [
+        {
+            "name": "Saleem",
+            "description": "Poor rickshaw driver, sole earner for family of 5. Speaks Urdu-English mix, uses 'bhai' and 'yaar'. Panicked and defensive after minor accident with expensive car."
+        },
+        {
+            "name": "Ahmed Malik",
+            "description": "Successful businessman late for international flight. Impatient, entitled. Speaking formally but stressed about missing flight and damage to his car."
+        },
+        {
+            "name": "Constable Raza",
+            "description": "15-year traffic police veteran, underpaid and cynical. Just wants to clear traffic and maybe get a 'facilitation fee'. Sees this as everyday nuisance."
+        },
+        {
+            "name": "Uncle Jameel",
+            "description": "Local shopkeeper who witnessed everything. Nosy, loves drama, gives unsolicited advice in thick Urdu accent. Claims to know 'someone in police'."
+        }
+    ]
+}
