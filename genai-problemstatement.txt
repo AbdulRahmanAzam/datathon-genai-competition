@@ -1,0 +1,117 @@
+Hackfest x Datathon 2026
+Module: Generative AI
+Problem Statement
+1 Introduction
+The Generative AI module of the Hackfest x Datathon challenges participants to move beyond
+linear text generation. You are required to design a Multi-Agent Narrative System where
+autonomous agents navigate a world defined by a ”Story Seed.” Unlike traditional chatbots,
+these agents must possess a sense of agent memory, and the ability to execute non-verbal
+actions to resolve conflicts and achieve goals.
+2 Resources & Tooling
+2.1 Base Repository
+A starter codebase, including environment configurations and the initial story seed, is provided
+here:
+https://github.com/itbaans/GenAi
+DSS
+2.2 Configuration and Technical Constraints
+The repository includes configuration files containing critical parameters that must be respected,
+including but not limited to:
+• Context Length (max
+context
+length): The maximum token limit for the entire input
+buffer, including character memory and prompt construction.
+• Max Tokens Per Prompt (max
+model generation/output.
+tokens
+per
+prompt): The maximum limit for a single
+• Character Profiles: Specific persona traits, goals, and starting inventories that define
+agent behavior.
+• Dialogue Turns (max
+turns): The simulation is strictly limited to a maximum of 25
+turns to ensure narrative conciseness.
+• Temperature: While the baseline is set in the code, participants are allowed to change
+to fine-tune the balance between creative narration and logical consistency.
+Participants must ensure their system logic accounts for these constraints to prevent ”hal
+lucinations,” truncated responses, or broken state transitions.
+2.3 Model Restrictions
+Participants are encouraged to use Open-Source models or Free APIs (e.g., Google Gem
+ini Free Tier). Your system must be designed to run effectively in a standard development
+environment without requiring paid credits.
+3 System Architecture
+The base repository provides the foundational setup for this architecture, including a pre-defined
+Director(Orchestrator) and Character Personas.
+1
+3.1 The Director (Pre-defined)
+The Director is already implemented in the codebase as the primary controller of the narrative.
+Its role is to act as a ”Narrative Engine” responsible for:
+• Turn-Taking: Managing the logic of which character should speak or act next.
+• Narrative Pacing: Ensuring the story adheres to the provided Story Seed and progresses
+toward a meaningful conclusion within the 25-turn limit.
+• Context Management: Providing characters with the necessary environmental data.
+3.2 Character Personas (Pre-defined)
+Each character is defined in the code with specific personality traits. These characteristics are
+designed to drive friction and dialogue; you must ensure agents maintain a consistent voice
+based on these pre-defined traits.
+3.3 Mandatory Components for Implementation
+Your solution must implement the following core components. While characters are defined in
+the seed, they may be enhanced to support these agentic functions:
+• Character Memory: Participants must implement individual memory buffers for each
+character. This allows agents to track specific knowledge, current inventory, and evolving
+perceptions of others, ensuring logical consistency across turns.
+• Action System: Students must implement a mechanism where agents perform non
+verbal behaviors. These actions must result in a tangible update to the Story State or be
+reflected in the subsequent narration.
+• Reasoning: Participants are required to implement a reasoning layer. Agents should
+”think” through their goals and environmental constraints to decide whether to Talk or
+Act.
+4 Interaction and Action Requirements
+The simulation is strictly limited to a total of 25 dialogue turns. Within these 25 turns, the
+system must trigger at least 5 distinct Actions.
+• Defining Actions: Actions are non-verbal behaviors executed by an agent that modify
+the Story State.
+• Action Logic: An agent should ”decide” to perform an action when the dialogue alone
+is insufficient to reach their goal. For example, instead of just saying they are leaving, an
+agent performs the action Leave
+Room, which must then be updated in the Story State so
+other agents are aware of their absence.
+• Purpose of Actions: Actions serve to break dialogue loops and force the narrative
+forward (e.g., Search
+Object, Trade
+5 Deliverables & Output Files
+Item, Unlock
+Door, Betray
+Ally).
+Your system is required to generate the following output files (exact fields may vary, but core
+content should be similar):
+2
+5.1 Narration Output (story
+output.json)
+This file records the final narrative trace of the simulation. It should contain:
+• Metadata: Title, seed story description.
+• Events: A chronological list of turns, including:– type: ”dialogue” or ”narration”.– speaker: Who spoke (for dialogue).– content: The actual text generated.– turn: The turn number.
+• Conclusion: Why the story ended.
+5.2 Prompts Log (prompts
+log.json)
+This file serves as a debug/audit log for the LLM interactions. It should track:
+• timestamp: When the request was made.
+• agent: Which agent (Director or Character) made the request.
+• prompt: The full text prompt sent to the LLM.
+• response: The raw response received from the model.
+5.3 Technical Submission
+• Technical Report: A PDF (LaTeX) describing your architecture and action logic.
+• Codebase: Modular, commented code with a clear README.md for easy reproduction.
+Pro-Tip: Logging Placement
+Code for both the json files is already set up in the repository so you only need to set
+this up if you decide to change your code base
+6 Evaluation Criteria
+The following metrics will be used for final assessment:
+Metric
+Story Completion
+Character Consistency
+Memory Tracking
+Director Effectiveness
+Penalty Warning
+Code Execution: If the evaluation team is unable to run your code or view the gener
+ated narration using the provided instructions, the submission will be heavily penalized.
+Ensure your README.md is exhaustive and clear

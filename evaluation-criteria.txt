@@ -1,0 +1,113 @@
+Evaluation Rubric 
+GenAI_DSS: Multi-Agent Narrative System 
+Overview 
+This rubric is used to evaluate submissions for the GenAI_DSS Hackfest × Datathon. 
+Participants are expected to extend the provided starter codebase and demonstrate a working 
+multi-agent narrative system with coherent story progression and clear system design. 
+Total Marks: 100 
+ 
+Evaluation Criteria 
+Component Excellent / Full Marks Partial / Poor Performance 
+GitHub Repository 
+& Working System 
+(25 marks) 
+● System runs successfully 
+using the provided 
+instructions.  
+● Repository is 
+well-structured and code 
+is clean, modular, and 
+readable. 
+● Repository exists but is 
+poorly organized, difficult 
+to run.  
+● The system is partially or 
+fully non-functional. 
+JSON Files 
+Compliance 
+(15 marks) 
+● All required input and 
+output JSON files strictly 
+follow the problem 
+statement. 
+● Fields are complete, 
+meaningful, and 
+consistent with the 
+narrative flow. 
+● Missing, malformed, or 
+inconsistent JSON files. 
+● Output does not 
+accurately reflect the 
+system execution. 
+Feature 
+Implementation 
+Beyond Base 
+Design 
+(15 marks) 
+● Implements all required 
+functionality and 
+introduces meaningful 
+extensions beyond the 
+starter kit, such as 
+actions, memory, or 
+improved reasoning. 
+● Features are stable and 
+well-integrated. 
+● Limited or incorrect 
+feature implementation. 
+● Little or no improvement 
+beyond the provided base 
+design. 
+Documentation & 
+Report 
+● Clear README with 
+setup and usage 
+● Incomplete or unclear 
+documentation. 
+(20 marks) instructions. Design 
+report explains what was 
+built, why design 
+decisions were made, 
+and how the system 
+works. 
+● Demonstrates originality 
+with minimal reliance on 
+AI-generated content. 
+● Design decisions are 
+poorly justified or heavily 
+AI-generated without 
+understanding. 
+Q/A Session with 
+Judges 
+(15 marks) 
+● Demonstrates strong 
+understanding of the 
+system architecture, 
+agent interactions, and 
+design choices. 
+● Provides clear justification 
+for implementation 
+decisions. 
+● Unable to clearly explain 
+the system or justify 
+design decisions. 
+Story Narration 
+Quality 
+(10 marks) 
+● Narrative is coherent, 
+engaging, and logically 
+structured. Director 
+narration and agent 
+interactions contribute 
+meaningfully to story 
+progression. 
+● Evaluation is subjective 
+and accompanied by 
+judge comments. 
+● Narration lacks 
+coherence or clarity. Story 
+progression is weak or 
+difficult to follow. 
+ 
+Note: Story Narration Quality is evaluated subjectively. Judges are expected to provide brief 
+written comments to justify the awarded score.

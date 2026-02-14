@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #7C4DFF;
+  --color-secondary: #651FFF;
+  --color-accent: #D500F9;
+  --color-dark-bg: #121212;
+  --color-dark-surface: #1E1E2E;
+  --color-dark-card: #252540;
+  --color-light-bg: #FFFFFF;
+  --color-light-surface: #F5F3FF;
+  --color-light-card: #EDE7F6;
+  --color-neon-purple: #B388FF;
+  --color-neon-pink: #FF80AB;
+  --color-neon-blue: #82B1FF;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-sans);
+    margin: 0;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1a1a2e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .bg-grid-pattern {
+    background-image:
+      linear-gradient(rgba(124, 77, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 77, 255, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(124, 77, 255, 0.3), 0 0 60px rgba(124, 77, 255, 0.1);
+  }
+  .glow-text {
+    text-shadow: 0 0 20px rgba(124, 77, 255, 0.5), 0 0 40px rgba(213, 0, 249, 0.3);
+  }
+  .neon-border {
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    box-shadow: inset 0 0 20px rgba(124, 77, 255, 0.05), 0 0 15px rgba(124, 77, 255, 0.1);
+  }
+}
