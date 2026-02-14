@@ -16,15 +16,55 @@ from src.graph.narrative_graph import NarrativeGraph
 from src.story_state import StoryStateManager
 
 
+def find_seed_story(story_name: str = None):
+    """Find a seed story from the examples directory.
+    
+    If story_name is given, look for that specific folder.
+    Otherwise, use the first available example.
+    """
+    examples_dir = project_root / "examples"
+    
+    if story_name:
+        story_dir = examples_dir / story_name
+        if story_dir.exists():
+            return story_dir
+    
+    # Find any available example
+    if examples_dir.exists():
+        for child in sorted(examples_dir.iterdir()):
+            if child.is_dir() and (child / "seed_story.json").exists():
+                return child
+    
+    return None
+
+
 async def main():
-    # Load seed story from examples
-    examples_dir = project_root / "examples" / "rickshaw_accident"
+    # Determine which story to run
+    story_name = os.getenv("STORY_NAME", None)
+    if len(sys.argv) > 1:
+        story_name = sys.argv[1]
+
+    examples_dir = find_seed_story(story_name)
+    if not examples_dir:
+        print("Error: No seed story found in examples/ directory.")
+        print("Create examples/<story_name>/seed_story.json and character_configs.json")
+        sys.exit(1)
 
     seed_story = json.loads((examples_dir / "seed_story.json").read_text())
     char_configs = json.loads((examples_dir / "character_configs.json").read_text())
 
     # Initialize config
     config = StoryConfig()
+
+    # Allow overriding max_turns via environment or seed story
+    if "max_turns" in seed_story:
+        config.max_turns = seed_story["max_turns"]
+    env_turns = os.getenv("MAX_TURNS")
+    if env_turns:
+        config.max_turns = int(env_turns)
+
+    # Auto-calculate min_actions based on turn budget
+    config.min_actions = max(2, config.max_turns // 5)
 
     # Create character agents
     characters = [
@@ -41,17 +81,19 @@ async def main():
     # Build and run narrative graph
     story_graph = NarrativeGraph(config, characters, director)
 
-    print("Starting Narrative Game…")
+    print("Starting Narrative Film…")
     print(f"  Title      : {seed_story['title']}")
     print(f"  Scenario   : {seed_story['description']}")
     print(f"  Model      : {config.model_name}")
     print(f"  Max turns  : {config.max_turns}")
-    print(f"  Min actions: {config.min_actions}\n")
+    print(f"  Min actions: {config.min_actions}")
+    print(f"  Characters : {', '.join(c.name for c in characters)}\n")
 
     # Run the game
     final_state = await story_graph.run(
         seed_story=seed_story,
         character_profiles=story_manager.state.character_profiles,
+        total_turns=config.max_turns,
     )
 
     # ── Print results ───────────────────────────────────────────────────
@@ -82,7 +124,7 @@ async def main():
     print(f"Distinct actions: {distinct}")
     print(f"Actions taken   : {actions}")
 
-    # ── Save story_output.json (backward‑compatible) ────────────────────
+    # ── Save story_output.json ──────────────────────────────────────────
     output_path = project_root / "story_output.json"
     output_data = {
         "title": seed_story.get("title"),
@@ -93,15 +135,7 @@ async def main():
             "conclusion_reason": final_state.get("conclusion_reason"),
             "distinct_actions": distinct,
             "actions_taken": actions,
-            "world_state": {
-                "lane_blocked": final_state.get("lane_blocked", True),
-                "traffic_level": final_state.get("traffic_level", 8),
-                "tension_level": final_state.get("tension_level", 7),
-                "police_present": final_state.get("police_present", False),
-                "evidence": final_state.get("evidence", {}),
-                "settlement_offer": final_state.get("settlement_offer"),
-                "resolution_flags": final_state.get("resolution_flags", {}),
-            },
+            "world_state": final_state.get("world_state", {}),
         },
     }
 

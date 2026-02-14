@@ -1195,9 +1195,10 @@ function WorldBadge({ label, value, isDark }) {
 
 /* ═════════════════════════════════════════════════════════════════════
    AGENTS VIEW – shows each agent's talk/actions clearly
+   Each card shows: WHO did WHAT (said / performed) with full content
    ═════════════════════════════════════════════════════════════════════ */
 function AgentsView({ timeline, isDark, chars }) {
-  /* Collect only events that belong to specific agents (dialogue, actions, reasoning) */
+  /* Collect only events that belong to specific agents */
   const agentEvents = timeline.filter(evt =>
     evt.type === 'event' || evt.type === 'reasoning'
   );
@@ -1233,17 +1234,21 @@ function AgentsView({ timeline, isDark, chars }) {
         {chars.map((c, i) => {
           const stats = agentStats[c.name] || { talks: 0, actions: 0 };
           const color = CHAR_COLORS[i % CHAR_COLORS.length];
+          const emoji = EMOTION_MAP[(stats.lastEmotion || '').toLowerCase()] || '';
           return (
             <div
               key={c.name}
               className={`flex items-center gap-2 px-3 py-2 rounded-xl ${isDark ? 'bg-white/3' : 'bg-gray-50'}`}
             >
-              <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+              <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white shadow-sm"
                 style={{ backgroundColor: color }}>{c.name[0]}</div>
               <div>
-                <div className="text-xs font-semibold" style={{ color }}>{c.name}</div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold" style={{ color }}>{c.name}</span>
+                  {emoji && <span className="text-xs">{emoji}</span>}
+                </div>
                 <div className={`text-[10px] ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
-                  {stats.talks} talks · {stats.actions} actions
+                  {stats.talks} dialogue · {stats.actions} actions
                 </div>
               </div>
             </div>
@@ -1251,132 +1256,145 @@ function AgentsView({ timeline, isDark, chars }) {
         })}
       </div>
 
-      {/* Sequential event list */}
-      <AnimatePresence initial={false}>
-        {agentEvents.map((evt, idx) => {
-          const color = charColor(evt.speaker, chars);
-          const isAction = evt.type === 'event' && !!evt.actionType;
-          const isDialogue = evt.type === 'event' && !evt.actionType;
-          const isReasoning = evt.type === 'reasoning';
-          const emotionEmoji = EMOTION_MAP[(evt.emotion || '').toLowerCase()] || '';
+      {/* Sequential event list showing WHO said/did WHAT */}
+      <div className="space-y-2">
+        <AnimatePresence initial={false}>
+          {agentEvents.map((evt, idx) => {
+            const color = charColor(evt.speaker, chars);
+            const isAction = evt.type === 'event' && !!evt.actionType;
+            const isDialogue = evt.type === 'event' && !evt.actionType;
+            const isReasoning = evt.type === 'reasoning';
+            const emotionEmoji = EMOTION_MAP[(evt.emotion || '').toLowerCase()] || '';
 
-          return (
-            <motion.div
-              key={`agent-${idx}`}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-              className={`rounded-xl overflow-hidden ${
-                isDark ? 'bg-white/2 border border-white/5' : 'bg-white border border-gray-100 shadow-sm'
-              }`}
-            >
-              {/* Agent header bar */}
-              <div
-                className="flex items-center gap-2.5 px-4 py-2.5"
-                style={{ borderBottom: `2px solid ${color}20` }}
-              >
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm"
-                  style={{ backgroundColor: color }}>
-                  {evt.speaker?.[0]}
-                </div>
-                <span className="text-sm font-bold" style={{ color }}>{evt.speaker}</span>
-
-                {/* Type badge */}
-                {isDialogue && (
-                  <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                    isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'
-                  }`}>Dialogue</span>
-                )}
-                {isAction && (
-                  <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                    isDark ? 'bg-orange-500/15 text-orange-400' : 'bg-orange-100 text-orange-600'
-                  }`}>Action</span>
-                )}
-                {isReasoning && (
-                  <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                    isDark ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-50 text-purple-600'
-                  }`}>Thinking</span>
-                )}
-
-                {/* Action type chip */}
-                {isAction && evt.actionType && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-400 font-mono flex items-center gap-0.5">
-                    <FiZap size={9} /> {evt.actionType}
-                  </span>
-                )}
-
-                {/* Emotion */}
-                {evt.emotion && (
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 ${
-                    isDark ? 'bg-white/5 text-gray-400' : 'bg-gray-100 text-gray-500'
-                  }`}>
-                    {emotionEmoji && <span>{emotionEmoji}</span>}
-                    {evt.emotion}
-                  </span>
-                )}
-
-                {/* Turn */}
-                <span className={`ml-auto text-[10px] font-mono ${
-                  isDark ? 'text-gray-600' : 'text-gray-400'
-                }`}>T{evt.turn}</span>
-              </div>
-
-              {/* Content body */}
-              <div className="px-4 py-3">
-                {/* For reasoning events: show the thought process */}
-                {isReasoning && (
-                  <div className="space-y-1.5">
+            /* Reasoning events: compact card */
+            if (isReasoning) {
+              return (
+                <motion.div
+                  key={`agent-${idx}`}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`rounded-lg px-4 py-2.5 border-l-[3px] ${
+                    isDark ? 'bg-purple-500/5 border-purple-500/30' : 'bg-purple-50/50 border-purple-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-white"
+                      style={{ backgroundColor: color }}>{evt.speaker?.[0]}</div>
+                    <span className="text-xs font-bold" style={{ color }}>{evt.speaker}</span>
+                    <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                      isDark ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-100 text-purple-600'
+                    }`}>Thinking</span>
+                    <span className={`ml-auto text-[10px] font-mono ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>T{evt.turn}</span>
+                  </div>
+                  <div className="space-y-1 ml-7">
                     {evt.observation && (
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <span className={`font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Observes: </span>
-                        {evt.observation}
-                      </div>
-                    )}
-                    {evt.reasoning && (
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <span className={`font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Thinks: </span>
-                        {evt.reasoning}
-                      </div>
-                    )}
-                    <div className={`text-xs mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                      <span className="font-semibold">Decision: </span>
-                      <span className={`font-mono px-1.5 py-0.5 rounded ${
-                        evt.mode === 'ACT'
-                          ? 'bg-orange-500/15 text-orange-400'
-                          : isDark ? 'bg-white/5 text-gray-400' : 'bg-gray-100 text-gray-500'
-                      }`}>{evt.mode}</span>
-                      {evt.mode === 'ACT' && evt.action?.type && (
-                        <span className="ml-1.5 text-orange-400">→ {evt.action.type}</span>
-                      )}
-                    </div>
-                    {evt.speechPreview && (
-                      <p className={`text-xs italic mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                        "{evt.speechPreview}…"
+                      <p className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <span className="font-semibold">Observes:</span> {evt.observation}
                       </p>
                     )}
+                    {evt.reasoning && (
+                      <p className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <span className="font-semibold">Thinks:</span> {evt.reasoning}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                        evt.mode === 'ACT' ? 'bg-orange-500/15 text-orange-400' : isDark ? 'bg-white/5 text-gray-400' : 'bg-gray-100 text-gray-500'
+                      }`}>{evt.mode}</span>
+                      {evt.mode === 'ACT' && evt.action?.type && (
+                        <span className="text-[10px] text-orange-400">→ {evt.action.type}</span>
+                      )}
+                      {evt.emotion && (
+                        <span className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                          {emotionEmoji} {evt.emotion}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                )}
+                </motion.div>
+              );
+            }
 
-                {/* For dialogue events: show what they said */}
-                {isDialogue && (
-                  <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
-                    <span className={isDark ? 'text-gray-500' : 'text-gray-400'}>&ldquo;</span>
-                    {evt.content}
-                    <span className={isDark ? 'text-gray-500' : 'text-gray-400'}>&rdquo;</span>
-                  </p>
-                )}
+            /* Dialogue & Action events: prominent card showing content */
+            return (
+              <motion.div
+                key={`agent-${idx}`}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                className={`rounded-xl overflow-hidden ${
+                  isAction
+                    ? isDark ? 'bg-orange-500/5 border border-orange-500/15' : 'bg-orange-50/80 border border-orange-200'
+                    : isDark ? 'bg-white/2 border border-white/5' : 'bg-white border border-gray-100 shadow-sm'
+                }`}
+              >
+                {/* Agent header: Speaker said / performed */}
+                <div className="px-4 py-2.5" style={{ borderBottom: `2px solid ${color}20` }}>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm"
+                      style={{ backgroundColor: color }}>{evt.speaker?.[0]}</div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-bold" style={{ color }}>{evt.speaker}</span>
+                      <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                        {isDialogue ? 'said:' : 'performed:'}
+                      </span>
+                    </div>
 
-                {/* For action events: show what they did */}
-                {isAction && (
-                  <p className={`text-sm italic leading-relaxed ${isDark ? 'text-orange-200/70' : 'text-orange-700'}`}>
-                    {evt.content}
-                  </p>
-                )}
-              </div>
-            </motion.div>
-          );
-        })}
-      </AnimatePresence>
+                    {/* Badges */}
+                    {isAction && (
+                      <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+                        isDark ? 'bg-orange-500/15 text-orange-400' : 'bg-orange-100 text-orange-600'
+                      }`}>Action</span>
+                    )}
+                    {isAction && evt.actionType && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-400 font-mono flex items-center gap-0.5">
+                        <FiZap size={9} /> {evt.actionType}
+                      </span>
+                    )}
+                    {evt.emotion && (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 ${
+                        isDark ? 'bg-white/5 text-gray-400' : 'bg-gray-100 text-gray-500'
+                      }`}>
+                        {emotionEmoji && <span>{emotionEmoji}</span>}
+                        {evt.emotion}
+                      </span>
+                    )}
+                    <span className={`ml-auto text-[10px] font-mono ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
+                      Turn {evt.turn}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content: the actual dialogue or action narration */}
+                <div className="px-4 py-3 ml-9">
+                  {isDialogue && (
+                    <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+                      <span className={`text-lg leading-none mr-0.5 ${isDark ? 'text-primary/60' : 'text-primary/40'}`}>&ldquo;</span>
+                      {evt.content}
+                      <span className={`text-lg leading-none ml-0.5 ${isDark ? 'text-primary/60' : 'text-primary/40'}`}>&rdquo;</span>
+                    </p>
+                  )}
+                  {isAction && (
+                    <p className={`text-sm italic leading-relaxed ${isDark ? 'text-orange-200/80' : 'text-orange-700'}`}>
+                      {evt.content}
+                    </p>
+                  )}
+
+                  {/* Reasoning trace below content */}
+                  {(evt.observation || evt.reasoning) && (
+                    <div className={`mt-2.5 pt-2 border-t text-[11px] space-y-0.5 ${
+                      isDark ? 'border-white/5 text-gray-600' : 'border-gray-100 text-gray-400'
+                    }`}>
+                      {evt.observation && <p><span className="font-semibold">Observes:</span> {evt.observation}</p>}
+                      {evt.reasoning && <p><span className="font-semibold">Thinks:</span> {evt.reasoning}</p>}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

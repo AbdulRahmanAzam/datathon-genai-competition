@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
-from langchain_groq import ChatGroq
 from ..config import StoryConfig
+from ..llm_provider import get_llm_provider
 
 
 class BaseAgent(ABC):
@@ -11,28 +11,31 @@ class BaseAgent(ABC):
         self.name = name
         self.config = config
         self.logs = []  # Store logs in memory
-        self.llm = ChatGroq(
-            model=config.model_name,
+        # Use the failover LLM provider instead of direct ChatGroq
+        self._llm_provider = get_llm_provider(
             temperature=config.temperature,
             max_tokens=config.max_tokens_per_prompt,
         )
 
     async def generate_response(self, prompt: str) -> str:
-        """Generate a response using the LLM."""
+        """Generate a response using the failover LLM provider."""
         try:
-            messages = [("human", prompt)]
-            response = await self.llm.ainvoke(messages)
-            self._log_interaction(prompt, response.content)
-            return response.content
+            response_content, provider_used = await self._llm_provider.generate(prompt)
+            self._log_interaction(prompt, response_content, provider_used)
+            if not response_content or not response_content.strip():
+                print(f"[{self.name}] LLM returned empty content via {provider_used}")
+            return response_content
         except Exception as e:
-            print(f"Error generating response for {self.name}: {e}")
+            print(f"[{self.name}] LLM call failed: {e}")
+            self._log_interaction(prompt, f"[ERROR] {e}", "failed")
             return ""
 
-    def _log_interaction(self, prompt: str, response: str):
-        """Log interaction to memory."""
+    def _log_interaction(self, prompt: str, response: str, provider: str = "unknown"):
+        """Log interaction to memory with provider info."""
         entry = {
             "timestamp": datetime.now().isoformat(),
             "agent": self.name,
+            "provider": provider,
             "prompt": prompt,
             "response": response,
         }

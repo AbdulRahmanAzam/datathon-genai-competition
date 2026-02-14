@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import FeaturesPage from './pages/FeaturesPage';
 import ShowcasePage from './pages/ShowcasePage';
 import LivePage from './pages/LivePage';
+import HistoryPage from './pages/HistoryPage';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -27,6 +28,7 @@ function AppContent() {
         <Route path="/features" element={<FeaturesPage />} />
         <Route path="/showcase" element={<ShowcasePage />} />
         <Route path="/live" element={<LivePage />} />
+              <Route path="/history" element={<HistoryPage />} />
       </Routes>
     </div>
   );

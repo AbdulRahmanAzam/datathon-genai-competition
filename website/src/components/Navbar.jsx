@@ -9,6 +9,7 @@ const navLinks = [
   { path: '/features', label: 'Features' },
   { path: '/showcase', label: 'Showcase' },
   { path: '/live', label: 'Live' },
+  { path: '/history', label: 'History' },
 ];
 
 export default function Navbar() {

@@ -11,6 +11,7 @@ class StoryStateManager:
         self.config = config
         self.state = StoryState(
             seed_story=seed_story,
+            total_turns=config.max_turns,
             character_profiles={
                 char["name"]: CharacterProfile(
                     name=char["name"],

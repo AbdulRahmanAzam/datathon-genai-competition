@@ -21,7 +21,7 @@ class CharacterAgent(BaseAgent):
     ) -> Dict[str, Any]:
         """
         Character decides TALK vs ACT and returns strict JSON.
-        Includes one retry + safe fallback.
+        Includes one retry with full context + safe fallback.
         """
         character_profile = story_state.character_profiles.get(self.name)
 
@@ -37,42 +37,82 @@ class CharacterAgent(BaseAgent):
 
         try:
             content = await self.generate_response(prompt)
-            decision = self._parse_decision(content, allowed_actions)
-            if decision is not None:
-                return decision
 
-            # ── retry with repair prompt ────────────────────────────────
+            # If LLM returned empty response, skip straight to contextual retry
+            if content and content.strip():
+                decision = self._parse_decision(content, allowed_actions)
+                if decision is not None:
+                    return decision
+
+            # ── retry with context-rich repair prompt ───────────────────
+            seed = story_state.seed_story or {}
+            scene_desc = seed.get("description", "An unfolding scene")
+            profile_desc = character_profile.description if character_profile else "A character"
+
+            recent = story_state.dialogue_history[-3:]
+            recent_summary = "; ".join(
+                f"{t.speaker}: {t.dialogue[:60]}" for t in recent
+            ) if recent else "No dialogue yet — the scene is just starting"
+
             repair = (
+                f"You are {self.name} — {profile_desc}\n"
+                f"Scene: {scene_desc[:200]}\n"
+                f"Recent: {recent_summary}\n\n"
                 "Your previous response was not valid JSON. "
-                "Return ONLY valid JSON matching this schema:\n"
-                '{"mode": "TALK" or "ACT", '
-                '"speech": "string or null", '
-                '"action": {"type": "ACTION_TYPE", "target": null, "params": {}} or null}\n'
-                "No markdown, no explanation."
+                "Return ONLY valid JSON matching this exact schema:\n"
+                '{"observation": "what you notice right now (1 sentence)", '
+                '"reasoning": "your internal thought (1 sentence)", '
+                '"emotion": "your dominant emotion", '
+                '"mode": "TALK", '
+                '"speech": "your ACTUAL dialogue — 2-3 sentences, stay in character, respond to the scene", '
+                '"action": null}\n'
+                "No markdown, no explanation — ONLY the JSON object."
             )
             content = await self.generate_response(repair)
-            decision = self._parse_decision(content, allowed_actions)
-            if decision is not None:
-                return decision
+            if content and content.strip():
+                decision = self._parse_decision(content, allowed_actions)
+                if decision is not None:
+                    return decision
         except Exception as e:
             print(f"Error in character reasoning for {self.name}: {e}")
 
-        # ── safe fallback ───────────────────────────────────────────────
+        # ── context-aware fallback ──────────────────────────────────────
+        seed = story_state.seed_story or {}
+        scene_desc = seed.get("description", "the scene")
+        profile_desc = (
+            character_profile.description if character_profile else "a person in the scene"
+        )
+
         if force_act and allowed_actions:
             return {
-                "observation": "The situation demands immediate action.",
-                "reasoning": "I must act now, there is no time to waste.",
-                "emotion": "anxious",
+                "observation": f"The situation at {scene_desc[:50]} demands action.",
+                "reasoning": f"As {self.name}, I must act now — there is no time to waste.",
+                "emotion": "determined",
                 "mode": "ACT",
                 "speech": None,
                 "action": {"type": allowed_actions[0], "target": None, "params": {}},
             }
+
+        # Generate a contextual fallback speech
+        recent = story_state.dialogue_history[-1:] if story_state.dialogue_history else []
+        if recent:
+            last = recent[0]
+            fallback_speech = (
+                f"*{self.name} turns to {last.speaker}* "
+                f"Wait — let me think about this for a moment."
+            )
+        else:
+            fallback_speech = (
+                f"*{self.name} surveys the scene* "
+                f"What exactly is going on here?"
+            )
+
         return {
-            "observation": "The scene feels overwhelming.",
-            "reasoning": "I need a moment to collect myself before I decide.",
-            "emotion": "nervous",
+            "observation": f"The scene demands attention.",
+            "reasoning": f"I need to assess the situation before making my move.",
+            "emotion": "alert",
             "mode": "TALK",
-            "speech": f"*{self.name} looks around nervously, taking in the chaotic scene*",
+            "speech": fallback_speech,
             "action": None,
         }
 

@@ -9,6 +9,7 @@ import asyncio
 import json
 import sys
 import os
+from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
@@ -28,6 +29,7 @@ from src.schemas import StoryState, CharacterProfile, DialogueTurn
 from src.agents.character_agent import CharacterAgent
 from src.agents.director_agent import DirectorAgent
 from src.action_system import ActionSystem
+from src.supabase_client import save_story_run, list_story_runs, get_story_run, delete_story_run
 
 app = FastAPI(title="NarrativeVerse API")
 
@@ -61,32 +63,13 @@ def _sse(event: str, data: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(data, default=str)}\n\n"
 
 
-CORE_ACTIONS = {
-    "CALL_POLICE", "RECORD_VIDEO", "MOVE_VEHICLE_ASIDE",
-    "REQUEST_DOCUMENTS", "CHECK_DAMAGE", "PROPOSE_SETTLEMENT",
-    "PAY_FACILITATION_FEE", "ISSUE_CHALLAN", "EXCHANGE_CONTACTS",
-}
-
-
 def _pick_suggested_action(state: StoryState, action_system: ActionSystem):
+    """Pick any unused+allowed action for the current story."""
     used = set(state.actions_taken)
-    missing = CORE_ACTIONS - used
     allowed = set(action_system.get_allowed_actions(state))
-    candidates = missing & allowed
+    candidates = allowed - used
     if not candidates:
         return None
-    preferred = []
-    if not state.police_present:
-        preferred.append("CALL_POLICE")
-    preferred.append("EXCHANGE_CONTACTS")
-    if state.police_present:
-        preferred.extend(["ISSUE_CHALLAN", "PAY_FACILITATION_FEE"])
-    preferred.extend(["RECORD_VIDEO", "MOVE_VEHICLE_ASIDE",
-                      "PROPOSE_SETTLEMENT", "REQUEST_DOCUMENTS",
-                      "CHECK_DAMAGE"])
-    for p in preferred:
-        if p in candidates:
-            return p
     return sorted(candidates)[0]
 
 
@@ -117,11 +100,32 @@ async def generate_story(req: GenerateRequest):
         }
         memories: Dict[str, List[str]] = {c.name: [] for c in req.characters}
 
+        total_turns = config.max_turns
+        min_actions = max(2, total_turns // 5)
+        config.min_actions = min_actions
+
         state = StoryState(
             seed_story=seed_story,
+            total_turns=total_turns,
             character_profiles=char_profiles,
             character_memories=memories,
         )
+
+        # Collect timeline events for Supabase storage
+        sse_timeline: List[Dict[str, Any]] = []
+
+        def _track(event_type: str, data: dict):
+            """Track SSE events for later storage."""
+            sse_timeline.append({"sseType": event_type, **data})
+
+        # ── Plan story arc ──────────────────────────────────────────
+        char_list = [{"name": c.name, "description": c.description} for c in req.characters]
+        arc_plan = await director.plan_story_arc(
+            seed_story=seed_story,
+            characters=char_list,
+            total_turns=total_turns,
+        )
+        state.story_arc_plan = arc_plan
 
         # Send init event
         yield _sse("init", {
@@ -139,7 +143,7 @@ async def generate_story(req: GenerateRequest):
 
             # Hard stop
             if turn_num >= config.max_turns:
-                narration = "The scene finally winds down as the parties reach an uneasy resolution."
+                narration = "The scene draws to its inevitable close."
                 state.is_concluded = True
                 state.conclusion_reason = "Maximum turns reached"
                 state.events.append({
@@ -155,20 +159,24 @@ async def generate_story(req: GenerateRequest):
             force_act = False
             suggested_action = None
 
-            actions_needed = config.min_actions - distinct_actions
+            actions_needed = min_actions - distinct_actions
             if actions_needed > 0 and remaining <= actions_needed + 1:
                 force_act = True
             if state.turns_since_state_change >= 2:
                 force_act = True
-            if turn_num >= 12 and distinct_actions < 3:
+            # Mid-story action pressure
+            mid_point = max(3, total_turns // 2)
+            if turn_num >= mid_point and distinct_actions < max(1, min_actions // 2):
                 force_act = True
-            if turn_num >= 18 and distinct_actions < config.min_actions:
+            # Late-game action pressure
+            late_point = max(4, int(total_turns * 0.7))
+            if turn_num >= late_point and distinct_actions < min_actions:
                 force_act = True
 
-            if force_act and distinct_actions < config.min_actions:
+            if force_act and distinct_actions < min_actions:
                 suggested_action = _pick_suggested_action(state, action_system)
 
-            endgame = turn_num >= (config.max_turns - 3)
+            endgame = remaining <= max(2, int(total_turns * 0.2))
 
             # LLM speaker selection
             available = list(characters_agents.keys())
@@ -199,13 +207,12 @@ async def generate_story(req: GenerateRequest):
                 "endgame": endgame,
                 "distinctActions": distinct_actions,
                 "suggestedAction": suggested_action,
-                "worldState": {
-                    "tension": state.tension_level,
-                    "police": state.police_present,
-                    "laneBlocked": state.lane_blocked,
-                    "crowd": state.crowd_size,
-                    "traffic": state.traffic_level,
-                },
+                "worldState": state.world_state or {},
+            })
+            _track("director_result", {
+                "turn": turn_num, "nextSpeaker": next_speaker,
+                "narration": narration or "", "forceAct": force_act,
+                "endgame": endgame, "distinctActions": distinct_actions,
             })
 
             # ── 2) Character Reason ────────────────────────────────────
@@ -234,6 +241,12 @@ async def generate_story(req: GenerateRequest):
                 "mode": mode,
                 "action": decision.get("action"),
                 "speechPreview": (decision.get("speech") or "")[:120],
+                "observation": decision.get("observation", ""),
+                "reasoning": decision.get("reasoning", ""),
+                "emotion": decision.get("emotion", "neutral"),
+            })
+            _track("reasoning_result", {
+                "turn": turn_num, "speaker": next_speaker, "mode": mode,
                 "observation": decision.get("observation", ""),
                 "reasoning": decision.get("reasoning", ""),
                 "emotion": decision.get("emotion", "neutral"),
@@ -310,6 +323,7 @@ async def generate_story(req: GenerateRequest):
                 }
 
             yield _sse("action_result", event_data)
+            _track("action_result", event_data)
 
             # ── 4) Memory Update ───────────────────────────────────────
             yield _sse("step", {"phase": "memory_update", "turn": state.current_turn})
@@ -332,16 +346,11 @@ async def generate_story(req: GenerateRequest):
                     state.character_memories[name] = state.character_memories[name][-config.memory_buffer_size:]
 
                 if action_meta:
-                    fact_parts = [f"[FACT] {action_meta['type']} executed"]
-                    if state.police_present:
-                        fact_parts.append("police are present")
-                    if not state.lane_blocked:
-                        fact_parts.append("lane is clear")
-                    if state.evidence:
-                        fact_parts.append(f"evidence: {list(state.evidence.keys())}")
-                    if state.settlement_offer:
-                        fact_parts.append(f"settlement offered: {state.settlement_offer}")
-
+                    world = state.world_state or {}
+                    fact_parts = [f"[FACT] {action_meta['type']} executed by {action_meta['actor']}"]
+                    for k, v in world.items():
+                        if isinstance(v, bool) and v:
+                            fact_parts.append(k.replace('_', ' '))
                     global_fact = " | ".join(fact_parts)
                     for name in characters_agents:
                         state.character_memories[name].append(global_fact)
@@ -361,17 +370,23 @@ async def generate_story(req: GenerateRequest):
             should_conclude = False
             conclusion_reason = None
 
+            min_conclusion_turn = max(3, total_turns // 2)
             if state.current_turn >= config.max_turns:
                 should_conclude = True
                 conclusion_reason = "Maximum turns reached"
-            elif state.current_turn < config.min_turns:
+            elif state.current_turn < min_conclusion_turn:
                 should_conclude = False
-            elif len(set(state.actions_taken)) < config.min_actions and state.current_turn < config.max_turns:
+            elif len(set(state.actions_taken)) < min_actions and state.current_turn < config.max_turns:
                 should_conclude = False
             else:
                 should_conclude, conclusion_reason = await director.check_conclusion(state)
 
             yield _sse("conclusion_check", {
+                "turn": state.current_turn,
+                "shouldEnd": should_conclude,
+                "reason": conclusion_reason,
+            })
+            _track("conclusion_check", {
                 "turn": state.current_turn,
                 "shouldEnd": should_conclude,
                 "reason": conclusion_reason,
@@ -413,7 +428,72 @@ async def generate_story(req: GenerateRequest):
 
         yield _sse("done", {"events": state.events})
 
+        # ── Write prompt logs to file ──────────────────────────────────
+        _write_prompt_logs(characters_agents, director)
+
+        # ── Save to Supabase ───────────────────────────────────────────
+        try:
+            summary = {
+                "totalTurns": state.current_turn,
+                "totalActions": len(set(state.actions_taken)),
+                "actionsTaken": list(set(state.actions_taken)),
+                "conclusionReason": state.conclusion_reason or "Completed",
+                "worldState": state.world_state or {},
+            }
+            await save_story_run(
+                title=req.title,
+                description=req.description,
+                characters=[c.model_dump() for c in req.characters],
+                events=state.events,
+                timeline=sse_timeline,
+                summary=summary,
+            )
+        except Exception as e:
+            print(f"[Supabase] Error saving story: {e}")
+
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+# ── Prompt logging ──────────────────────────────────────────────────────
+
+def _write_prompt_logs(
+    characters_agents: Dict[str, CharacterAgent],
+    director: DirectorAgent,
+):
+    """Collect logs from all agents and write to prompts_log.json."""
+    all_logs = []
+
+    # Director logs
+    for entry in director.logs:
+        all_logs.append({
+            "timestamp": entry["timestamp"],
+            "agent": entry["agent"],
+            "prompt": entry["prompt"],
+            "response": entry["response"],
+            "role": "Director",
+        })
+
+    # Character agent logs
+    for name, agent in characters_agents.items():
+        for entry in agent.logs:
+            all_logs.append({
+                "timestamp": entry["timestamp"],
+                "agent": entry["agent"],
+                "prompt": entry["prompt"],
+                "response": entry["response"],
+                "role": f"Character ({name})",
+            })
+
+    # Sort by timestamp
+    all_logs.sort(key=lambda x: x["timestamp"])
+
+    log_path = project_root / "prompts_log.json"
+    try:
+        with open(log_path, "w", encoding="utf-8") as f:
+            json.dump(all_logs, f, indent=2, ensure_ascii=False, default=str)
+        print(f"\n[LOG] Wrote {len(all_logs)} prompt logs to {log_path}")
+    except Exception as e:
+        print(f"[LOG ERROR] Failed to write prompt logs: {e}")
 
 
 # ── Health check ────────────────────────────────────────────────────────
@@ -421,3 +501,32 @@ async def generate_story(req: GenerateRequest):
 @app.get("/api/health")
 async def health():
     return {"status": "ok"}
+
+
+# ── History endpoints ──────────────────────────────────────────────────
+
+@app.get("/api/history")
+async def get_history():
+    """List all past story runs (summaries only)."""
+    runs = await list_story_runs(limit=50)
+    return {"runs": runs}
+
+
+@app.get("/api/history/{run_id}")
+async def get_history_item(run_id: str):
+    """Get a single story run with full timeline data."""
+    run = await get_story_run(run_id)
+    if not run:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=404, content={"error": "Story run not found"})
+    return run
+
+
+@app.delete("/api/history/{run_id}")
+async def delete_history_item(run_id: str):
+    """Delete a story run."""
+    success = await delete_story_run(run_id)
+    if not success:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=404, content={"error": "Failed to delete"})
+    return {"status": "deleted"}

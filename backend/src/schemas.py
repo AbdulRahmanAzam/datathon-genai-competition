@@ -28,16 +28,13 @@ class StoryState(BaseModel):
     is_concluded: bool = False
     conclusion_reason: Optional[str] = None
 
-    # ── World‑state fields ──────────────────────────────────────────────
-    lane_blocked: bool = True
-    traffic_level: int = 8          # 1‑10
-    tension_level: int = 7          # 1‑10
-    crowd_size: int = 5
-    police_present: bool = False
-    bribe_pressure: int = 3         # 0‑10
-    evidence: Dict[str, Any] = Field(default_factory=dict)
-    settlement_offer: Optional[int] = None
-    resolution_flags: Dict[str, bool] = Field(default_factory=dict)
+    # ── Story arc ───────────────────────────────────────────────────────
+    total_turns: int = 25
+    current_phase: str = "setup"
+    story_arc_plan: List[Dict[str, Any]] = Field(default_factory=list)
+
+    # ── Generic world state (dynamic, story-specific) ───────────────────
+    world_state: Dict[str, Any] = Field(default_factory=dict)
 
     # ── Per‑character short‑term memory ─────────────────────────────────
     character_memories: Dict[str, List[str]] = Field(default_factory=dict)

@@ -1,6 +1,3 @@
-Hackfest x Datathon 2026
-Module: Generative AI
-Problem Statement
 1 Introduction
 The Generative AI module of the Hackfest x Datathon challenges participants to move beyond
 linear text generation. You are required to design a Multi-Agent Narrative System where
@@ -114,4 +111,4 @@ Director Effectiveness
 Penalty Warning
 Code Execution: If the evaluation team is unable to run your code or view the gener
 ated narration using the provided instructions, the submission will be heavily penalized.
-Ensure your README.md is exhaustive and clear
+Ensure your README.md is exhaustive and clear.

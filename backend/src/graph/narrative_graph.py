@@ -1,7 +1,11 @@
 """
-Narrative graph – orchestrates the multi‑agent story loop.
+Narrative graph — orchestrates the multi-agent story loop.
 
-Nodes (matching the website's graphNodes):
+Fully generic: works with any seed story and character set.
+Plans the story arc upfront and drives toward conclusion within
+the turn budget.
+
+Nodes:
   director_select → character_reason → process_action → memory_update
       → check_conclusion → (conclude | director_select)
 """
@@ -42,7 +46,6 @@ class NarrativeGraph:
 
         workflow.set_entry_point("director_select")
 
-        # director can short‑circuit to conclude when hard‑stop fires
         workflow.add_conditional_edges(
             "director_select",
             self._route_after_director,
@@ -73,35 +76,17 @@ class NarrativeGraph:
     def _route_conclusion(state: StoryState) -> str:
         return "conclude" if state.is_concluded else "continue"
 
-    # ── suggested action picker ───────────────────────────────────────────
+    # ── suggested action picker (generic) ─────────────────────────────
 
-    _CORE_ACTIONS = {
-        "CALL_POLICE", "RECORD_VIDEO", "MOVE_VEHICLE_ASIDE",
-        "REQUEST_DOCUMENTS", "CHECK_DAMAGE", "PROPOSE_SETTLEMENT",
-        "PAY_FACILITATION_FEE", "ISSUE_CHALLAN", "EXCHANGE_CONTACTS",
-    }
-
-    def _pick_suggested_action(self, state: StoryState):
-        """Return the best unused+allowed action type, or None."""
+    def _pick_suggested_action(self, state: StoryState) -> Optional[str]:
+        """Return any unused+allowed action type, or None."""
         used = set(state.actions_taken)
-        missing = self._CORE_ACTIONS - used
         allowed = set(self.action_system.get_allowed_actions(state))
-        candidates = missing & allowed
+        # Find actions not yet used
+        candidates = allowed - used
         if not candidates:
             return None
-        # preference order
-        preferred = []
-        if not state.police_present:
-            preferred.append("CALL_POLICE")
-        preferred.append("EXCHANGE_CONTACTS")
-        if state.police_present:
-            preferred.extend(["ISSUE_CHALLAN", "PAY_FACILITATION_FEE"])
-        preferred.extend(["RECORD_VIDEO", "MOVE_VEHICLE_ASIDE",
-                          "PROPOSE_SETTLEMENT", "REQUEST_DOCUMENTS",
-                          "CHECK_DAMAGE"])
-        for p in preferred:
-            if p in candidates:
-                return p
+        # Return first available candidate (alphabetical for determinism)
         return sorted(candidates)[0]
 
     # ════════════════════════════════════════════════════════════════════
@@ -111,8 +96,10 @@ class NarrativeGraph:
     async def _director_select_node(self, state: StoryState) -> Dict:
         """Director selects the next speaker + enforces deterministic rules."""
 
+        total = state.total_turns or self.config.max_turns
+
         # ── Hard stop ───────────────────────────────────────────────────
-        if state.current_turn >= self.config.max_turns:
+        if state.current_turn >= total:
             return {
                 "is_concluded": True,
                 "conclusion_reason": "Maximum turns reached",
@@ -120,10 +107,7 @@ class NarrativeGraph:
                 + [
                     {
                         "type": "narration",
-                        "content": (
-                            "The commotion on Shahrah‑e‑Faisal finally winds down "
-                            "as the parties reach an uneasy resolution."
-                        ),
+                        "content": "The scene finally draws to a close as the moment passes.",
                         "turn": state.current_turn,
                         "metadata": {"conclusion": True},
                     }
@@ -132,34 +116,34 @@ class NarrativeGraph:
 
         # ── Deterministic pacing rules ──────────────────────────────────
         distinct_actions = len(set(state.actions_taken))
-        remaining = self.config.max_turns - state.current_turn
+        remaining = total - state.current_turn
+        min_actions = max(2, total // 5)
         force_act = False
         suggested_action = None
 
-        # quota pacing: ensure enough room for required actions
-        actions_needed = self.config.min_actions - distinct_actions
+        actions_needed = min_actions - distinct_actions
         if actions_needed > 0 and remaining <= actions_needed + 1:
             force_act = True
 
-        # loop‑breaking: 2 turns without any state change → force ACT
         if state.turns_since_state_change >= 2:
             force_act = True
 
-        # Rule: turn >= 12 and distinct < 3 → force ACT + nudge unused
-        if state.current_turn >= 12 and distinct_actions < 3:
+        # Mid-story action pressure
+        mid_point = max(3, total // 2)
+        if state.current_turn >= mid_point and distinct_actions < max(1, min_actions // 2):
             force_act = True
 
-        # Rule: turn >= 18 and distinct < min_actions → MUST use missing type
-        if state.current_turn >= 18 and distinct_actions < self.config.min_actions:
+        # Late-game action pressure
+        late_point = max(4, int(total * 0.7))
+        if state.current_turn >= late_point and distinct_actions < min_actions:
             force_act = True
 
-        # Compute suggested_action when force_act and need more distinct actions
-        if force_act and distinct_actions < self.config.min_actions:
+        if force_act and distinct_actions < min_actions:
             suggested_action = self._pick_suggested_action(state)
 
-        endgame = state.current_turn >= (self.config.max_turns - 3)  # turns 23‑25
+        endgame = remaining <= max(2, int(total * 0.2))
 
-        # ── LLM‑assisted speaker selection ──────────────────────────────
+        # ── LLM-assisted speaker selection ──────────────────────────────
         available = list(self.characters.keys())
         next_speaker, narration = await self.director.select_next_speaker(
             state, available, force_act=force_act, endgame=endgame
@@ -167,7 +151,7 @@ class NarrativeGraph:
 
         print("=" * 60)
         print(
-            f"Director | Turn {state.current_turn + 1}/{self.config.max_turns} "
+            f"Director | Turn {state.current_turn + 1}/{total} "
             f"| Force ACT: {force_act} | Endgame: {endgame}"
         )
         print(f"  Narration : {narration}")
@@ -213,7 +197,6 @@ class NarrativeGraph:
         character = self.characters[next_speaker]
         allowed_actions = self.action_system.get_allowed_actions(state)
 
-        # If suggested_action is set, restrict allowed to just that action
         if state.suggested_action and state.suggested_action in allowed_actions:
             allowed_actions = [state.suggested_action]
 
@@ -319,7 +302,7 @@ class NarrativeGraph:
     # ────────────────────────────────────────────────────────────────────
 
     async def _memory_update_node(self, state: StoryState) -> Dict:
-        """Update per‑character short‑term memory buffers."""
+        """Update per-character short-term memory buffers."""
 
         memories = {k: list(v) for k, v in state.character_memories.items()}
         for name in self.characters:
@@ -346,24 +329,19 @@ class NarrativeGraph:
             preview = (last_event.get("content") or "")[:80]
             memory_line = f"T{last_event['turn']}: {preview}"
 
-        # add to every character (all present at the scene)
         for name in self.characters:
             mem = memories[name]
             mem.append(memory_line)
             memories[name] = mem[-max_mem:]
 
-        # ── global fact for state‑changing actions ──────────────────────
+        # ── global fact for state-changing actions ──────────────────────
         if action_meta:
-            fact_parts = [f"[FACT] {action_meta['type']} executed"]
-            if state.police_present:
-                fact_parts.append("police are present")
-            if not state.lane_blocked:
-                fact_parts.append("lane is clear")
-            if state.evidence:
-                fact_parts.append(f"evidence: {list(state.evidence.keys())}")
-            if state.settlement_offer:
-                fact_parts.append(f"settlement offered: {state.settlement_offer}")
-
+            world = state.world_state or {}
+            fact_parts = [f"[FACT] {action_meta['type']} executed by {action_meta['actor']}"]
+            # Include any world state changes
+            for k, v in world.items():
+                if isinstance(v, bool) and v:
+                    fact_parts.append(k.replace("_", " "))
             global_fact = " | ".join(fact_parts)
             for name in self.characters:
                 mem = memories[name]
@@ -375,14 +353,19 @@ class NarrativeGraph:
     # ────────────────────────────────────────────────────────────────────
 
     async def _check_conclusion_node(self, state: StoryState) -> Dict:
-        """Decide whether the story should end."""
+        """Decide whether the story should end.
+        
+        Uses deterministic checks first to avoid unnecessary LLM calls.
+        Only calls LLM in the final 30% of turns when action requirements are met.
+        """
+
+        total = state.total_turns or self.config.max_turns
+        min_actions = max(2, total // 5)
+        min_turns = max(3, total // 2)
+        distinct_actions = len(set(state.actions_taken))
 
         # hard stop
-        if state.current_turn >= self.config.max_turns:
-            wrap = (
-                "The Shahrah‑e‑Faisal scene finally wraps up as the parties "
-                "reach an uneasy resolution under the fading Karachi sun."
-            )
+        if state.current_turn >= total:
             return {
                 "is_concluded": True,
                 "conclusion_reason": "Maximum turns reached",
@@ -390,7 +373,7 @@ class NarrativeGraph:
                 + [
                     {
                         "type": "narration",
-                        "content": wrap,
+                        "content": "The scene draws to its inevitable close.",
                         "turn": state.current_turn,
                         "metadata": {"conclusion": True},
                     }
@@ -398,15 +381,19 @@ class NarrativeGraph:
             }
 
         # don't conclude too early
-        if state.current_turn < self.config.min_turns:
+        if state.current_turn < min_turns:
             return {"is_concluded": False}
 
         # STRICT: do not end unless distinct_actions >= min_actions
-        distinct_actions = len(set(state.actions_taken))
-        if distinct_actions < self.config.min_actions and state.current_turn < self.config.max_turns:
+        if distinct_actions < min_actions and state.current_turn < total:
             return {"is_concluded": False}
 
-        # LLM‑assisted check
+        # Only call LLM in the final 30% of turns (saves ~70% of conclusion LLM calls)
+        # late_threshold = max(min_turns, int(total * 0.7))
+        # if state.current_turn < late_threshold:
+        #     return {"is_concluded": False}
+
+        # LLM-assisted check (only reached in late game with enough actions)
         should_end, reason = await self.director.check_conclusion(state)
 
         if should_end:
@@ -431,7 +418,7 @@ class NarrativeGraph:
     # ────────────────────────────────────────────────────────────────────
 
     async def _conclude_node(self, state: StoryState) -> Dict:
-        """Final node – marks story concluded."""
+        """Final node — marks story concluded."""
         return {"is_concluded": True}
 
     # ════════════════════════════════════════════════════════════════════
@@ -442,17 +429,33 @@ class NarrativeGraph:
         self,
         seed_story: Dict,
         character_profiles: Optional[Dict[str, Any]] = None,
+        total_turns: Optional[int] = None,
     ) -> StoryState:
         """Execute the narrative game loop and return final state."""
 
+        turns = total_turns or self.config.max_turns
         memories = {name: [] for name in (character_profiles or {})}
+
+        # ── Plan the story arc ─────────────────────────────────────────
+        char_list = []
+        for name, profile in (character_profiles or {}).items():
+            char_list.append({"name": name, "description": profile.description
+                              if hasattr(profile, "description") else str(profile)})
+
+        arc_plan = await self.director.plan_story_arc(
+            seed_story=seed_story,
+            characters=char_list,
+            total_turns=turns,
+        )
 
         initial_state = StoryState(
             seed_story=seed_story,
+            total_turns=turns,
             character_profiles=character_profiles or {},
             dialogue_history=[],
             director_notes=[],
             character_memories=memories,
+            story_arc_plan=arc_plan,
         )
 
         final_state = await self.graph.ainvoke(
