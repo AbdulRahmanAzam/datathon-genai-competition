@@ -60,11 +60,17 @@ class CharacterAgent(BaseAgent):
         # ── safe fallback ───────────────────────────────────────────────
         if force_act and allowed_actions:
             return {
+                "observation": "The situation demands immediate action.",
+                "reasoning": "I must act now, there is no time to waste.",
+                "emotion": "anxious",
                 "mode": "ACT",
                 "speech": None,
                 "action": {"type": allowed_actions[0], "target": None, "params": {}},
             }
         return {
+            "observation": "The scene feels overwhelming.",
+            "reasoning": "I need a moment to collect myself before I decide.",
+            "emotion": "nervous",
             "mode": "TALK",
             "speech": f"*{self.name} looks around nervously, taking in the chaotic scene*",
             "action": None,
@@ -84,9 +90,20 @@ class CharacterAgent(BaseAgent):
             if mode not in ("TALK", "ACT"):
                 mode = "TALK"
 
+            # Extract reasoning trace fields
+            observation = data.get("observation", "")
+            reasoning = data.get("reasoning", "")
+            emotion = data.get("emotion", "neutral")
+
+            base = {
+                "observation": str(observation),
+                "reasoning": str(reasoning),
+                "emotion": str(emotion),
+            }
+
             if mode == "TALK":
                 speech = data.get("speech") or data.get("dialogue") or "..."
-                return {"mode": "TALK", "speech": str(speech), "action": None}
+                return {**base, "mode": "TALK", "speech": str(speech), "action": None}
 
             # mode == "ACT"
             action = data.get("action")
@@ -97,9 +114,10 @@ class CharacterAgent(BaseAgent):
             if action_type not in allowed_actions:
                 # action not allowed → graceful degrade to TALK
                 speech = data.get("speech") or f"*{self.name} considers their options*"
-                return {"mode": "TALK", "speech": str(speech), "action": None}
+                return {**base, "mode": "TALK", "speech": str(speech), "action": None}
 
             return {
+                **base,
                 "mode": "ACT",
                 "speech": data.get("speech"),
                 "action": {

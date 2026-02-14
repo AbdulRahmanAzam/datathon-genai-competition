@@ -102,10 +102,20 @@ RULES:
 - Keep dialogue under {config.max_dialogue_length} characters.
 - Output ONLY valid JSON (no markdown, no explanation).
 
-Choose TALK to speak dialogue, or ACT to perform an action.
+=== YOUR REASONING (Think Step-by-Step) ===
+Before you act, think through:
+1. OBSERVE: What do you notice in the scene right now?
+2. GOAL: What are you trying to achieve?
+3. DECISION: Should you TALK (speak dialogue) or ACT (non-verbal action)?
+   - TALK if: You need to communicate, persuade, reveal information, respond to someone
+   - ACT if: Talk alone won't work, you need to take physical action
+4. EMOTION: How are you feeling right now?
 
 JSON OUTPUT (strict schema):
 {{
+  "observation": "What you notice in the scene (1 sentence)",
+  "reasoning": "Your thought process for this decision (1-2 sentences)",
+  "emotion": "your current emotion (e.g. angry, scared, hopeful, frustrated, calm, anxious, relieved)",
   "mode": "TALK" or "ACT",
   "speech": "your dialogue text" or null,
   "action": {{"type": "ACTION_TYPE", "target": null, "params": {{}}}} or null
