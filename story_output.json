@@ -7,92 +7,311 @@
   "events": [
     {
       "type": "narration",
-      "content": "Saleem, the rickshaw driver, is the most likely to break the silence. He's directly involved in the accident and likely feeling the most immediate pressure from the gathering crowd and the approaching police. He yells, attempting to establish his version of events before anyone else can.",
+      "content": "The rickshaw driver, Saleem, steps out of his vehicle, assessing the damage as the crowd gathers, and begins to explain the situation to the onlookers, while Ahmed Malik, the car owner, impatiently checks his watch, realizing he's running late for his flight. The air is filled with the sound of honking horns and murmurs from the crowd.",
       "turn": 0
     },
     {
       "type": "dialogue",
       "speaker": "Saleem",
-      "content": "\"Arre yaar! Dekho toh, dekho! Yeh banda, *yeh banda* full speed mein aaya! Main toh slow hi jaa raha tha, Allah ki kasam! Five logon ka pet pala hai mera, bhai! Iski gaadi dekho, kuch hua bhi hai? Meri rickshaw dekho! Sab kuch kharab! Police aayegi toh woh sirf hum gareebon se paise lenge, jaane do! Kya karein, yaar, kya karein?\"",
+      "content": "Yaar, my fault nahi hai, bhai!",
       "turn": 1
     },
     {
       "type": "narration",
-      "content": "Ahmed Malik, the car driver, bristles at Saleem\u2019s accusation and the implication he\u2019s wealthy enough not to worry about a dent. He steps out of his car, adjusting his expensive shalwar kameez, and surveys the damage with a dismissive air. He\u2019s clearly annoyed by the delay and the gathering crowd, and wants to project an image of control.",
+      "content": "Ahmed Malik, visibly frustrated and glancing at his watch, steps out of his car to confront Saleem, while the crowd continues to grow and the horns honk incessantly. The air is thick with tension as he prepares to respond to Saleem's claim of innocence.",
       "turn": 1
     },
     {
       "type": "dialogue",
       "speaker": "Ahmed Malik",
-      "content": "\u201cFive people\u2019s stomachs? Is that my concern? Look at the state of *my* vehicle! This is a brand new Mercedes, you understand? A dent like that\u2026 the resale value! And frankly, your rickshaw looks perfectly serviceable. Honestly, the dramatics. Just\u2026 move it. I have a flight to catch. An *international* flight. This is costing me money, and now potentially damaging my business dealings. Police will come, fine. Let them do their job. But I haven\u2019t got all day for this nonsense.\u201d",
+      "content": "This is ridiculous, I'm late for my flight!",
       "turn": 2
     },
     {
       "type": "narration",
-      "content": "The escalating argument draws the attention of Constable Raza, a weary-looking traffic policeman who slowly weaves his way through the gathering crowd, already calculating potential earnings. He surveys the scene with a practiced eye, taking in the damaged vehicles and the agitated drivers. A small, cynical smile plays on his lips \u2013 another opportunity has presented itself.",
+      "content": "As the argument between Saleem and Ahmed Malik intensifies, Uncle Jameel, the shopkeeper, steps out of his store and begins to gesture to the growing crowd, trying to create some space between the two drivers. He takes a few steps forward, his eyes fixed on the damaged vehicles, and starts to inspect the scene.",
       "turn": 2
+    },
+    {
+      "type": "narration",
+      "content": "Uncle Jameel pulls out their phone and dials the police. Sirens can be heard approaching in the distance.",
+      "turn": 3,
+      "metadata": {
+        "action": {
+          "type": "CALL_POLICE",
+          "actor": "Uncle Jameel"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "Constable Raza arrives at the scene, his sirens blaring as he steps out of the police car, surveying the commotion and the blocked lane. He approaches the gathering, eyeing the damaged rickshaw and car, and clears his throat to assert his authority.",
+      "turn": 3
     },
     {
       "type": "dialogue",
       "speaker": "Constable Raza",
-      "content": "\"Acha, acha, shant ho jao, shant ho jao. Sab log chup karo thora. Dekho, saab, Mercedes hai toh hai\u2026 aur rickshaw bhi chal rahi hai, bas thodi jhuki hui hai. Five logon ka pet pala hai\u2026haan, haan, sun raha hoon. Sabke pet pale hue hain is shehar mein. \n\nChalo, paperwork hoga, dekhte hain kya hua. *Thora* chai-pani ka kharcha bhi to banta hai, scene dekhte hue. Saab, aapka international flight hai? Dekhte hain, dekhte hain\u2026jaldi karne ki koshish karte hain.\"",
-      "turn": 3
+      "content": "Theek hai, theek hai, sabr karo.",
+      "turn": 4
     },
     {
       "type": "narration",
-      "content": "Saleem, sensing the constable's thinly veiled request for a bribe and desperate to avoid further delay, attempts to appeal to Raza's empathy, hoping to avoid a financial hit. He knows arguing with Malik is pointless; his only leverage is playing on the common ground of hardship with the police officer.",
-      "turn": 3
+      "content": "Constable Raza steps out of his vehicle, surveying the scene as the crowd grows larger, and begins to assess the situation, his eyes fixed on the damaged rickshaw and car. He clears his throat, preparing to take control of the chaotic scene.",
+      "turn": 4
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Constable Raza",
+      "content": "Kya hua?",
+      "turn": 5
+    },
+    {
+      "type": "narration",
+      "content": "As Constable Raza begins to assess the situation, Ahmed Malik, growing increasingly agitated, starts to pace back and forth beside his car, glancing at his watch repeatedly. He then moves towards the boot of his car, as if searching for something.",
+      "turn": 5
+    },
+    {
+      "type": "narration",
+      "content": "Ahmed Malik suggests exchanging phone numbers and addresses so the matter can be settled properly later.",
+      "turn": 6,
+      "metadata": {
+        "action": {
+          "type": "EXCHANGE_CONTACTS",
+          "actor": "Ahmed Malik"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "Saleem, frustrated and worried about the consequences, interrupts Ahmed Malik's suggestion and tries to explain his side of the story to Constable Raza, while the crowd continues to grow and the horns keep honking in the background.",
+      "turn": 6
     },
     {
       "type": "dialogue",
       "speaker": "Saleem",
-      "content": "\"Chai-pani? Bhai, kya bolte ho aap? Meri rickshaw dekho! Jhuki hui hai? Sab kuch garam ho gaya hai, yaar! Five logon ka pet\u2026woh toh main bol raha hoon! Aapko pata bhi hai kitna mushkil hai is shehar mein? International flight\u2026theek hai, theek hai. Lekin meri zindagi bhi to hai! Constable saab, thoda toh sochiye. Kuch toh rahim karein. Main gareeb aadmi hoon, bhai. Isse zyada kya kar sakta hoon?\"",
-      "turn": 4
-    },
-    {
-      "type": "narration",
-      "content": "A voice cuts through the escalating argument. Uncle Jameel, a tea vendor who has been silently observing the scene with a practiced eye, steps forward, balancing a tray of chai glasses. He\u2019s a fixture on Shahrah-e-Faisal, a witness to countless such incidents. He doesn't offer tea immediately, but a weary observation that shifts the focus from the immediate blame game to the larger reality of Karachi life.",
-      "turn": 4
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Uncle Jameel",
-      "content": "\"Aray,aray,aray! Kya nautanki hai yeh? Mercedes wali flight catch karne ki tension mein hai, aur rickshaw wala apne pet ki. Sab ke dukh sunai dete hain, beta. *Main* toh yahan roz dekhta hoon. \n\nDekho, Saab, international flight important hai, par yeh bhi yaad rakho, Karachi mein *sab* important hai. Constable Saab bhi thoda chai-pani ke liye hint kar rahe hain, kya karein? System hai, system! \n\nAur aap, rickshaw wale bhai, roo-dhao mat karo. Five logon ka pet pala hai toh thoda adjust karna seekho. *Mujhe* bhi pata hai mushkil hai, lekin zindagi hi aisee hai. Allah khair kare, sab theek ho jayega\u2026shayed. *Mera ek dost police mein hai, sun lo.*\"",
-      "turn": 5
-    },
-    {
-      "type": "narration",
-      "content": "Ahmed Malik, visibly frustrated by the escalating situation and the casual acceptance of corruption, decides to attempt a different tactic. He\u2019s losing patience and the mention of a police contact by Uncle Jameel seems to solidify his belief that this will be a long, drawn-out, and expensive ordeal. He attempts to bypass the system, appealing directly to Jameel, hoping to leverage his connection.",
-      "turn": 5
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Ahmed Malik",
-      "content": "\u201cA *dost* in the police? Wonderful. Just wonderful. This is precisely what I feared. Uncle Jameel, with all due respect, I do not have time for \u2018adjust karna\u2019 and \u2018Allah khair kare\u2019. My flight is boarding soon! \n\nConstable, forget the \u2018chai-pani\u2019. Forget the paperwork. I will pay for the damage \u2013 a reasonable amount, for the rickshaw, not a ransom \u2013 *if* we can move this along. But this charade\u2026 this is unacceptable. I need to be at the airport. Now. Is there a way to expedite this, or must I escalate this myself?\u201d",
-      "turn": 6
-    },
-    {
-      "type": "narration",
-      "content": "Constable Raza, sensing a potential for a larger payout and a quicker resolution (and avoiding further scrutiny), perks up at Ahmed Malik\u2019s offer. He subtly glances around to ensure no senior officers are within earshot. The crowd is thickening, and the pressure to resolve the situation \u2013 and line his own pockets \u2013 is mounting. He needs to play this carefully, appearing to mediate while maximizing his benefit.",
-      "turn": 6
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Constable Raza",
-      "content": "\"Dekhiye, Saab. Aapki jaldi hai, samajh gaya. Aur Uncle Jameel ne bhi sahi kaha, system hai. Paperwork mein waqt barayega, aur phir\u2026kharcha bhi to hoga. \n\nAcha, suniye. Rickshaw wale bhai ko thoda compensation de dijiyega, theek hai? Bas itna hi. Mein dekhta hoon ke woh satisfied hain, aur aapko bhi airport jaane deta hoon. \n\nFive hazaar. Bas. Five hazaar de dijiyega, aur chaliye. Koi tension nahi. Sab khairiyat se.\"",
+      "content": "Mujhe nuksan nahi hua, bhai, aapka gaadi takra gayi",
       "turn": 7
     },
     {
       "type": "narration",
-      "content": "Ahmed, with a sigh that carried the weight of Karachi itself, pulled out his wallet. Five thousand rupees exchanged hands, a small fortune to Saleem, a pittance to Ahmed, and a perfectly acceptable bribe to Constable Raza. The rickshaw was hastily righted, traffic began to inch forward, and Ahmed, glancing at his watch, sprinted towards the airport terminal. Uncle Jameel watched him go, a knowing smile playing on his lips. 'Allah khair kare,' he murmured, already anticipating the next drama to unfold on Shahrah-e-Faisal. The heat shimmered, the horns blared, and life in Karachi continued, a chaotic symphony of survival and compromise.",
-      "turn": 7,
+      "content": "Constable Raza looks at Saleem and Ahmed Malik, taking in their conflicting accounts, and begins to assess the situation, eyeing the damaged rickshaw and car. He rubs his chin thoughtfully, considering his next move.",
+      "turn": 7
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Constable Raza",
+      "content": "Dono side ki baat sunoonga",
+      "turn": 8
+    },
+    {
+      "type": "narration",
+      "content": "As the argument escalates, Uncle Jameel, a nearby shopkeeper, decides to intervene by pulling out a chair from his shop to create a makeshift barrier between the growing crowd and the accident scene. He begins to direct pedestrians around the blocked lane, trying to restore some order to the chaotic situation.",
+      "turn": 8
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Uncle Jameel",
+      "content": "*Uncle Jameel hesitates, unsure what to do*",
+      "turn": 9
+    },
+    {
+      "type": "narration",
+      "content": "As the commotion grows, Uncle Jameel decides to take matters into his own hands, stepping forward to intervene, his eyes scanning the scene before him. He begins to gesture to the crowd, trying to create some space between the two vehicles, preparing to take a more hands-on approach to resolve the situation.",
+      "turn": 9
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Uncle Jameel",
+      "content": "*Uncle Jameel hesitates, unsure what to do*",
+      "turn": 10
+    },
+    {
+      "type": "narration",
+      "content": "As the argument between Ahmed Malik and Saleem continues, Constable Raza decides to take matters into his own hands and starts to inspect the vehicles, taking out his notebook to potentially ISSUE_CHALLAN. He carefully examines the dented car and the rickshaw, his eyes scanning for any signs of damage or evidence of who might be at fault.",
+      "turn": 10
+    },
+    {
+      "type": "narration",
+      "content": "Constable Raza writes out an official traffic challan, documenting the violation formally.",
+      "turn": 11,
+      "metadata": {
+        "action": {
+          "type": "ISSUE_CHALLAN",
+          "actor": "Constable Raza"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "Ahmed Malik, frustrated with the delay, protests the challan, claiming it's unfair and that Saleem was at fault, while Constable Raza stands firm, explaining the reasons for the challan. The crowd begins to murmur, taking sides in the dispute.",
+      "turn": 11
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Ahmed Malik",
+      "content": "This is absurd, I'm late for my flight",
+      "turn": 12
+    },
+    {
+      "type": "narration",
+      "content": "Saleem, frustrated by the challan and the wealthy businessman's complaints, steps forward to plead his case to Constable Raza, while the crowd's murmurs grow louder and more agitated, as Uncle Jameel watches with a keen eye, wondering if he should intervene, and Ahmed Malik glances at his watch, anxious about missing his flight.",
+      "turn": 12
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Saleem",
+      "content": "Bhai, meri galti nahi hai, yaar",
+      "turn": 13
+    },
+    {
+      "type": "narration",
+      "content": "As the argument escalates, Uncle Jameel decides to intervene, trying to calm the situation by physically stepping between the two drivers, his hands raised in a calming gesture, while also attempting to move the crowd back to clear a path. The crowd begins to part, allowing Uncle Jameel to create some space around the accident scene.",
+      "turn": 13
+    },
+    {
+      "type": "narration",
+      "content": "Uncle Jameel discreetly hands over some cash to Constable Raza as a 'facilitation fee' to speed things along.",
+      "turn": 14,
+      "metadata": {
+        "action": {
+          "type": "PAY_FACILITATION_FEE",
+          "actor": "Uncle Jameel"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "Saleem, feeling frustrated and helpless, tries to plead his case to Constable Raza and the gathering crowd, while Ahmed Malik looks at his watch anxiously, realizing he's running out of time to catch his flight. The scene is becoming more chaotic as the crowd grows and the traffic jam worsens.",
+      "turn": 14
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Saleem",
+      "content": "Bhai, Uncle Jameel ne paise de diye, ab to hum chhod do",
+      "turn": 15
+    },
+    {
+      "type": "narration",
+      "content": "Ahmed Malik, feeling frustrated and pressed for time, steps forward to intervene in the situation, his eyes fixed on Constable Raza who has just received the facilitation fee. The crowd around them continues to grow, with more people gathering to watch the commotion.",
+      "turn": 15
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Ahmed Malik",
+      "content": "This is unacceptable, I'm late",
+      "turn": 16
+    },
+    {
+      "type": "narration",
+      "content": "As the argument escalates, Constable Raza steps forward, pulling out his notebook and begins to WRITE_REPORT, a physical action that may help to de-escalate the situation or provide a new lead in the investigation, while the crowd gathers around, eager to see what will happen next.",
+      "turn": 16
+    },
+    {
+      "type": "narration",
+      "content": "Constable Raza takes out their phone and begins recording video of the damaged vehicles and the scene around them.",
+      "turn": 17,
+      "metadata": {
+        "action": {
+          "type": "RECORD_VIDEO",
+          "actor": "Constable Raza"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "Ahmed Malik, already frustrated with the delay, becomes even more agitated as Constable Raza starts recording the video, realizing this will further prolong the process. He takes a step forward, his face reddening with impatience.",
+      "turn": 17
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Ahmed Malik",
+      "content": "I'm late for my flight",
+      "turn": 18
+    },
+    {
+      "type": "narration",
+      "content": "Saleem, noticing Ahmed Malik's growing frustration, tries to reason with him as Constable Raza continues recording the damage, while Uncle Jameel looks on nervously, hoping his bribe will resolve the issue quickly. The crowd around them grows restless, eager for the traffic to start moving again.",
+      "turn": 18
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Saleem",
+      "content": "Bhai, please chalo, flight miss ho jayega",
+      "turn": 19
+    },
+    {
+      "type": "narration",
+      "content": "As the argument escalates, Constable Raza steps forward, phone still in hand, and begins to inspect the damaged vehicles, taking note of the extent of the damage. The crowd watches anxiously as Constable Raza prepares to take further action, potentially to ISSUE_CHALLAN or separate the parties involved.",
+      "turn": 19
+    },
+    {
+      "type": "narration",
+      "content": "Constable Raza pushes the damaged vehicle aside, clearing the blocked lane. Traffic slowly begins to flow again.",
+      "turn": 20,
+      "metadata": {
+        "action": {
+          "type": "MOVE_VEHICLE_ASIDE",
+          "actor": "Constable Raza"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "Uncle Jameel, who has been watching the commotion from his shop, decides to intervene, hoping to calm the situation and prevent any further escalation. He approaches the group, wiping the sweat from his forehead with a cloth.",
+      "turn": 20
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Uncle Jameel",
+      "content": "Aray bhai, jaane do, flight miss na ho jaye",
+      "turn": 21
+    },
+    {
+      "type": "narration",
+      "content": "Ahmed Malik, frustrated with the delay, responds to Uncle Jameel's suggestion, while Constable Raza observes the scene, still recording with his phone. The crowd around them continues to grow, eager to see the situation resolved.",
+      "turn": 21
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Ahmed Malik",
+      "content": "Check damage, I'm late",
+      "turn": 22
+    },
+    {
+      "type": "narration",
+      "content": "As the damaged vehicle is moved aside, Ahmed Malik rushes to the airport, hoping to catch his flight on time. The crowd disperses, and Constable Raza breathes a sigh of relief as the situation is resolved. With the facilitation fee paid and the challan issued, the incident comes to a close.",
+      "turn": 22,
       "metadata": {
         "conclusion": true
       }
     }
   ],
   "metadata": {
-    "total_turns": 7,
-    "conclusion_reason": "Ahmed, with a sigh that carried the weight of Karachi itself, pulled out his wallet. Five thousand rupees exchanged hands, a small fortune to Saleem, a pittance to Ahmed, and a perfectly acceptable bribe to Constable Raza. The rickshaw was hastily righted, traffic began to inch forward, and Ahmed, glancing at his watch, sprinted towards the airport terminal. Uncle Jameel watched him go, a knowing smile playing on his lips. 'Allah khair kare,' he murmured, already anticipating the next drama to unfold on Shahrah-e-Faisal. The heat shimmered, the horns blared, and life in Karachi continued, a chaotic symphony of survival and compromise."
+    "total_turns": 22,
+    "conclusion_reason": "As the damaged vehicle is moved aside, Ahmed Malik rushes to the airport, hoping to catch his flight on time. The crowd disperses, and Constable Raza breathes a sigh of relief as the situation is resolved. With the facilitation fee paid and the challan issued, the incident comes to a close.",
+    "distinct_actions": 6,
+    "actions_taken": [
+      "CALL_POLICE",
+      "EXCHANGE_CONTACTS",
+      "ISSUE_CHALLAN",
+      "PAY_FACILITATION_FEE",
+      "RECORD_VIDEO",
+      "MOVE_VEHICLE_ASIDE"
+    ],
+    "world_state": {
+      "lane_blocked": false,
+      "traffic_level": 5,
+      "tension_level": 6,
+      "police_present": true,
+      "evidence": {
+        "video": true
+      },
+      "settlement_offer": null,
+      "resolution_flags": {
+        "contacts_exchanged": true,
+        "challan_issued": true,
+        "facilitation_paid": true
+      }
+    }
   }
 }
