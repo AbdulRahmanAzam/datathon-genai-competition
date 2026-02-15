@@ -16,7 +16,7 @@ from ..config import StoryConfig
 from ..schemas import StoryState, DialogueTurn
 from ..agents.character_agent import CharacterAgent
 from ..agents.director_agent import DirectorAgent
-from ..action_system import ActionSystem
+from ..action_system import ActionSystem, RESOLUTION_SIGNALS
 
 
 class NarrativeGraph:
@@ -78,15 +78,30 @@ class NarrativeGraph:
 
     # ── suggested action picker (generic) ─────────────────────────────
 
-    def _pick_suggested_action(self, state: StoryState) -> Optional[str]:
-        """Return any unused+allowed action type, or None."""
+    def _pick_suggested_action(
+        self, state: StoryState, prefer_resolution: bool = False
+    ) -> Optional[str]:
+        """Return an unused+allowed action type, or None.
+
+        When *prefer_resolution* is True (endgame), prioritise actions
+        that create resolution signals (NEGOTIATE, ACCEPT_TERMS,
+        MAKE_PAYMENT, TAKE_DECISIVE_ACTION, SUMMON_HELP).
+        """
         used = set(state.actions_taken)
         allowed = set(self.action_system.get_allowed_actions(state))
-        # Find actions not yet used
         candidates = allowed - used
         if not candidates:
             return None
-        # Return first available candidate (alphabetical for determinism)
+
+        if prefer_resolution:
+            resolution_actions = [
+                "NEGOTIATE", "ACCEPT_TERMS", "MAKE_PAYMENT",
+                "TAKE_DECISIVE_ACTION", "SUMMON_HELP",
+            ]
+            for ra in resolution_actions:
+                if ra in candidates:
+                    return ra
+
         return sorted(candidates)[0]
 
     # ════════════════════════════════════════════════════════════════════
@@ -117,7 +132,7 @@ class NarrativeGraph:
         # ── Deterministic pacing rules ──────────────────────────────────
         distinct_actions = len(set(state.actions_taken))
         remaining = total - state.current_turn
-        min_actions = max(2, total // 5)
+        min_actions = max(5, total // 5)
         force_act = False
         suggested_action = None
 
@@ -128,9 +143,19 @@ class NarrativeGraph:
         if state.turns_since_state_change >= 2:
             force_act = True
 
+        # ── Dialogue streak breaker: force action after 2+ talk-only turns
+        dialogue_streak = 0
+        for t in reversed(state.dialogue_history):
+            if "[ACTION:" not in t.dialogue:
+                dialogue_streak += 1
+            else:
+                break
+        if dialogue_streak >= 2 and distinct_actions < min_actions:
+            force_act = True
+
         # Mid-story action pressure
         mid_point = max(3, total // 2)
-        if state.current_turn >= mid_point and distinct_actions < max(1, min_actions // 2):
+        if state.current_turn >= mid_point and distinct_actions < max(2, min_actions // 2):
             force_act = True
 
         # Late-game action pressure
@@ -138,10 +163,24 @@ class NarrativeGraph:
         if state.current_turn >= late_point and distinct_actions < min_actions:
             force_act = True
 
-        if force_act and distinct_actions < min_actions:
-            suggested_action = self._pick_suggested_action(state)
-
         endgame = remaining <= max(2, int(total * 0.2))
+
+        # ── Endgame resolution push ────────────────────────────────
+        # In the last ~20% of turns, if no resolution signal yet,
+        # force resolution-oriented actions even if min_actions are met.
+        if endgame:
+            world = state.world_state or {}
+            has_resolution = any(world.get(k) for k in RESOLUTION_SIGNALS)
+            if not has_resolution:
+                force_act = True
+                suggested_action = self._pick_suggested_action(
+                    state, prefer_resolution=True
+                )
+
+        if force_act and distinct_actions < min_actions:
+            suggested_action = self._pick_suggested_action(
+                state, prefer_resolution=endgame
+            )
 
         # ── LLM-assisted speaker selection ──────────────────────────────
         available = list(self.characters.keys())
@@ -198,7 +237,10 @@ class NarrativeGraph:
         allowed_actions = self.action_system.get_allowed_actions(state)
 
         if state.suggested_action and state.suggested_action in allowed_actions:
-            allowed_actions = [state.suggested_action]
+            # Put suggested action first but keep others as fallback
+            allowed_actions = [state.suggested_action] + [
+                a for a in allowed_actions if a != state.suggested_action
+            ]
 
         memories = state.character_memories.get(next_speaker, [])
 
@@ -360,8 +402,8 @@ class NarrativeGraph:
         """
 
         total = state.total_turns or self.config.max_turns
-        min_actions = max(2, total // 5)
-        min_turns = max(3, total // 2)
+        min_actions = max(5, total // 5)
+        min_turns = max(3, int(total * 0.6))
         distinct_actions = len(set(state.actions_taken))
 
         # hard stop
@@ -388,12 +430,13 @@ class NarrativeGraph:
         if distinct_actions < min_actions and state.current_turn < total:
             return {"is_concluded": False}
 
-        # Only call LLM in the final 30% of turns (saves ~70% of conclusion LLM calls)
-        # late_threshold = max(min_turns, int(total * 0.7))
-        # if state.current_turn < late_threshold:
-        #     return {"is_concluded": False}
+        # STRICT: do not end unless a resolution signal exists in world_state
+        world = state.world_state or {}
+        has_resolution = any(world.get(k) for k in RESOLUTION_SIGNALS)
+        if not has_resolution and state.current_turn < total:
+            return {"is_concluded": False}
 
-        # LLM-assisted check (only reached in late game with enough actions)
+        # LLM-assisted check (only reached with enough actions + resolution)
         should_end, reason = await self.director.check_conclusion(state)
 
         if should_end:

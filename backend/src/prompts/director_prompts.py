@@ -1,26 +1,57 @@
-"""Director prompt builders — fully generic for any film/drama scenario.
+"""Director prompt builders — strict JSON-only output.
 
-The Director acts as the FILM DIRECTOR, orchestrating the scene:
-- Plans a complete story arc before the first turn
-- Selects which character speaks next to maximize dramatic tension
-- Injects cinematic narration to guide the visual feel
-- Monitors pacing and pushes toward resolution within the turn budget
+Every prompt enforces raw JSON with no markdown, no commentary,
+no trailing commas.  Allowed actions are always provided explicitly
+so the LLM never invents action types.
 """
 
 from ..schemas import StoryState
+from ..action_system import ACTION_DEFINITIONS, RESOLUTION_SIGNALS
+
+# ── Canonical allowed actions (exported for other modules) ──────────
+ALLOWED_ACTIONS = sorted(ACTION_DEFINITIONS.keys())
+
+
+# ── Phase helpers ───────────────────────────────────────────────────
 
 def _get_phase(current_turn: int, total_turns: int) -> str:
     if total_turns <= 0:
-        return "setup"
-    progress = current_turn / total_turns
-    if progress < 0.2:
         return "SETUP"
-    elif progress < 0.7:
+    progress = current_turn / total_turns
+    if progress < 0.15:
+        return "SETUP"
+    elif progress < 0.55:
         return "CONFLICT"
+    elif progress < 0.80:
+        return "CLIMAX"
     else:
         return "RESOLUTION"
 
-# ── Arc Planning Prompt (called once before the story starts) ──────────
+
+def _phase_guidance(phase: str) -> str:
+    return {
+        "SETUP": (
+            "Introduce characters and establish the conflict. "
+            "Let them discover the situation and react."
+        ),
+        "CONFLICT": (
+            "Escalate tension. Create confrontations. Drive PHYSICAL ACTIONS. "
+            "Characters clash — emotionally AND through decisive moves."
+        ),
+        "CLIMAX": (
+            "PEAK TENSION. Force decisive action. Someone must act NOW. "
+            "Push toward resolution — no more stalling."
+        ),
+        "RESOLUTION": (
+            "Bring closure through settlement, authority, or departure. "
+            "Final lines should feel earned and emotionally resonant."
+        ),
+    }.get(phase, "Continue the story.")
+
+
+# ════════════════════════════════════════════════════════════════════
+#  ARC PLANNING PROMPT
+# ════════════════════════════════════════════════════════════════════
 
 def build_arc_planning_prompt(
     seed_story: dict,
@@ -28,21 +59,21 @@ def build_arc_planning_prompt(
     total_turns: int,
     min_actions: int,
 ) -> str:
-    """Build a prompt for the director to plan the complete story arc."""
     title = seed_story.get("title", "Untitled")
     description = seed_story.get("description", "")
 
     char_lines = []
     for char in characters:
         if isinstance(char, dict):
-            char_lines.append(f"  • {char['name']}: {char['description']}")
+            char_lines.append(f"  - {char['name']}: {char['description']}")
         elif hasattr(char, "name"):
-            char_lines.append(f"  • {char.name}: {char.description}")
-    chars_text = "\n".join(char_lines) if char_lines else "  • (No characters defined)"
+            char_lines.append(f"  - {char.name}: {char.description}")
+    chars_text = "\n".join(char_lines) or "  - (No characters)"
 
-    return f"""You are a PROFESSIONAL FILM DIRECTOR planning a short dramatic film.
+    actions_list = ", ".join(ALLOWED_ACTIONS)
 
-FILM BRIEF:
+    return f"""You are a FILM DIRECTOR planning a short dramatic film.
+
 TITLE: "{title}"
 SCENARIO: {description}
 
@@ -50,50 +81,41 @@ CAST:
 {chars_text}
 
 TOTAL TURNS: {total_turns}
-MINIMUM PHYSICAL ACTIONS: {min_actions} (must be different action types)
+MINIMUM DISTINCT ACTIONS: {min_actions}
+ALLOWED ACTION TYPES (use ONLY these): [{actions_list}]
 
-PLANNING TASK:
-Plan the COMPLETE dramatic arc for this {total_turns}-turn film.
-
-STRUCTURE:
-• SETUP (first ~20% of turns): Introduce the conflict, establish characters
-  and the world. Open with narration setting the scene, then first dialogue.
-• CONFLICT (middle ~50% of turns): Escalate tension, create confrontations,
-  reveal stakes. Characters clash. Physical actions happen here.
-• RESOLUTION (final ~30% of turns): Climax and denouement. Reach a
-  meaningful conclusion. Final turn should have closing narration.
+Plan a complete dramatic arc:
+- SETUP  (turns 0-{max(1, int(total_turns * 0.15))}): Introduce conflict, establish characters.
+- CONFLICT (turns {int(total_turns * 0.15)+1}-{int(total_turns * 0.55)}): Escalate, clashes, physical actions.
+- CLIMAX (turns {int(total_turns * 0.55)+1}-{int(total_turns * 0.80)}): Peak tension, decisive actions.
+- RESOLUTION (turns {int(total_turns * 0.80)+1}-{total_turns}): Closure, settlement, final moments.
 
 RULES:
-1. The story MUST conclude by turn {total_turns} — plan the ending.
-2. At least {min_actions} physical actions must occur (different types).
-3. Turn 0 should be opening narration (no dialogue).
-4. The final turn should include concluding narration.
-5. Every character should speak at least once.
-6. The pacing must feel natural for a {total_turns}-turn story.
+1. Story concludes by turn {total_turns}.
+2. At least {min_actions} DISTINCT actions from the allowed list.
+3. Every character speaks at least once.
+4. Actions MUST come ONLY from the allowed list. No invented actions.
 
-Return ONLY valid JSON:
+OUTPUT RULES (MANDATORY):
+- Return ONLY raw JSON. No backticks. No markdown fences. No prose before or after.
+- No trailing commas inside arrays or objects.
+- If you cannot comply, output {{}}.
 
+REQUIRED JSON SCHEMA:
 {{
   "arc_plan": [
-    {{
-      "turn": 0,
-      "phase": "setup",
-      "type": "narration",
-      "beat": "Opening — set the scene",
-      "suggested_speaker": null
-    }},
-    {{
-      "turn": 1,
-      "phase": "setup",
-      "type": "dialogue",
-      "beat": "First character breaks the silence",
-      "suggested_speaker": "Character Name"
-    }}
+    {{"turn": 0, "phase": "setup", "type": "narration", "beat": "Opening — set the scene", "suggested_speaker": null}},
+    {{"turn": 1, "phase": "setup", "type": "dialogue", "beat": "First character reacts", "suggested_speaker": "Character Name"}},
+    {{"turn": 5, "phase": "conflict", "type": "action", "beat": "Character confronts other", "suggested_speaker": "Character Name"}}
   ],
-  "conclusion_type": "How the story should naturally end (1 sentence)"
+  "planned_actions": ["CONFRONT", "INVESTIGATE", "INTERVENE", "NEGOTIATE", "MAKE_PAYMENT"],
+  "conclusion_type": "One sentence describing how the story ends"
 }}"""
 
-# ── Speaker Selection Prompt (called each turn) ───────────────────────
+
+# ════════════════════════════════════════════════════════════════════
+#  SPEAKER SELECTION PROMPT
+# ════════════════════════════════════════════════════════════════════
 
 def build_director_select_prompt(
     story_state: StoryState,
@@ -106,12 +128,13 @@ def build_director_select_prompt(
     title = seed.get("title", "Untitled")
     desc = seed.get("description", "")
 
-    # Dynamic character descriptions from profiles
+    # Character descriptions
     char_descriptions = []
     for name, profile in (story_state.character_profiles or {}).items():
-        char_descriptions.append(f"  • {name}: {profile.description}")
-    chars_text = "\n".join(char_descriptions) if char_descriptions else "  (No profiles)"
+        char_descriptions.append(f"  - {name}: {profile.description}")
+    chars_text = "\n".join(char_descriptions) or "  (No profiles)"
 
+    # Recent dialogue
     recent = story_state.dialogue_history[-5:]
     if recent:
         recent_text = "\n".join(
@@ -119,91 +142,121 @@ def build_director_select_prompt(
             for t in recent
         )
     else:
-        recent_text = "  No dialogue yet. The story is just starting."
+        recent_text = "  No dialogue yet."
 
     total = getattr(story_state, "total_turns", config.max_turns)
     distinct_actions = len(set(story_state.actions_taken))
     used_actions = sorted(set(story_state.actions_taken))
-    min_actions = max(2, total // 5)
+    min_actions = max(5, total // 5)
     remaining = total - story_state.current_turn
     phase = _get_phase(story_state.current_turn, total)
+    phase_guide = _phase_guidance(phase)
 
     # Arc plan hint
     arc_plan = getattr(story_state, "story_arc_plan", [])
     arc_hint = ""
     for beat in arc_plan:
         if beat.get("turn") == story_state.current_turn:
-            arc_hint = f"\nPLANNED BEAT: {beat.get('beat', '')} (Speaker: {beat.get('suggested_speaker', 'any')})"
+            arc_hint = (
+                f"\nPLANNED BEAT: {beat.get('beat', '')} "
+                f"(Speaker: {beat.get('suggested_speaker', 'any')})"
+            )
             break
 
-    # Phase-specific guidance
-    if phase == "SETUP":
-        phase_guide = "Introduce characters and establish the conflict."
-    elif phase == "CONFLICT":
-        phase_guide = "Escalate tension. Create confrontations. Drive physical actions."
-    else:
-        phase_guide = "Push toward conclusion. Resolve the central conflict decisively."
+    # Allowed / unused actions
+    actions_list = ", ".join(ALLOWED_ACTIONS)
+    unused_actions = sorted(set(ALLOWED_ACTIONS) - set(story_state.actions_taken))
 
+    # Anti-repetition
+    last_speaker = ""
+    dialogue_streak = 0
+    if story_state.dialogue_history:
+        last_speaker = story_state.dialogue_history[-1].speaker
+        for t in reversed(story_state.dialogue_history):
+            if "[ACTION:" not in t.dialogue:
+                dialogue_streak += 1
+            else:
+                break
+
+    silent_chars = [
+        c for c in available_characters
+        if c not in {t.speaker for t in story_state.dialogue_history[-5:]}
+    ]
+
+    # Build extra directives
     extra = ""
+    if last_speaker:
+        extra += f"\nLAST SPEAKER: {last_speaker} — avoid picking them again."
+    if dialogue_streak >= 2:
+        extra += (
+            f"\n!! {dialogue_streak} consecutive TALK turns. "
+            "A PHYSICAL ACTION is OVERDUE. Pick someone who will ACT. !!"
+        )
+    if silent_chars:
+        extra += f"\nSILENT CHARACTERS: {', '.join(silent_chars)} — consider them."
     if force_act:
         extra += (
-            "\n!! A physical ACTION is needed this turn. Choose a character "
-            "who can PERFORM an action (not just talk). !!"
+            "\n!! FORCE ACT: A physical action MUST happen this turn. "
+            "Pick a character likely to ACT (not just talk). !!"
         )
-        if distinct_actions < min_actions:
+        if distinct_actions < min_actions and unused_actions:
             extra += (
-                f"\n!! We need MORE VARIED actions. Already used: {used_actions}. "
-                "Pick a character who can perform a DIFFERENT action type. !!"
+                f"\n!! UNUSED ACTIONS: {', '.join(unused_actions[:5])}. "
+                "Prioritize variety. !!"
             )
     if endgame:
-        extra += f"\n!! FINAL {remaining} TURNS. Drive the story to its conclusion NOW. !!"
+        extra += f"\n!! FINAL {remaining} TURNS. Drive to conclusion. !!"
+        world = story_state.world_state or {}
+        has_resolution = any(world.get(k) for k in RESOLUTION_SIGNALS)
+        if not has_resolution:
+            extra += (
+                "\n!! NO RESOLUTION SIGNAL YET. Push for NEGOTIATE, "
+                "MAKE_PAYMENT, or ACCEPT_TERMS to close the story. !!"
+            )
     if remaining <= 1:
-        extra += "\n!! LAST TURN. The story MUST conclude. Write concluding narration. !!"
+        extra += "\n!! LAST TURN. Story MUST end. Write concluding narration. !!"
+
+    safe_default = available_characters[0] if available_characters else "Unknown"
 
     return f"""You are the DIRECTOR of "{title}".
 
-DIRECTOR'S CHAIR
-FILM: "{title}"
 SCENE: {desc}
 
 CAST:
 {chars_text}
 
-SCENE STATUS:
 Turn {story_state.current_turn}/{total} | Phase: {phase} | Remaining: {remaining}
-Actions: {distinct_actions}/{min_actions} minimum ({used_actions or 'none yet'})
+Distinct actions: {distinct_actions}/{min_actions} min ({used_actions or 'none yet'})
+ALLOWED ACTIONS: [{actions_list}]
+UNUSED ACTIONS: [{', '.join(unused_actions)}]
 
 PHASE DIRECTION: {phase_guide}
 {arc_hint}
 
-RECENT SCENES:
+RECENT:
 {recent_text}
 
-AVAILABLE CHARACTERS: {', '.join(available_characters)}
+AVAILABLE: {', '.join(available_characters)}
 {extra}
 
-DIRECTOR'S TASK:
+Select the next character. Write cinematic narration (2-3 sentences):
+camera angles, lighting, body language, atmosphere.
 
-Select the NEXT CHARACTER to speak/act. Consider:
-1. DRAMATIC IMPACT: Who creates the most compelling moment NOW?
-2. NATURAL FLOW: Who would realistically respond to what just happened?
-3. STORY PROGRESSION: What advances the plot toward the planned ending?
-4. PACING: Don't repeat the same speaker consecutively.
+OUTPUT RULES (MANDATORY):
+- Return ONLY raw JSON. No backticks. No markdown. No prose.
+- No trailing commas.
+- If you cannot comply, output: {{"next_speaker": "{safe_default}", "narration": "The scene continues."}}
 
-Your NARRATION should be:
-• CINEMATIC: Describe what the camera sees — lighting, body language,
-  sounds, atmosphere, crowd reactions, environmental details.
-• TRANSITIONAL: Bridge smoothly from the last moment to the next.
-• ATMOSPHERIC: Build mood and tension through sensory detail.
-• 2-3 sentences maximum — tight and evocative.
-
-OUTPUT (JSON ONLY):
+REQUIRED JSON:
 {{
-  "next_speaker": "Character Name",
-  "narration": "Cinematic scene narration (2-3 sentences)"
+  "next_speaker": "Character Name from available list",
+  "narration": "Cinematic 2-3 sentence narration"
 }}"""
 
-# ── Conclusion Check Prompt ────────────────────────────────────────────
+
+# ════════════════════════════════════════════════════════════════════
+#  CONCLUSION CHECK PROMPT
+# ════════════════════════════════════════════════════════════════════
 
 def build_director_conclusion_prompt(story_state: StoryState, config) -> str:
     seed = story_state.seed_story or {}
@@ -220,52 +273,60 @@ def build_director_conclusion_prompt(story_state: StoryState, config) -> str:
     total = getattr(story_state, "total_turns", config.max_turns)
     distinct_actions = len(set(story_state.actions_taken))
     used_actions = sorted(set(story_state.actions_taken))
-    min_actions = max(2, total // 5)
+    min_actions = max(5, total // 5)
     remaining = total - story_state.current_turn
-    min_turns = max(3, total // 2)
+    min_turns = max(3, int(total * 0.6))
 
     world = story_state.world_state or {}
     world_text = (
-        "\n".join(f"  • {k}: {v}" for k, v in world.items())
+        "\n".join(f"  - {k}: {v}" for k, v in world.items())
         if world
-        else "  No state changes yet"
+        else "  No state changes"
     )
+
+    has_resolution = any(world.get(k) for k in RESOLUTION_SIGNALS)
 
     return f"""You are the DIRECTOR of "{title}". Should this scene conclude?
 
-SCENE STATUS:
-SCENE: {desc}
 Turn: {story_state.current_turn}/{total} | Remaining: {remaining}
-Distinct Actions: {distinct_actions}/{min_actions} minimum
-Actions Used: {used_actions or 'none'}
+Distinct Actions: {distinct_actions}/{min_actions} min | Used: {used_actions or 'none'}
+Resolution signal present: {has_resolution}
 
 WORLD STATE:
 {world_text}
 
-RECENT DIALOGUE:
+RECENT:
 {recent_text}
 
-CONCLUSION RULES (MANDATORY - you MUST obey ALL):
+MANDATORY RULES:
 1. DO NOT conclude before turn {min_turns}.
-2. DO NOT conclude if distinct_actions < {min_actions}, UNLESS it's the final turn.
-3. CONCLUDE when BOTH conditions are met:
+2. DO NOT conclude if distinct_actions < {min_actions} UNLESS remaining <= 1.
+3. DO NOT conclude if no resolution signal UNLESS remaining <= 1.
+   Resolution signals: terms_accepted, payment_made, decisive_action_taken, help_summoned.
+4. CONCLUDE when ALL conditions met:
    a) distinct_actions >= {min_actions}
-   b) A natural resolution has occurred OR remaining turns <= 1
-4. If remaining <= 1, you MUST conclude regardless.
+   b) resolution signal is present
+   c) OR remaining <= 1
+5. If remaining <= 1, MUST conclude regardless.
 
-If concluding, write a CINEMATIC WRAP-UP narration:
-• Describe the aftermath and what each character does
-• Create a sense of closure — like a film's final shot
-• Make it emotionally resonant and visually rich
-• 3-5 sentences that feel like the end of a movie
+If concluding, write a CINEMATIC wrap-up (3-5 sentences):
+- Describe the aftermath and each character's final moment
+- Create visual closure — like a film's final shot
+- Emotionally resonant and vivid
 
-OUTPUT (JSON ONLY):
+OUTPUT RULES (MANDATORY):
+- Return ONLY raw JSON. No backticks. No markdown. No prose.
+- No trailing commas.
+- If you cannot comply, output: {{"should_end": false, "reason": "continue", "conclusion_narration": null}}
+
+REQUIRED JSON:
 {{
   "should_end": true or false,
   "reason": "Brief explanation",
-  "conclusion_narration": "Cinematic concluding narration if ending, else null"
+  "conclusion_narration": "Cinematic conclusion if ending, else null"
 }}"""
 
-# ── Keep old names importable ───────────────────────────────────────────
+
+# ── Keep old names importable ───────────────────────────────────────
 DIRECTOR_SELECT_SPEAKER_PROMPT = ""
 DIRECTOR_CONCLUSION_PROMPT = ""
