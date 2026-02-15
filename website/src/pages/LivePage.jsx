@@ -769,6 +769,7 @@ function ConclusionCheckCard({ evt, isDark }) {
 
 /* ── Concluded card ─────────────────────────────────────────────────── */
 function ConcludedCard({ evt, isDark }) {
+  const narration = evt.conclusionNarration || evt.reason;
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
@@ -778,13 +779,14 @@ function ConcludedCard({ evt, isDark }) {
           : 'bg-linear-to-b from-primary/5 to-transparent border-primary/15'
       }`}
     >
-      <div className="text-3xl mb-3">📖</div>
+      <div className="text-3xl mb-3">🎬</div>
       <h3 className={`font-bold text-lg mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-        Story Concluded
+        The End
       </h3>
-      <p className={`text-sm mb-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-        {evt.reason}
+      <p className={`text-sm mb-4 italic leading-relaxed max-w-lg mx-auto ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+        {narration}
       </p>
+      <div className={`w-16 h-px mx-auto mb-4 ${isDark ? 'bg-gray-700' : 'bg-gray-300'}`} />
       <div className="flex justify-center gap-4">
         <div className={`text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
           <div className="text-2xl font-bold text-primary">{evt.turn}</div>
@@ -850,18 +852,19 @@ function DialogueView({ timeline, isDark, chars }) {
           }
 
           if (evt.type === 'concluded') {
+            const narration = evt.conclusionNarration || evt.reason;
             return (
               <motion.div
                 key={`end-${idx}`}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="text-center my-6"
               >
-                <div className={`inline-block px-6 py-3 rounded-2xl ${
+                <div className={`inline-block px-6 py-4 rounded-2xl max-w-md ${
                   isDark ? 'bg-primary/10 border border-primary/20' : 'bg-primary/5 border border-primary/15'
                 }`}>
                   <div className="text-lg mb-1">🎬</div>
-                  <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Story Complete</p>
-                  <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{evt.reason}</p>
+                  <p className={`text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>The End</p>
+                  <p className={`text-xs italic leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{narration}</p>
                 </div>
               </motion.div>
             );
@@ -1045,6 +1048,7 @@ function MovieSceneView({ timeline, isDark, chars, title }) {
 
             /* ── CONCLUDED: The End ──────────────────────────────── */
             if (evt.type === 'concluded') {
+              const narration = evt.conclusionNarration || evt.reason;
               return (
                 <motion.div
                   key={`fin-${idx}`}
@@ -1057,10 +1061,10 @@ function MovieSceneView({ timeline, isDark, chars, title }) {
                   >
                     The End
                   </p>
-                  <p className={`text-xs mt-3 italic max-w-md mx-auto ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-                    {evt.reason}
+                  <p className={`text-sm mt-4 italic leading-relaxed max-w-lg mx-auto ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                    {narration}
                   </p>
-                  <div className="flex justify-center gap-6 mt-4">
+                  <div className="flex justify-center gap-6 mt-5">
                     <div className="text-center">
                       <div className="text-lg font-bold text-primary">{evt.turn}</div>
                       <div className={`text-[10px] ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>Turns</div>

@@ -29,6 +29,7 @@ from src.schemas import StoryState, CharacterProfile, CharacterMemory, DialogueT
 from src.agents.character_agent import CharacterAgent
 from src.agents.director_agent import DirectorAgent
 from src.action_system import ActionSystem
+from src.action_system import RESOLUTION_SIGNALS
 from src.supabase_client import (
     save_story_run, list_story_runs, get_story_run, delete_story_run,
     create_story_run, update_story_run,
@@ -174,11 +175,18 @@ async def generate_story(req: GenerateRequest):
             yield _sse("step", {"phase": "director_select", "turn": turn_num})
             _track("step", {"phase": "director_select", "turn": turn_num})
 
-            # Hard stop
+            # Hard stop — generate proper conclusion via LLM
             if turn_num >= config.max_turns:
-                narration = "The scene draws to its inevitable close."
+                yield _sse("step", {"phase": "generating_conclusion", "turn": turn_num})
+                _track("step", {"phase": "generating_conclusion", "turn": turn_num})
+
+                try:
+                    narration = await director.generate_final_conclusion(state)
+                except Exception:
+                    narration = "The scene draws to its inevitable close, each character left with the weight of what transpired."
+
                 state.is_concluded = True
-                state.conclusion_reason = "Maximum turns reached"
+                state.conclusion_reason = narration
                 state.events.append({
                     "type": "narration", "content": narration,
                     "turn": turn_num, "metadata": {"conclusion": True},
@@ -483,7 +491,13 @@ async def generate_story(req: GenerateRequest):
             elif len(set(state.actions_taken)) < min_actions and state.current_turn < config.max_turns:
                 should_conclude = False
             else:
-                should_conclude, conclusion_reason = await director.check_conclusion(state)
+                # Check for resolution signals before calling LLM
+                world = state.world_state or {}
+                has_resolution = any(world.get(k) for k in RESOLUTION_SIGNALS)
+                if not has_resolution and state.current_turn < config.max_turns:
+                    should_conclude = False
+                else:
+                    should_conclude, conclusion_reason = await director.check_conclusion(state)
 
             yield _sse("conclusion_check", {
                 "turn": state.current_turn,
@@ -498,22 +512,29 @@ async def generate_story(req: GenerateRequest):
 
             if should_conclude:
                 state.is_concluded = True
-                state.conclusion_reason = str(conclusion_reason or "Story concluded")
-                if conclusion_reason:
-                    state.events.append({
-                        "type": "narration", "content": conclusion_reason,
-                        "turn": state.current_turn,
-                        "metadata": {"conclusion": True},
-                    })
+
+                # Generate a proper cinematic conclusion via LLM
+                yield _sse("step", {"phase": "generating_conclusion", "turn": state.current_turn})
+                _track("step", {"phase": "generating_conclusion", "turn": state.current_turn})
+
+                conclusion_narration = await director.generate_final_conclusion(state)
+                state.conclusion_reason = conclusion_narration
+
+                state.events.append({
+                    "type": "narration", "content": conclusion_narration,
+                    "turn": state.current_turn,
+                    "metadata": {"conclusion": True},
+                })
 
                 # ── 6) Conclude ────────────────────────────────────────
                 yield _sse("step", {"phase": "conclude_story", "turn": state.current_turn})
                 _track("step", {"phase": "conclude_story", "turn": state.current_turn})
                 concluded_data = {
                     "turn": state.current_turn,
-                    "reason": state.conclusion_reason,
+                    "reason": conclusion_narration,
                     "totalActions": len(set(state.actions_taken)),
                     "actionsTaken": list(set(state.actions_taken)),
+                    "conclusionNarration": conclusion_narration,
                 }
                 yield _sse("concluded", concluded_data)
                 _track("concluded", concluded_data)
@@ -521,17 +542,31 @@ async def generate_story(req: GenerateRequest):
 
             await asyncio.sleep(0.05)  # small yield
 
-        # Final summary
+        # Final summary — generate proper conclusion if loop ended without one
         if not state.is_concluded:
             state.is_concluded = True
-            state.conclusion_reason = state.conclusion_reason or "Maximum turns reached"
+
+            # Generate proper LLM conclusion even for the fallback case
+            try:
+                conclusion_narration = await director.generate_final_conclusion(state)
+            except Exception:
+                conclusion_narration = "The scene draws to its inevitable close, each character left with the weight of what transpired."
+
+            state.conclusion_reason = conclusion_narration
+            state.events.append({
+                "type": "narration", "content": conclusion_narration,
+                "turn": state.current_turn,
+                "metadata": {"conclusion": True},
+            })
+
             yield _sse("step", {"phase": "conclude_story", "turn": state.current_turn})
             _track("step", {"phase": "conclude_story", "turn": state.current_turn})
             final_concluded_data = {
                 "turn": state.current_turn,
-                "reason": state.conclusion_reason,
+                "reason": conclusion_narration,
                 "totalActions": len(set(state.actions_taken)),
                 "actionsTaken": list(set(state.actions_taken)),
+                "conclusionNarration": conclusion_narration,
             }
             yield _sse("concluded", final_concluded_data)
             _track("concluded", final_concluded_data)
@@ -701,9 +736,75 @@ def _write_prompts_jsonl(
 
 # ── Health check ────────────────────────────────────────────────────────
 
+@app.get("/")
+async def root():
+    """Root endpoint - API documentation."""
+    return {
+        "name": "NarrativeVerse API",
+        "version": "1.0",
+        "status": "online",
+        "endpoints": {
+            "generate": "POST /api/generate",
+            "health": "GET /api/health",
+            "history": "GET /api/history",
+            "history_item": "GET /api/history/{run_id}",
+        }
+    }
+
 @app.get("/api/health")
 async def health():
-    return {"status": "ok"}
+    """Health check with environment configuration validation."""
+    import os
+    
+    # Check for required environment variables
+    env_status = {}
+    
+    # Check LLM provider keys
+    gemini_enabled = os.getenv("GEMINI_ENABLED", "true").strip().lower() == "true"
+    groq_enabled = os.getenv("GROQ_ENABLED", "true").strip().lower() == "true"
+    
+    gemini_keys = []
+    groq_keys = []
+    
+    if gemini_enabled:
+        for i in range(1, 5):
+            key = os.getenv(f"GEMINI_API_KEY_{i}")
+            if key and key.strip():
+                gemini_keys.append(f"GEMINI_API_KEY_{i}")
+        if os.getenv("GEMINI_API_KEY"):
+            gemini_keys.append("GEMINI_API_KEY")
+    
+    if groq_enabled:
+        for i in range(1, 5):
+            key = os.getenv(f"GROQ_API_KEY_{i}")
+            if key and key.strip():
+                groq_keys.append(f"GROQ_API_KEY_{i}")
+        if os.getenv("GROQ_API_KEY"):
+            groq_keys.append("GROQ_API_KEY")
+    
+    has_llm_keys = len(gemini_keys) > 0 or len(groq_keys) > 0
+    
+    env_status["llm_provider"] = {
+        "gemini_enabled": gemini_enabled,
+        "groq_enabled": groq_enabled,
+        "gemini_keys_count": len(gemini_keys),
+        "groq_keys_count": len(groq_keys),
+        "has_keys": has_llm_keys,
+    }
+    
+    # Check Supabase
+    env_status["supabase"] = {
+        "url_configured": bool(os.getenv("SUPABASE_URL")),
+        "key_configured": bool(os.getenv("SUPABASE_KEY")),
+    }
+    
+    overall_status = "ok" if has_llm_keys else "missing_api_keys"
+    
+    return {
+        "status": overall_status,
+        "environment": env_status,
+        "ready": has_llm_keys,
+    }
 
 
 # ── History endpoints ──────────────────────────────────────────────────

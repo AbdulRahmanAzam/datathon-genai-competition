@@ -327,6 +327,93 @@ REQUIRED JSON:
 }}"""
 
 
+# ════════════════════════════════════════════════════════════════════
+#  FINAL CONCLUSION NARRATION PROMPT
+# ════════════════════════════════════════════════════════════════════
+
+def build_final_conclusion_narration_prompt(story_state: StoryState, config) -> str:
+    """Generate a cinematic conclusion narration that wraps up the entire story."""
+    seed = story_state.seed_story or {}
+    title = seed.get("title", "Untitled")
+    desc = seed.get("description", "")
+
+    # Character summaries
+    char_lines = []
+    for name, profile in (story_state.character_profiles or {}).items():
+        char_lines.append(f"  - {name}: {profile.description}")
+    chars_text = "\n".join(char_lines) or "  (No characters)"
+
+    # Recent dialogue (last 8 turns for more context)
+    recent = story_state.dialogue_history[-8:]
+    recent_text = (
+        "\n".join(f"  [{t.turn_number}] {t.speaker}: {t.dialogue[:160]}" for t in recent)
+        if recent
+        else "  No dialogue"
+    )
+
+    # World state
+    world = story_state.world_state or {}
+    world_text = (
+        "\n".join(f"  - {k}: {v}" for k, v in world.items())
+        if world
+        else "  No state changes"
+    )
+
+    total = getattr(story_state, "total_turns", config.max_turns)
+    distinct_actions = len(set(story_state.actions_taken))
+    used_actions = sorted(set(story_state.actions_taken))
+
+    # Key events summary
+    key_events = []
+    for evt in story_state.events:
+        if isinstance(evt, dict):
+            if evt.get("type") == "action":
+                meta = (evt.get("metadata") or {}).get("action", {})
+                key_events.append(f"  - Turn {evt.get('turn')}: {meta.get('actor', '?')} performed {meta.get('type', '?')}")
+    key_events_text = "\n".join(key_events[-6:]) if key_events else "  No major actions"
+
+    return f"""You are the DIRECTOR of "{title}". The story has reached its final moment.
+Write a CINEMATIC CONCLUSION that wraps up the entire story.
+
+TITLE: "{title}"
+SCENARIO: {desc}
+
+CAST:
+{chars_text}
+
+STORY STATS: {story_state.current_turn}/{total} turns completed | {distinct_actions} distinct actions ({used_actions or 'none'})
+
+WORLD STATE:
+{world_text}
+
+KEY ACTIONS THAT OCCURRED:
+{key_events_text}
+
+RECENT DIALOGUE (the last moments):
+{recent_text}
+
+YOUR TASK:
+Write a powerful, cinematic conclusion that:
+1. RESOLVES the central conflict — what was the outcome?
+2. Gives each character a FINAL MOMENT — their last action, expression, or words
+3. Creates VISUAL CLOSURE — describe the final "shot" like a film ending
+4. Is EMOTIONALLY RESONANT — the audience should feel something
+5. Is 4-6 sentences long — concise but complete
+
+DO NOT leave anything unresolved. This is THE END of the story.
+Describe what happens to each character. Paint the final image.
+
+OUTPUT RULES (MANDATORY):
+- Return ONLY raw JSON. No backticks. No markdown. No prose before or after.
+- No trailing commas.
+
+REQUIRED JSON:
+{{
+  "conclusion_narration": "Your 4-6 sentence cinematic conclusion wrapping up the entire story",
+  "final_outcome": "One sentence summary of how the story resolved"
+}}"""
+
+
 # ── Keep old names importable ───────────────────────────────────────
 DIRECTOR_SELECT_SPEAKER_PROMPT = ""
 DIRECTOR_CONCLUSION_PROMPT = ""

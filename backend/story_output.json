@@ -7,34 +7,35 @@
   "events": [
     {
       "type": "narration",
-      "content": "The camera pans over the chaos, focusing on Saleem, who's visibly shaken, his hands clutching the handlebars of his rickshaw as he stands amidst the wreckage. The late afternoon sun beats down on him, accentuating the sweat on his forehead. As the crowd begins to gather, Saleem looks around frantically, his eyes darting from the onlookers to the damaged car and back.",
+      "content": "A tight close-up on Saleem's sweat-streaked face, eyes darting between his damaged rickshaw and the pristine sedan, fear and frustration etched deep. The harsh late afternoon sun glares off the dented metal, highlighting the disparity in their vehicles and fortunes. Horns blare relentlessly in the background, a relentless assault on the already thick, humid air.",
       "turn": 0
     },
     {
       "type": "dialogue",
       "speaker": "Saleem",
-      "content": "Arre bhai, I tell you, not my fault! My rickshaw was going straight, your high-and-mighty car swerved in front of me",
+      "content": "Arre bhai, yeh kya ho gaya! You came out of nowhere, cutting me off! My rickshaw, yaar, this is my rozi-roti! It's not my fault, I swear, you suddenly brake lagaya!",
       "turn": 1
     },
     {
       "type": "narration",
-      "content": "The camera zooms in on Ahmed Malik, his expression a mix of frustration and annoyance, as the scorching sun beats down on his sleek sedan. His dark sunglasses hide his eyes, but a vein on his forehead pulses with impatience. He steps out of his car, his tailored suit a stark contrast to the dusty surroundings.",
+      "content": "CLOSE UP on a dent near the rear wheel arch of a gleaming black sedan, then PULL BACK to reveal Ahmed Malik, immaculately dressed but visibly seething. He gestures dismissively at Saleem, his eyes darting to his watch, the glint of the setting sun reflecting off his expensive timepiece as the heat makes his collar feel a little too tight.",
       "turn": 1
     },
     {
       "type": "dialogue",
       "speaker": "Ahmed Malik",
-      "content": "What's going on here? I was behind this rickshaw, and suddenly it swerved in front of me. Can someone explain what happened?",
+      "content": "That is an utterly absurd accusation! You clearly swerved into my lane, Saleem, and now you have damaged my vehicle. I am already running critically late for an international flight, and this delay is simply unacceptable.",
       "turn": 2
     },
     {
       "type": "narration",
-      "content": "The camera pans to Constable Raza, who stands idly by the collision with a mixture of disinterest and frustration on his face, the setting sun casting a golden glow over the chaotic scene. He cracks his knuckles, the sound echoing through the air, as he begins to move towards the arguing drivers. The hum of the crowd and the honking of horns fills the atmosphere, a cacophony of noise and tension.",
+      "content": "The camera pans across the chaotic scene, the golden light of late afternoon casting long shadows behind the vehicles, as Constable Raza steps forward, his worn leather boots scuffling against the pavement, his eyes squinting with a mix of boredom and anticipation, his hand resting on the hip where his baton is holstered, ready to intervene.",
       "turn": 2
     },
     {
-      "type": "narration",
-      "content": "Constable Raza steps forward to confront the other party directly, taking control of the moment.",
+      "type": "action",
+      "content": "I step forward, my hand resting on my hip, and my eyes fixed on the two arguing men, my voice firm as I prepare to take control of the situation, the crowd's noise dies down slightly as they wait to see what I'll do, I take a deep breath, ready to assert my authority",
+      "speaker": "Constable Raza",
       "turn": 3,
       "metadata": {
         "action": {
@@ -45,73 +46,25 @@
     },
     {
       "type": "narration",
-      "content": "The camera focuses on Saleem's sweaty face, his eyes darting between Constable Raza and Ahmed Malik, as the sun beats down on him, casting a harsh glare over the chaotic scene. The sounds of horns and murmuring crowd fill the background. Saleem's hands are clenched into fists, a mixture of anxiety and defensiveness evident in his body language.",
+      "content": "The camera pans to Uncle Jameel, who is standing at the edge of the crowd, his eyes wide with excitement as he watches the confrontation unfold, the golden light of the late afternoon sun casting a dramatic glow on his face. His hands are clasped together in front of him, and he takes a step forward, his body language screaming to be involved in the drama. The air is thick with tension as he opens his mouth to speak, the murmurs of the crowd dying down in anticipation of his words.",
       "turn": 3
     },
     {
       "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Arre bhai, I tell you, this was not my fault! My rickshaw was going straight, your high-and-mighty car swerved in front of me. See, bhai, my rickshaw is scratched, yours is fine, so who's responsible? Yaar, please understand, my family depends on me!",
-      "turn": 4
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Ahmed Malik's frustrated face, his eyes squinting in annoyance as he looks at Saleem, the scorching sun beating down on the scene. Sweat drips from Ahmed's forehead as he wipes his brow with a handkerchief, his voice rising in impatience. The crowd around them grows more agitated, sensing the tension escalating.",
-      "turn": 4
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Ahmed Malik",
-      "content": "Look, this is ridiculous. I'm going to miss my flight because of your reckless driving. You're lucky I don't press charges.",
-      "turn": 5
-    },
-    {
-      "type": "narration",
-      "content": "The camera cuts to a close-up shot of Saleem's sweating face as he gestures emphatically with his hands, his voice rising in frustration. The sunlight casts a golden glow on the dusty road, highlighting the chaos of the scene. Saleem's eyes narrow as he takes a step closer to Ahmed Malik, his rickshaw parked behind him.",
-      "turn": 5
-    },
-    {
-      "type": "narration",
-      "content": "I quickly jump into my rickshaw and start the engine, hoping to make a quick getaway before the situation spirals out of control. The crowd parts as I make a hasty exit, with Uncle Jameel calling out to me in a shrill voice. I don't dare look back, fearing what I might see.",
-      "turn": 6,
-      "metadata": {
-        "action": {
-          "type": "EXIT_SCENE",
-          "actor": "Saleem"
-        }
-      }
-    },
-    {
-      "type": "narration",
-      "content": "The camera pans across the chaotic scene, capturing the frustrated crowd and the two vehicles, before focusing on the elderly Uncle Jameel, his thick mustache quivering as he speaks. Harsh sunlight beats down on the pavement, heightening the sense of tension. He takes a step forward, a self-important glint in his eye, ready to weigh in on the dispute.",
-      "turn": 6
-    },
-    {
-      "type": "dialogue",
       "speaker": "Uncle Jameel",
-      "content": "Arre bhai, what's going on here? This is getting out of hand. Saleem, you should not have driven rashly, and Ahmed Malik, you should not have been speeding. Now, this is a mess.",
-      "turn": 7
+      "content": "Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole thing, and I think I can help you both, my friend in the police department will vouch for me",
+      "turn": 4
     },
     {
       "type": "narration",
-      "content": "The camera zooms in on Ahmed Malik's tense face, his eyes darting between Saleem's rickshaw and Constable Raza's stern expression. The bright sunlight reflects off his designer sunglasses, accentuating his impatience. As he gestures emphatically, his expensive suit seems out of place among the crowded and chaotic street.",
-      "turn": 7
+      "content": "The camera zooms in on Constable Raza's stern face, his eyes narrowing as he surveys the scene, the golden light of the setting sun casting a glow on his worn uniform. The air is thick with tension, the sound of horns honking and people shouting filling the air as the crowd grows larger. With a deep breath, Constable Raza takes a step forward, his hand resting on his hip, ready to take control of the situation.",
+      "turn": 4
     },
     {
-      "type": "dialogue",
-      "speaker": "Ahmed Malik",
-      "content": "Look, Constable Raza, I don't have time for this. Can't you see I'm already late for my international flight? I need you to settle this now.",
-      "turn": 8
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Constable Raza's weathered face, his expression a mix of exhaustion and frustration as he steps out of the police van, the scorching sun beating down on him. He takes a deep breath, eyeing the chaotic scene before him, before striding towards the arguing drivers. The sound of horns honking and traffic chaos fills the air as he approaches.",
-      "turn": 8
-    },
-    {
-      "type": "narration",
-      "content": "I step between Ahmed Malik and Saleem, holding up my hands in a calming gesture as I shout above the din of the crowd, 'Hey, hey, let's not have any more of this! We'll sort this out, okay?'",
-      "turn": 9,
+      "type": "action",
+      "content": "I step forward, holding up my hands to quiet the crowd, and firmly tell Saleem and Ahmed Malik to stop arguing, my eyes scanning the scene to take in all the details.",
+      "speaker": "Constable Raza",
+      "turn": 5,
       "metadata": {
         "action": {
           "type": "INTERVENE",
@@ -121,237 +74,218 @@
     },
     {
       "type": "narration",
-      "content": "The camera cuts to Ahmed Malik, his face a mixture of frustration and agitation as he glares at Saleem, his voice still raised in anger. The bright afternoon sun casts a harsh glare on his expensive watch, emphasizing his sense of urgency. Constable Raza's intervention has momentarily calmed the situation, but the tension remains palpable.",
-      "turn": 9
+      "content": "A tight shot on Ahmed Malik's face reveals a muscle twitching in his jaw, his eyes narrowed as he cuts Constable Raza off mid-sentence. He checks his watch again, a gesture of profound impatience. The ambient noise of honking horns and murmuring crowd seems to amplify his rising frustration.",
+      "turn": 5
     },
     {
       "type": "dialogue",
       "speaker": "Ahmed Malik",
-      "content": "Look, Constable Raza, this is a clear case of negligence. Saleem here was driving recklessly, and look at the damage he's done to my car.",
-      "turn": 10
+      "content": "This is completely unacceptable! Do you understand the gravity of this situation? I am on an extremely tight schedule for an international flight, and now my bespoke automobile is marred.",
+      "turn": 6
     },
     {
       "type": "narration",
-      "content": "The camera zooms in on Constable Raza's sweaty face, his eyes darting between the two parties as he struggles to maintain order. The sound of horns honking and the chatter of the gathering crowd fills the air, punctuated by the occasional shout. The fading light of the setting sun casts a golden glow over the chaotic scene.",
-      "turn": 10
+      "content": "A bead of sweat trickles down Saleem's temple, reflecting the harsh afternoon sun. His eyes dart between the furious Ahmed Malik and the impassive Constable Raza, the weight of his family's survival pressing down on him, visible in his slumped shoulders amidst the growing, impatient crowd.",
+      "turn": 6
     },
     {
       "type": "dialogue",
+      "speaker": "Saleem",
+      "content": "Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than your big gaadi, yaar. Please, I have nothing, my family depends on me.",
+      "turn": 7
+    },
+    {
+      "type": "narration",
+      "content": "Constable Raza's patience snaps. He strides purposefully towards",
+      "turn": 7
+    },
+    {
+      "type": "action",
+      "content": "Constable Raza carefully examines the scene, inspecting every detail, taking control of the moment.",
       "speaker": "Constable Raza",
-      "content": "Arre bhai, why are you two still arguing? I've already listened to enough. Saleem, you'll have to pay for the damages, and Ahmed Malik, you'll have to let him go without a fine this time.",
-      "turn": 11
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Saleem's frantic face, sweat dripping down his forehead as he fidgets with his rickshaw's handlebars, the humid air thick with tension. The crowd's murmurs and Uncle Jameel's dramatic commentary fill the air as Saleem takes a step back, his eyes darting between Constable Raza and Ahmed Malik. The sunlight reflects off the rickshaw's metal body, casting a golden glow on the chaotic scene.",
-      "turn": 11
-    },
-    {
-      "type": "narration",
-      "content": "I carefully examine the damage to the expensive sedan, pointing out a few scratches that look like they came from the car's own bumper before the collision.",
-      "turn": 12,
+      "turn": 8,
       "metadata": {
         "action": {
           "type": "INVESTIGATE",
-          "actor": "Saleem"
+          "actor": "Constable Raza"
         }
       }
     },
     {
       "type": "narration",
-      "content": "The camera cuts to a close-up of Ahmed Malik's face, his eyes narrowing in frustration as the din of horns and shouting crowd fades into the background. The sunlight dancing across the asphalt accentuates his tense body language, his hands gripping the door handle of his sedan as if willing it to drive off on its own. His voice cuts through the air like a sharp knife, 'This is outrageous, Constable Raza, I demand you take immediate action.'",
-      "turn": 12
+      "content": "A close-up on Ahmed's expensive watch, ticking relentlessly, then his eyes dart from the constable to the growing crowd, his face a mask of escalating frustration. He clutches his phone, clearly calculating the shrinking window to his flight. The harsh afternoon sun glints off his brow, highlighting his desperation.",
+      "turn": 8
     },
     {
       "type": "dialogue",
       "speaker": "Ahmed Malik",
-      "content": "This is ridiculous, Constable Raza. You're just taking my side because you're friends with Saleem or something. I demand you take action and charge him with negligence.",
-      "turn": 13
+      "content": "This is absolutely unacceptable! Do you comprehend the critical nature of my international flight, which I am now undeniably late for, all while my S-Class sits here with such appalling damage? I expect immediate resolution, as every second counts towards missing my connection.",
+      "turn": 9
     },
     {
       "type": "narration",
-      "content": "The camera zooms in on Saleem's anxious face, sweat beading on his forehead as he continues to examine the damage to Ahmed Malik's car, the scorching sun beating down on the scene. The crowd around us grows thicker, their murmurs and shouts a cacophony of chaos. Constable Raza's expression remains stoic, but his gaze drifts towards Uncle Jameel, who's watching the exchange with an air of excitement.",
-      "turn": 13
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Arey bhai, yeh to pata hai ki car ki saaf dikhne wali scratch abhi se thi! Main kya kar sakta hoon, kisi galti se nahin, yaar. Yeh toh mere rickshaw ke liye ek aakrosh hai, jo main nahi chaahta. Ab aap kya kar rahe ho, bhai?",
-      "turn": 14
-    },
-    {
-      "type": "narration",
-      "content": "The camera cuts to Constable Raza, who's growing increasingly impatient, his expression a mix of frustration and annoyance as he's sandwiched between the arguing men. The setting sun casts a warm glow on the chaotic scene, but the atmosphere remains tense and heated. He takes a stern step forward, his eyes fixed on Saleem and Ahmed Malik, signaling that he's had enough of their bickering.",
-      "turn": 14
-    },
-    {
-      "type": "narration",
-      "content": "Constable Raza hands over money to settle the matter, taking control of the moment.",
-      "turn": 15,
-      "metadata": {
-        "action": {
-          "type": "MAKE_PAYMENT",
-          "actor": "Constable Raza"
-        }
-      }
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Saleem's worried face, sweat beading on his forehead as he protests the sudden settlement. The harsh sunlight from the late afternoon casts an unforgiving light on the chaotic scene, the hot asphalt and the tangled rickshaw and sedan. The crowd begins to disperse, sensing the resolution, but the tension still hangs in the air like the smell of exhaust fumes.",
-      "turn": 15
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Bhai, yeh sab sach hai kya? Main kuch bhi galat nahin kiya, yaar. Woh car ki saaf dikhne wali scratch abhi se thi, main to sirf rickshaw chala raha tha!",
-      "turn": 16
-    },
-    {
-      "type": "narration",
-      "content": "Tension thickens as the confrontation deepens.",
-      "turn": 16
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Arre bhai, yeh to jhooth hai! Woh car ki saaf dikhne wali scratch abhi se thi. Main kya kar sakta hoon? Yeh toh sirf paise mein galti nahin dikhana hai.",
-      "turn": 17
-    },
-    {
-      "type": "narration",
-      "content": "The camera cuts to Constable Raza, who stands firm, hands still clutching the crisp 500-rupee note. The fading sunlight casts a golden glow on his worn uniform, while the distant hum of traffic and the cacophony of angry voices create a chaotic atmosphere. His expression is unyielding, a mixture of tired resignation and calculated control.",
-      "turn": 17
-    },
-    {
-      "type": "narration",
-      "content": "I grab the megaphone from my car and raise my voice to silence the crowd. 'Everyone, please calm down. I'm taking over the situation. Saleem and Ahmed Malik, you both need to step aside while I assess the damage and decide the next course of action.'",
-      "turn": 18,
-      "metadata": {
-        "action": {
-          "type": "TAKE_DECISIVE_ACTION",
-          "actor": "Constable Raza"
-        }
-      }
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Saleem's frantic face as he protests his innocence, the crowd around him growing more agitated by the second. The harsh sunlight casts long shadows on the faces of the onlookers, heightening the sense of urgency and desperation. Saleem's words are laced with a mix of fear and defensiveness, his voice rising in desperation as he tries to convince Constable Raza of his side of the story.",
-      "turn": 18
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Bhai, yeh sachmuch galat hai! Main toh sirf rickshaw chala raha tha, aur koi bhi galti nahin kiya. Yeh paise wapas lao, main yeh sab saboot dekega!",
-      "turn": 19
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Constable Raza, his face stern and authoritative as he raises his voice to command the crowd's attention. The hot sun beats down on the scene, casting long shadows across the dusty street. The rickshaw and car remain stationary, a symbol of the stalemate between the two drivers.",
-      "turn": 19
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Constable Raza",
-      "content": "Chalo, chalo, koi galti nahin ho gayi hai, main kuch bhi nahin kharaab kar sakta hoon. Yeh sab koi jhooth hai. Ab yeh paise wapas lao, main yeh sab saboot dekega!",
-      "turn": 20
-    },
-    {
-      "type": "narration",
-      "content": "Saleem, still flustered, quickly steps forward, his eyes darting between Constable Raza and Ahmed Malik's silent form. The camera zooms in on his sweaty face as he begins to speak. The hot sun beats down on the scene, emphasizing the desperation in his voice.",
-      "turn": 20
-    },
-    {
-      "type": "narration",
-      "content": "Saleem calls for help, reaching out to bring someone to the scene, taking control of the moment.",
-      "turn": 21,
-      "metadata": {
-        "action": {
-          "type": "SUMMON_HELP",
-          "actor": "Saleem"
-        }
-      }
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Uncle Jameel's enthusiastic face, his eyes shining with excitement as he steps forward. The crowd parts for him, sensing an opportunity for drama. A warm, golden light illuminates the scene, highlighting the intricate details of Uncle Jameel's mustache.",
-      "turn": 21
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Uncle Jameel",
-      "content": "Arey bhai, yeh kya ho raha hai? Tumne kisi se bhi baat ki hai? Mujhe lagta hai ki sab kuchh theek ho jayega, lekin aab kuchh ho raha hai.",
-      "turn": 22
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Saleem's worried face, sweat glistening on his forehead as he tries to make sense of the chaos. The sounds of honking horns and murmuring crowd in the background create a sense of urgency. Saleem's frantic eyes scan the crowd, searching for a way out of this mess.",
-      "turn": 22
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Bhai, Uncle Jameel sahib, please help us out here. Tell them that I'm telling the truth, I didn't do anything wrong. Yeh paise wapas lao, main yeh sab saboot dekega!",
-      "turn": 23
-    },
-    {
-      "type": "narration",
-      "content": "The camera zooms in on Constable Raza's weathered face, his eyes squinting in the fading light of the day. He takes a deep breath, his chest expanding under his worn uniform, as he steps forward to intervene. The sound of traffic rumbles in the background, a cacophony of horns and engines, but Constable Raza's presence is a momentary calm in the chaos.",
-      "turn": 23
-    },
-    {
-      "type": "narration",
-      "content": "Constable Raza proposes terms to resolve the situation, taking control of the moment.",
-      "turn": 24,
-      "metadata": {
-        "action": {
-          "type": "NEGOTIATE",
-          "actor": "Constable Raza"
-        }
-      }
-    },
-    {
-      "type": "narration",
-      "content": "The camera cuts to Saleem, his eyes wide with desperation, as the setting sun casts a golden glow on his worried face. The sound of distant traffic and murmurs of the crowd create a sense of urgency. Saleem's hands are clenched into fists, his body language a testament to his frustration.",
-      "turn": 24
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Bhai, Uncle Jameel sahib, please, stop him! Tell him we're telling the truth, I didn't do anything wrong. Yeh koi faislein nahin karein, woh koi paise nahin lo.",
-      "turn": 25
-    },
-    {
-      "type": "narration",
-      "content": "The scene draws to its inevitable close.",
-      "turn": 25,
+      "content": "Constable Raza, having assessed the damage and the escalating tempers, finally makes a decision, his stern gaze silencing both men. Ahmed Malik, fuming but with no other recourse, grudgingly dials a number on his phone, his international trip now undoubtedly jeopardized. Saleem, shoulders slumped but clutching the few rupees Raza has extracted from Ahmed as a gesture of goodwill, begins to push his battered rickshaw to the side of the road, the crowd slowly dispersing as the afternoon sun casts long shadows over the bustling street. The constable stands for a moment, watching them both, before turning to walk away, the sounds of the city quickly swallowing the echo of the recent dispute.",
+      "turn": 9,
       "metadata": {
         "conclusion": true
       }
     }
   ],
+  "conclusion": {
+    "reason": "Constable Raza, having assessed the damage and the escalating tempers, finally makes a decision, his stern gaze silencing both men. Ahmed Malik, fuming but with no other recourse, grudgingly dials a number on his phone, his international trip now undoubtedly jeopardized. Saleem, shoulders slumped but clutching the few rupees Raza has extracted from Ahmed as a gesture of goodwill, begins to push his battered rickshaw to the side of the road, the crowd slowly dispersing as the afternoon sun casts long shadows over the bustling street. The constable stands for a moment, watching them both, before turning to walk away, the sounds of the city quickly swallowing the echo of the recent dispute.",
+    "final_turn": 9,
+    "actions_completed": 3,
+    "world_state": {
+      "confrontation_occurred": true,
+      "intervention_made": true,
+      "investigation_done": true
+    }
+  },
   "metadata": {
-    "total_turns": 25,
-    "conclusion_reason": "Maximum turns reached",
-    "distinct_actions": 8,
+    "total_turns": 9,
+    "conclusion_reason": "Constable Raza, having assessed the damage and the escalating tempers, finally makes a decision, his stern gaze silencing both men. Ahmed Malik, fuming but with no other recourse, grudgingly dials a number on his phone, his international trip now undoubtedly jeopardized. Saleem, shoulders slumped but clutching the few rupees Raza has extracted from Ahmed as a gesture of goodwill, begins to push his battered rickshaw to the side of the road, the crowd slowly dispersing as the afternoon sun casts long shadows over the bustling street. The constable stands for a moment, watching them both, before turning to walk away, the sounds of the city quickly swallowing the echo of the recent dispute.",
+    "distinct_actions": 3,
     "actions_taken": [
       "CONFRONT",
-      "EXIT_SCENE",
       "INTERVENE",
-      "INVESTIGATE",
-      "MAKE_PAYMENT",
-      "TAKE_DECISIVE_ACTION",
-      "SUMMON_HELP",
-      "NEGOTIATE"
+      "INVESTIGATE"
     ],
     "world_state": {
       "confrontation_occurred": true,
-      "Saleem_departed": true,
       "intervention_made": true,
-      "investigation_done": true,
-      "payment_made": true,
-      "decisive_action_taken": true,
-      "help_summoned": true,
-      "negotiation_proposed": true
+      "investigation_done": true
+    },
+    "emotion_history": [
+      {
+        "turn": 1,
+        "character": "Saleem",
+        "emotion": "panicked"
+      },
+      {
+        "turn": 2,
+        "character": "Ahmed Malik",
+        "emotion": "Frustration"
+      },
+      {
+        "turn": 3,
+        "character": "Constable Raza",
+        "emotion": "irritation"
+      },
+      {
+        "turn": 4,
+        "character": "Uncle Jameel",
+        "emotion": "concern"
+      },
+      {
+        "turn": 5,
+        "character": "Constable Raza",
+        "emotion": "irritation"
+      },
+      {
+        "turn": 6,
+        "character": "Ahmed Malik",
+        "emotion": "Exasperation, intense urgency, controlled fury."
+      },
+      {
+        "turn": 7,
+        "character": "Saleem",
+        "emotion": "Extreme panic and defensive fear"
+      },
+      {
+        "turn": 8,
+        "character": "Constable Raza",
+        "emotion": "frustration"
+      },
+      {
+        "turn": 9,
+        "character": "Ahmed Malik",
+        "emotion": "Impatient, exasperated, entitled"
+      }
+    ],
+    "character_memories": {
+      "Saleem": {
+        "knowledge": [
+          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+        ],
+        "inventory": [],
+        "emotional_state": "Extreme panic and defensive fear",
+        "perceptions": {},
+        "recent_events": [
+          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
+          "T5: Constable Raza performed INTERVENE",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
+          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
+          "T8: Constable Raza performed INVESTIGATE",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
+          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+        ]
+      },
+      "Ahmed Malik": {
+        "knowledge": [
+          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+        ],
+        "inventory": [],
+        "emotional_state": "Impatient, exasperated, entitled",
+        "perceptions": {},
+        "recent_events": [
+          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
+          "T5: Constable Raza performed INTERVENE",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
+          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
+          "T8: Constable Raza performed INVESTIGATE",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
+          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+        ]
+      },
+      "Constable Raza": {
+        "knowledge": [
+          "I performed CONFRONT at turn 3",
+          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
+          "I performed INTERVENE at turn 5",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "I performed INVESTIGATE at turn 8",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+        ],
+        "inventory": [],
+        "emotional_state": "frustration",
+        "perceptions": {},
+        "recent_events": [
+          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
+          "T5: Constable Raza performed INTERVENE",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
+          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
+          "T8: Constable Raza performed INVESTIGATE",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
+          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+        ]
+      },
+      "Uncle Jameel": {
+        "knowledge": [
+          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+        ],
+        "inventory": [],
+        "emotional_state": "concern",
+        "perceptions": {},
+        "recent_events": [
+          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
+          "T5: Constable Raza performed INTERVENE",
+          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
+          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
+          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
+          "T8: Constable Raza performed INVESTIGATE",
+          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
+          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+        ]
+      }
     }
   }
 }

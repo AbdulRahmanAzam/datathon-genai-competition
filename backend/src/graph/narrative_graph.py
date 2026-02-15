@@ -113,16 +113,21 @@ class NarrativeGraph:
 
         total = state.total_turns or self.config.max_turns
 
-        # ── Hard stop ───────────────────────────────────────────────────
+        # ── Hard stop — generate proper LLM conclusion ──────────────────
         if state.current_turn >= total:
+            try:
+                conclusion_narration = await self.director.generate_final_conclusion(state)
+            except Exception:
+                conclusion_narration = "The scene finally draws to a close as the moment passes."
+
             return {
                 "is_concluded": True,
-                "conclusion_reason": "Maximum turns reached",
+                "conclusion_reason": conclusion_narration,
                 "events": state.events
                 + [
                     {
                         "type": "narration",
-                        "content": "The scene finally draws to a close as the moment passes.",
+                        "content": conclusion_narration,
                         "turn": state.current_turn,
                         "metadata": {"conclusion": True},
                     }
@@ -456,16 +461,21 @@ class NarrativeGraph:
         min_turns = max(3, int(total * 0.6))
         distinct_actions = len(set(state.actions_taken))
 
-        # hard stop
+        # hard stop — generate proper LLM conclusion
         if state.current_turn >= total:
+            try:
+                conclusion_narration = await self.director.generate_final_conclusion(state)
+            except Exception:
+                conclusion_narration = "The scene draws to its inevitable close."
+
             return {
                 "is_concluded": True,
-                "conclusion_reason": "Maximum turns reached",
+                "conclusion_reason": conclusion_narration,
                 "events": state.events
                 + [
                     {
                         "type": "narration",
-                        "content": "The scene draws to its inevitable close.",
+                        "content": conclusion_narration,
                         "turn": state.current_turn,
                         "metadata": {"conclusion": True},
                     }
@@ -511,8 +521,31 @@ class NarrativeGraph:
     # ────────────────────────────────────────────────────────────────────
 
     async def _conclude_node(self, state: StoryState) -> Dict:
-        """Final node — marks story concluded."""
-        return {"is_concluded": True}
+        """Final node — ensures a proper conclusion narration exists."""
+        updates = {"is_concluded": True}
+
+        # If no proper conclusion narration was generated yet, generate one now
+        has_conclusion_event = any(
+            isinstance(e, dict) and (e.get("metadata") or {}).get("conclusion")
+            for e in state.events
+        )
+        if not has_conclusion_event:
+            try:
+                conclusion_narration = await self.director.generate_final_conclusion(state)
+            except Exception:
+                conclusion_narration = "The story reaches its end."
+
+            updates["conclusion_reason"] = conclusion_narration
+            updates["events"] = state.events + [
+                {
+                    "type": "narration",
+                    "content": conclusion_narration,
+                    "turn": state.current_turn,
+                    "metadata": {"conclusion": True},
+                }
+            ]
+
+        return updates
 
     # ════════════════════════════════════════════════════════════════════
     #  RUN

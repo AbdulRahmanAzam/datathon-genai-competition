@@ -8,6 +8,7 @@ from ..prompts.director_prompts import (
     build_arc_planning_prompt,
     build_director_select_prompt,
     build_director_conclusion_prompt,
+    build_final_conclusion_narration_prompt,
     ALLOWED_ACTIONS,
 )
 
@@ -305,3 +306,62 @@ class DirectorAgent(BaseAgent):
         # Fallback: don't end
         print("[Director] Conclusion repair failed, defaulting to continue")
         return False, None
+
+    # ════════════════════════════════════════════════════════════════
+    #  FINAL CONCLUSION NARRATION
+    # ════════════════════════════════════════════════════════════════
+
+    async def generate_final_conclusion(
+        self, story_state: StoryState
+    ) -> str:
+        """Generate a cinematic conclusion narration that wraps up the story."""
+        prompt = build_final_conclusion_narration_prompt(
+            story_state=story_state,
+            config=self.config,
+        )
+
+        response = await self.generate_response(prompt)
+
+        if not response or not response.strip():
+            return self._fallback_conclusion(story_state)
+
+        # Attempt 1: safe parse
+        data = self.safe_parse_json(response)
+        if data and data.get("conclusion_narration"):
+            return data["conclusion_narration"]
+
+        # Attempt 2: repair
+        print("[Director] Conclusion narration parse failed, attempting repair…")
+        schema = '{"conclusion_narration": "...", "final_outcome": "..."}'
+        data = await self._repair_json(response, schema)
+        if data and data.get("conclusion_narration"):
+            return data["conclusion_narration"]
+
+        # Attempt 3: use raw response if it looks like narration
+        stripped = response.strip()
+        if len(stripped) > 30 and not stripped.startswith("{"):
+            return stripped[:500]
+
+        return self._fallback_conclusion(story_state)
+
+    def _fallback_conclusion(self, story_state: StoryState) -> str:
+        """Deterministic fallback conclusion when LLM fails."""
+        seed = story_state.seed_story or {}
+        title = seed.get("title", "Untitled")
+        chars = list((story_state.character_profiles or {}).keys())
+        char_text = " and ".join(chars) if chars else "The characters"
+        actions = list(set(story_state.actions_taken))
+
+        if actions:
+            return (
+                f"The scene of \"{title}\" draws to a close. "
+                f"After {len(actions)} decisive moments — "
+                f"{', '.join(actions[:3]).lower().replace('_', ' ')} — "
+                f"{char_text} part ways, each carrying the weight of what transpired. "
+                f"The dust settles, and life moves on."
+            )
+        return (
+            f"The scene of \"{title}\" finally comes to an end. "
+            f"{char_text} stand in the aftermath, the tension slowly dissolving. "
+            f"What happened here will not be easily forgotten."
+        )
