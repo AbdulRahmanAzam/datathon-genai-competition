@@ -14,6 +14,19 @@ class DialogueTurn(BaseModel):
 class CharacterProfile(BaseModel):
     name: str
     description: str
+    goals: List[str] = Field(default_factory=list)
+    inventory: List[str] = Field(default_factory=list)
+    emotional_state: str = "neutral"
+    relationships: Dict[str, str] = Field(default_factory=dict)
+
+
+class CharacterMemory(BaseModel):
+    """Structured memory buffer for a character."""
+    knowledge: List[str] = Field(default_factory=list)
+    inventory: List[str] = Field(default_factory=list)
+    emotional_state: str = "neutral"
+    perceptions: Dict[str, str] = Field(default_factory=dict)
+    recent_events: List[str] = Field(default_factory=list)
 
 
 class StoryState(BaseModel):
@@ -36,12 +49,16 @@ class StoryState(BaseModel):
     # ── Generic world state (dynamic, story-specific) ───────────────────
     world_state: Dict[str, Any] = Field(default_factory=dict)
 
-    # ── Per‑character short‑term memory ─────────────────────────────────
-    character_memories: Dict[str, List[str]] = Field(default_factory=dict)
+    # ── Per‑character structured memory ──────────────────────────────────
+    character_memories: Dict[str, Any] = Field(default_factory=dict)
 
     # ── Action tracking ─────────────────────────────────────────────────
     actions_taken: List[str] = Field(default_factory=list)
     turns_since_state_change: int = 0
+
+    # ── Emotion & relationship tracking ─────────────────────────────────
+    emotion_history: List[Dict[str, Any]] = Field(default_factory=list)
+    relationship_changes: List[Dict[str, Any]] = Field(default_factory=list)
 
     # ── Internal flow control (transient per turn) ──────────────────────
     force_act: bool = False

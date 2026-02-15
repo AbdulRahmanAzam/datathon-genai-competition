@@ -5,8 +5,8 @@ explicit ALLOWED list passed in; the prompt tells the LLM that
 any other action will be rejected.
 """
 
-from typing import List, Optional
-from ..schemas import CharacterProfile, StoryState
+from typing import List, Optional, Any
+from ..schemas import CharacterProfile, CharacterMemory, StoryState
 from ..action_system import ACTION_DEFINITIONS
 
 ALLOWED_ACTIONS = sorted(ACTION_DEFINITIONS.keys())
@@ -39,7 +39,7 @@ def build_character_context_pack(
     character_name: str,
     character_profile: Optional[CharacterProfile],
     story_state: StoryState,
-    memories: List[str],
+    memories: Any,
     allowed_actions: List[str],
     force_act: bool,
     config,
@@ -99,12 +99,48 @@ def build_character_context_pack(
                 "Say something COMPLETELY DIFFERENT. !!"
             )
 
-    # ── Memory ──────────────────────────────────────────────────────
-    memory_text = (
-        "\n".join(f"  - {m}" for m in memories)
-        if memories
-        else "  - No memories yet."
-    )
+    # ── Structured Memory ───────────────────────────────────────────
+    if memories and isinstance(memories, CharacterMemory):
+        knowledge_text = (
+            "\n".join(f"  - {k}" for k in memories.knowledge)
+            if memories.knowledge else "  - Nothing specific learned yet."
+        )
+        inventory_text = (
+            "\n".join(f"  - {i}" for i in memories.inventory)
+            if memories.inventory else "  - Nothing notable."
+        )
+        perception_lines = []
+        for pname, view in memories.perceptions.items():
+            if pname != character_name:
+                perception_lines.append(f"  - {pname}: {view}")
+        perception_text = (
+            "\n".join(perception_lines)
+            if perception_lines else "  - No strong impressions yet."
+        )
+        recent_text_mem = (
+            "\n".join(f"  - {e}" for e in memories.recent_events[-6:])
+            if memories.recent_events else "  - No recent events."
+        )
+        emotional = memories.emotional_state or "neutral"
+        memory_text = (
+            f"WHAT YOU KNOW:\n{knowledge_text}\n\n"
+            f"YOUR INVENTORY:\n{inventory_text}\n\n"
+            f"YOUR EMOTIONAL STATE: {emotional}\n\n"
+            f"HOW YOU SEE OTHERS:\n{perception_text}\n\n"
+            f"RECENT EVENTS YOU WITNESSED:\n{recent_text_mem}"
+        )
+    elif memories and isinstance(memories, list):
+        memory_text = (
+            "\n".join(f"  - {m}" for m in memories)
+            if memories else "  - No memories yet."
+        )
+    else:
+        memory_text = "  - No memories yet."
+
+    # ── Character goals ─────────────────────────────────────────────
+    goals_text = ""
+    if character_profile and character_profile.goals:
+        goals_text = "\nYOUR GOALS:\n" + "\n".join(f"  - {g}" for g in character_profile.goals)
 
     # ── Recent dialogue ─────────────────────────────────────────────
     recent = story_state.dialogue_history[-4:]
@@ -168,6 +204,7 @@ WORLD STATE:
 
 YOUR MEMORY:
 {memory_text}
+{goals_text}
 
 RECENT:
 {recent_text}

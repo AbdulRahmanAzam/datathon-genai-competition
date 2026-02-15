@@ -73,6 +73,74 @@ def _log_table_missing():
     )
 
 
+async def create_story_run(
+    title: str,
+    description: str,
+    characters: List[Dict[str, str]],
+) -> Optional[str]:
+    """Create an initial story run record. Returns the run ID for incremental updates."""
+    global _table_exists
+    if _table_exists is False:
+        return None
+    try:
+        client = get_supabase()
+        if client is None:
+            return None
+        data = {
+            "title": title,
+            "description": description,
+            "characters": characters,
+            "events": [],
+            "timeline": [],
+            "summary": {"status": "in_progress"},
+        }
+        result = client.table(TABLE).insert(data).execute()
+        _table_exists = True
+        if result.data:
+            run_id = result.data[0]["id"]
+            print(f"[Supabase] Created story run: {run_id}")
+            return run_id
+        return None
+    except Exception as e:
+        if _check_table_error(e):
+            _table_exists = False
+            _log_table_missing()
+        else:
+            print(f"[Supabase] Error creating story run: {e}")
+        return None
+
+
+async def update_story_run(
+    run_id: str,
+    events: List[Dict[str, Any]],
+    timeline: List[Dict[str, Any]],
+    summary: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """Update a story run with new events and timeline data (incremental save)."""
+    global _table_exists
+    if _table_exists is False:
+        return False
+    try:
+        client = get_supabase()
+        if client is None:
+            return False
+        data = {
+            "events": events,
+            "timeline": timeline,
+        }
+        if summary:
+            data["summary"] = summary
+        client.table(TABLE).update(data).eq("id", run_id).execute()
+        return True
+    except Exception as e:
+        if _check_table_error(e):
+            _table_exists = False
+            _log_table_missing()
+        else:
+            print(f"[Supabase] Error updating story run {run_id}: {e}")
+        return False
+
+
 async def save_story_run(
     title: str,
     description: str,

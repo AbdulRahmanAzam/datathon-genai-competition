@@ -130,12 +130,19 @@ async def main():
         "title": seed_story.get("title"),
         "seed_story": seed_story,
         "events": final_state.get("events", []),
+        "conclusion": {
+            "reason": final_state.get("conclusion_reason", "Story concluded"),
+            "final_turn": total_turns,
+            "actions_completed": distinct,
+            "world_state": final_state.get("world_state", {}),
+        },
         "metadata": {
             "total_turns": total_turns,
             "conclusion_reason": final_state.get("conclusion_reason"),
             "distinct_actions": distinct,
             "actions_taken": actions,
             "world_state": final_state.get("world_state", {}),
+            "emotion_history": final_state.get("emotion_history", []),
         },
     }
 
@@ -159,6 +166,19 @@ async def main():
     prompts_path = project_root / "prompts_log.json"
     prompts_path.write_text(json.dumps(all_logs, indent=2, default=str))
     print(f"Prompts saved to {prompts_path}")
+
+    # ── Save prompts.jsonl ───────────────────────────────────────────────
+    jsonl_path = project_root / "prompts.jsonl"
+    with open(jsonl_path, "w", encoding="utf-8") as f:
+        for log_entry in all_logs:
+            entry_data = {
+                "timestamp": log_entry["timestamp"],
+                "agent": log_entry["agent"],
+                "prompt": log_entry["prompt"],
+                "response": log_entry["response"],
+            }
+            f.write(json.dumps(entry_data, ensure_ascii=False, default=str) + "\n")
+    print(f"JSONL prompts saved to {jsonl_path}")
 
 
 if __name__ == "__main__":

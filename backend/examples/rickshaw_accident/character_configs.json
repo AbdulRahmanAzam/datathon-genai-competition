@@ -2,19 +2,51 @@
     "characters": [
         {
             "name": "Saleem",
-            "description": "Poor rickshaw driver, sole earner for family of 5. Speaks Urdu-English mix, uses 'bhai' and 'yaar'. Panicked and defensive after minor accident with expensive car."
+            "description": "Poor rickshaw driver, sole earner for family of 5. Speaks Urdu-English mix, uses 'bhai' and 'yaar'. Panicked and defensive after minor accident with expensive car.",
+            "goals": ["Get fair compensation for rickshaw damage", "Protect his livelihood and family income", "Avoid being blamed unfairly"],
+            "inventory": ["Damaged rickshaw", "Old Nokia phone", "Daily earnings (small cash)", "Vehicle registration papers"],
+            "emotional_state": "Panicked and desperate",
+            "relationships": {
+                "Ahmed Malik": "Adversary — wealthy car owner who caused the accident",
+                "Constable Raza": "Authority figure — hopes for fair judgment but fears corruption",
+                "Uncle Jameel": "Potential ally — trusted community elder and witness"
+            }
         },
         {
             "name": "Ahmed Malik",
-            "description": "Wealthy car owner and businessman, late for an international flight. Impatient, entitled. Speaks formally but stressed about missing his flight and the damage to his expensive sedan."
+            "description": "Wealthy car owner and businessman, late for an international flight. Impatient, entitled. Speaks formally but stressed about missing his flight and the damage to his expensive sedan.",
+            "goals": ["Get to the airport before his flight departs", "Minimize financial loss from car damage", "Resolve the situation quickly by any means"],
+            "inventory": ["Expensive sedan (damaged)", "Smartphone", "Wallet with cash and cards", "Flight ticket", "Business briefcase"],
+            "emotional_state": "Stressed and impatient",
+            "relationships": {
+                "Saleem": "Nuisance — poor rickshaw driver who damaged his car",
+                "Constable Raza": "Useful authority — can be influenced with money",
+                "Uncle Jameel": "Irrelevant bystander — annoying interference"
+            }
         },
         {
             "name": "Constable Raza",
-            "description": "15-year traffic police veteran, underpaid and cynical. Just wants to clear traffic and maybe get a 'facilitation fee'. Sees this as everyday nuisance."
+            "description": "15-year traffic police veteran, underpaid and cynical. Just wants to clear traffic and maybe get a 'facilitation fee'. Sees this as everyday nuisance.",
+            "goals": ["Clear the traffic jam quickly", "Extract a facilitation fee from the situation", "Maintain appearance of authority"],
+            "inventory": ["Police badge and whistle", "Traffic challan book", "Old service revolver", "Personal phone"],
+            "emotional_state": "Cynical and opportunistic",
+            "relationships": {
+                "Saleem": "Common citizen — typical reckless driver",
+                "Ahmed Malik": "VIP type — potential source of easy money",
+                "Uncle Jameel": "Known local busybody — annoying but harmless"
+            }
         },
         {
             "name": "Uncle Jameel",
-            "description": "Local shopkeeper who witnessed everything. Nosy, loves drama, gives unsolicited advice in thick Urdu accent. Claims to know 'someone in police'."
+            "description": "Local shopkeeper who witnessed everything. Nosy, loves drama, gives unsolicited advice in thick Urdu accent. Claims to know 'someone in police'.",
+            "goals": ["Insert himself into the drama", "Prove he saw everything and his testimony matters", "Mediate and earn social standing"],
+            "inventory": ["Shop keys", "Old phone", "Chai cup", "Reading glasses"],
+            "emotional_state": "Excited and nosy",
+            "relationships": {
+                "Saleem": "Sympathetic neighbor — poor fellow deserves help",
+                "Ahmed Malik": "Suspicious outsider — rich people always try to bully",
+                "Constable Raza": "Acquaintance — knows his type, can be managed"
+            }
         }
     ]
 }

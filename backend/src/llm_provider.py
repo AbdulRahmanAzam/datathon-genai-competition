@@ -244,11 +244,20 @@ class LLMProvider:
         
         Automatically handles failover between API keys.
         """
-        max_attempts = len(self.api_keys) * 5  # Allow more retries after cooldowns
+        max_attempts = len(self.api_keys) * 3  # Retry each key up to 3 times
         attempts = 0
         last_error = None
+        start_time = datetime.now()
+        max_total_seconds = 120  # Give up after 2 minutes total
 
         while attempts < max_attempts:
+            # Hard timeout to prevent infinite loops when all keys are rate-limited
+            if (datetime.now() - start_time).total_seconds() > max_total_seconds:
+                raise RuntimeError(
+                    f"LLM generation timed out after {max_total_seconds}s. "
+                    f"All API keys are likely rate-limited. Last error: {last_error}"
+                )
+
             key_index = self._get_available_key_index()
             
             if key_index is None:

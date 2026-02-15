@@ -13,7 +13,7 @@ Nodes:
 from typing import Dict, List, Any, Optional
 from langgraph.graph import StateGraph, END
 from ..config import StoryConfig
-from ..schemas import StoryState, DialogueTurn
+from ..schemas import StoryState, CharacterProfile, CharacterMemory, DialogueTurn
 from ..agents.character_agent import CharacterAgent
 from ..agents.director_agent import DirectorAgent
 from ..action_system import ActionSystem, RESOLUTION_SIGNALS
@@ -242,7 +242,7 @@ class NarrativeGraph:
                 a for a in allowed_actions if a != state.suggested_action
             ]
 
-        memories = state.character_memories.get(next_speaker, [])
+        memories = state.character_memories.get(next_speaker, CharacterMemory())
 
         decision = await character.reason_and_decide(
             story_state=state,
@@ -289,8 +289,9 @@ class NarrativeGraph:
                 updates.update(effects)
 
                 new_event = {
-                    "type": "narration",
+                    "type": "action",
                     "content": narration,
+                    "speaker": speaker,
                     "turn": state.current_turn + 1,
                     "metadata": {
                         "action": {"type": action["type"], "actor": speaker}
@@ -344,11 +345,18 @@ class NarrativeGraph:
     # ────────────────────────────────────────────────────────────────────
 
     async def _memory_update_node(self, state: StoryState) -> Dict:
-        """Update per-character short-term memory buffers."""
+        """Update per-character structured memory with information asymmetry."""
 
-        memories = {k: list(v) for k, v in state.character_memories.items()}
+        # Deep copy existing memories
+        memories: Dict[str, CharacterMemory] = {}
         for name in self.characters:
-            memories.setdefault(name, [])
+            existing = state.character_memories.get(name)
+            if existing and isinstance(existing, CharacterMemory):
+                memories[name] = existing.model_copy(deep=True)
+            elif existing and isinstance(existing, dict):
+                memories[name] = CharacterMemory(**existing)
+            else:
+                memories[name] = CharacterMemory()
 
         last_event = state.events[-1] if state.events else None
         if not last_event:
@@ -357,7 +365,17 @@ class NarrativeGraph:
         speaker = state.next_speaker or "Unknown"
         max_mem = self.config.memory_buffer_size
 
-        # ── create memory line ──────────────────────────────────────────
+        # ── Determine present characters (information asymmetry) ────────
+        present_characters = set()
+        world = state.world_state or {}
+        for name in self.characters:
+            departed_key = f"{name}_departed"
+            if not world.get(departed_key, False):
+                present_characters.add(name)
+        # The active speaker always witnesses their own event
+        present_characters.add(speaker)
+
+        # ── Create memory line ──────────────────────────────────────────
         action_meta = (last_event.get("metadata") or {}).get("action")
         if last_event["type"] == "dialogue":
             preview = (last_event.get("content") or "")[:80]
@@ -371,26 +389,58 @@ class NarrativeGraph:
             preview = (last_event.get("content") or "")[:80]
             memory_line = f"T{last_event['turn']}: {preview}"
 
-        for name in self.characters:
-            mem = memories[name]
-            mem.append(memory_line)
-            memories[name] = mem[-max_mem:]
+        # ── Update only PRESENT characters (information asymmetry) ──────
+        for name in present_characters:
+            if name in memories:
+                mem = memories[name]
+                mem.recent_events.append(memory_line)
+                mem.recent_events = mem.recent_events[-max_mem:]
 
-        # ── global fact for state-changing actions ──────────────────────
+        # ── Update knowledge and facts for state-changing actions ───────
         if action_meta:
-            world = state.world_state or {}
-            fact_parts = [f"[FACT] {action_meta['type']} executed by {action_meta['actor']}"]
-            # Include any world state changes
+            actor = action_meta.get("actor", speaker)
+            action_type = action_meta.get("type", "UNKNOWN")
+
+            # Actor gains specific knowledge about their action
+            if actor in memories:
+                memories[actor].knowledge.append(
+                    f"I performed {action_type} at turn {last_event['turn']}"
+                )
+
+            # All present characters learn the observable fact
+            fact_parts = [f"{action_type} by {actor}"]
             for k, v in world.items():
                 if isinstance(v, bool) and v:
                     fact_parts.append(k.replace("_", " "))
-            global_fact = " | ".join(fact_parts)
-            for name in self.characters:
-                mem = memories[name]
-                mem.append(global_fact)
-                memories[name] = mem[-max_mem:]
+            global_fact = "[FACT] " + " | ".join(fact_parts)
 
-        return {"character_memories": memories}
+            for name in present_characters:
+                if name in memories:
+                    mem = memories[name]
+                    mem.knowledge.append(global_fact)
+                    mem.recent_events.append(global_fact)
+                    mem.recent_events = mem.recent_events[-max_mem:]
+
+        # ── Update speaker's emotional state from their decision ────────
+        decision = state.pending_decision or {}
+        emotion = decision.get("emotion")
+        if emotion and speaker in memories:
+            memories[speaker].emotional_state = emotion
+
+        # ── Track emotion history ───────────────────────────────────────
+        emotion_entry = None
+        if emotion and speaker:
+            emotion_entry = {
+                "turn": last_event.get("turn", state.current_turn),
+                "character": speaker,
+                "emotion": emotion,
+            }
+
+        updates = {"character_memories": memories}
+        if emotion_entry:
+            updates["emotion_history"] = state.emotion_history + [emotion_entry]
+
+        return updates
 
     # ────────────────────────────────────────────────────────────────────
 
@@ -477,7 +527,15 @@ class NarrativeGraph:
         """Execute the narrative game loop and return final state."""
 
         turns = total_turns or self.config.max_turns
-        memories = {name: [] for name in (character_profiles or {})}
+
+        # Initialize structured per-character memory
+        memories: Dict[str, CharacterMemory] = {}
+        for name, profile in (character_profiles or {}).items():
+            memories[name] = CharacterMemory(
+                inventory=list(getattr(profile, 'inventory', []) or []),
+                emotional_state=getattr(profile, 'emotional_state', 'neutral') or 'neutral',
+                perceptions=dict(getattr(profile, 'relationships', {}) or {}),
+            )
 
         # ── Plan the story arc ─────────────────────────────────────────
         char_list = []

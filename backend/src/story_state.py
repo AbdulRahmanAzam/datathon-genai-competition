@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple, Optional
 from datetime import datetime
-from .schemas import StoryState, CharacterProfile, DialogueTurn
+from .schemas import StoryState, CharacterProfile, CharacterMemory, DialogueTurn
 from .config import StoryConfig
 
 
@@ -16,10 +16,21 @@ class StoryStateManager:
                 char["name"]: CharacterProfile(
                     name=char["name"],
                     description=char["description"],
+                    goals=char.get("goals", []),
+                    inventory=char.get("inventory", []),
+                    emotional_state=char.get("emotional_state", "neutral"),
+                    relationships=char.get("relationships", {}),
                 )
                 for char in characters
             },
-            character_memories={char["name"]: [] for char in characters},
+            character_memories={
+                char["name"]: CharacterMemory(
+                    inventory=list(char.get("inventory", [])),
+                    emotional_state=char.get("emotional_state", "neutral"),
+                    perceptions=dict(char.get("relationships", {})),
+                )
+                for char in characters
+            },
         )
 
     def should_end_story(self) -> Tuple[bool, str]:
