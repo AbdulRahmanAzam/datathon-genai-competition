@@ -64,7 +64,7 @@ async def main():
         config.max_turns = int(env_turns)
 
     # Auto-calculate min_actions based on turn budget
-    config.min_actions = max(2, config.max_turns // 5)
+    config.min_actions = max(5, config.max_turns // 5)
 
     # Create character agents
     characters = [

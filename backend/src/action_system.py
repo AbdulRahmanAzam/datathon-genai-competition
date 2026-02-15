@@ -12,6 +12,15 @@ from typing import Dict, Any, Tuple, List
 # ── Generic action catalogue ───────────────────────────────────────────────
 # These actions are universal narrative beats, not tied to any specific story.
 
+# World-state keys that indicate a resolution has been reached.
+# Used by the Director and graph to decide when to conclude the story.
+RESOLUTION_SIGNALS = {
+    "terms_accepted",
+    "payment_made",
+    "decisive_action_taken",
+    "help_summoned",
+}
+
 ACTION_DEFINITIONS: Dict[str, Dict[str, Any]] = {
     "INVESTIGATE": {
         "description": "Examine, inspect, or carefully assess something in the scene",

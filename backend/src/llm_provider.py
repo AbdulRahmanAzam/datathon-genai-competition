@@ -43,7 +43,7 @@ class LLMProvider:
         self._current_index = 0
         self._lock = asyncio.Lock()
         self._last_request_time: Optional[datetime] = None
-        self._min_request_interval = 2.0  # seconds between requests to avoid RPM limits
+        self._min_request_interval = 4.0  # seconds between requests to avoid RPM limits
         
         # Load all available API keys
         self._load_api_keys()
@@ -244,7 +244,7 @@ class LLMProvider:
         
         Automatically handles failover between API keys.
         """
-        max_attempts = len(self.api_keys) * 3  # Allow more retries after cooldowns
+        max_attempts = len(self.api_keys) * 5  # Allow more retries after cooldowns
         attempts = 0
         last_error = None
 
