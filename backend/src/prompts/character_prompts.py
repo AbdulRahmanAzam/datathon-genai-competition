@@ -77,7 +77,8 @@ def build_character_context_pack(
     # ── Action tracking ─────────────────────────────────────────────
     distinct_actions = len(set(story_state.actions_taken))
     used_actions = sorted(set(story_state.actions_taken))
-    min_actions = max(5, total // 5)
+    # Scale min_actions proportionally: ~20% of total turns
+    min_actions = max(3, total // 5)
     unused_actions = sorted(set(allowed_actions) - set(story_state.actions_taken))
 
     # ── Repetition detection ────────────────────────────────────────
@@ -217,35 +218,54 @@ DIRECTION: {phase_hint}
 
 PERFORMANCE RULES:
 1. EMOTIONAL AUTHENTICITY: Feel rage, fear, desperation, hope. Raw emotion.
-2. LANGUAGE: Speak how YOUR character speaks — dialect, slang, code-switching.
+2. LANGUAGE CONSISTENCY (CRITICAL):
+   - Speak ENTIRELY in clear, natural English.
+   - NEVER use non-English words, transliteration, or code-switching.
+   - Use the tone, dialect, and expressions that fit your character's background,
+     but all dialogue must be in English.
+   - Example: Instead of "Bhai sahab, yeh kya hai?", say "Sir, what is this?"
 3. SPECIFICITY: Name things. Reference exact scene details. No generic lines.
 4. REACTIVITY: Respond to what just happened. Acknowledge, counter, twist.
 5. GOAL-DRIVEN: Every line pursues something — defend, accuse, demand, plead.
 6. ECONOMY: 2-4 sentences max. Every word earns its place.
 7. ANTI-FILLER: NEVER say "Let me think" or "What's going on?" — every line
    must reveal info, shift power, escalate, or trigger reaction.
+8. FULL CONTEXT: Never give half-responses. Every line must feel complete,
+   grounded in the scene, and advance the story meaningfully.
+9. COMPLETION: Every sentence must be a complete thought. No trailing off,
+   no incomplete ideas, no fragmented speech unless dramatically intentional.
 
 WHEN TO ACT vs TALK:
 - TALK: communicate, persuade, accuse, defend, negotiate, reveal.
+  Dialogue must be COMPLETE sentences with full context. No fragments.
 - ACT: when words aren't enough — examine, call help, confront, pay, leave.
-  When you ACT, provide vivid narration in action.params.narration (2-3 sentences).
+  When YOU ACT, provide vivid narration in action.params.narration (2-3 complete sentences).
 
 !! CRITICAL: action.type MUST be EXACTLY one of: {', '.join(allowed_actions)} !!
 !! Any other action type is INVALID and WILL BE REJECTED. !!
 
+DIALOGUE REQUIREMENTS:
+- Every line must be a COMPLETE thought, not half-finished.
+- Reference the CURRENT situation specifically — who's there, what just happened.
+- Advance the scene meaningfully — reveal something, change the dynamic, create tension.
+- NO vague statements like "I don't know what to say" or "This is confusing."
+- Every sentence must have clear subject, verb, and complete meaning.
+
 OUTPUT RULES (MANDATORY):
 - Return ONLY raw JSON. No backticks. No markdown fences. No prose before or after.
 - No trailing commas.
-- If you cannot comply, output a valid TALK response.
+- Every field must contain COMPLETE content — no half-sentences, no fragments.
+- Speech must be 2-4 COMPLETE sentences in clear English.
+- If you cannot comply, output a valid TALK response with complete dialogue.
 
 REQUIRED JSON:
 {{
-  "observation": "What you notice right now (1 sentence)",
-  "reasoning": "Your internal thought (1-2 sentences)",
+  "observation": "What you notice right now (1 complete sentence)",
+  "reasoning": "Your internal thought (1-2 complete sentences)",
   "emotion": "dominant emotion",
   "mode": "TALK" or "ACT",
-  "speech": "Your dialogue (2-4 sentences)" or null,
-  "action": {{"type": "ACTION_TYPE_FROM_LIST", "target": null, "params": {{"narration": "2-3 cinematic sentences"}}}} or null
+  "speech": "Your dialogue — 2-4 complete sentences in English" or null,
+  "action": {{"type": "ACTION_TYPE_FROM_LIST", "target": null, "params": {{"narration": "2-3 complete cinematic sentences"}}}} or null
 }}"""
 
 

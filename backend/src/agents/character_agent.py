@@ -119,7 +119,7 @@ class CharacterAgent(BaseAgent):
                 "target": None,
                 "params": {
                     "narration": (
-                        f"{self.name} {hint}, taking control of the moment."
+                        f"{self.name} {hint}."
                     )
                 },
             },
@@ -170,33 +170,37 @@ class CharacterAgent(BaseAgent):
                     "target": None,
                     "params": {
                         "narration": (
-                            f"{self.name} {hint}, stepping forward decisively."
+                            f"{self.name} {hint}."
                         )
                     },
                 },
             }
 
-        # TALK fallback
+        # TALK fallback — context-aware, never generic
         recent = (
             story_state.dialogue_history[-1:]
             if story_state.dialogue_history
             else []
         )
         if recent:
+            last = recent[0].speaker
             fallback_speech = (
-                f"*turns to {recent[0].speaker}* "
-                "Hold on — I have something to say about that."
+                f"Wait — I need to say something about this."
             )
         elif "police" in profile_desc.lower() or "constable" in profile_desc.lower():
             fallback_speech = (
-                "Alright, everyone stay calm. I need to understand what happened."
+                "Everyone stay calm. I need to understand what happened here."
             )
         elif "driver" in profile_desc.lower() or "rickshaw" in profile_desc.lower():
             fallback_speech = (
-                "This wasn't my fault — look at the damage."
+                "This wasn't my fault — look at the damage yourself."
+            )
+        elif "aunty" in profile_desc.lower() or "mother" in profile_desc.lower():
+            fallback_speech = (
+                "What is going on here? Someone needs to explain this to me."
             )
         else:
-            fallback_speech = "*surveys the scene* Let me see what's really going on."
+            fallback_speech = "Let me see what's really happening here."
 
         return {
             "observation": "The scene demands attention.",

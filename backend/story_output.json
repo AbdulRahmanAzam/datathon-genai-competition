@@ -1,289 +1,610 @@
 {
-  "title": "The Rickshaw Accident",
+  "title": "The Rain Delay Confession",
   "seed_story": {
-    "title": "The Rickshaw Accident",
-    "description": "Late afternoon on Shahrah-e-Faisal near Karachi Airport. Rush hour traffic. Hot and humid. A rickshaw and a car have collided, both drivers blaming each other. Horns honking, crowd gathering. Traffic police known to ask for bribe. Everyone wants this over fast but for different reasons."
+    "title": "The Rain Delay Confession",
+    "description": "Late night at Jinnah International Airport, Karachi. Heavy rain has delayed all flights. A girl is leaving for Canada for good. Her ex-boyfriend shows up just to “return her book.” Flight keeps getting delayed. Boarding announcements echo. Her family is nearby. His best friend accidentally reveals he still loves her. She thinks he moved on. He thinks she’s engaged. Neither knows the full truth. Time is running out."
   },
   "events": [
     {
       "type": "narration",
-      "content": "A tight close-up on Saleem's sweat-streaked face, eyes darting between his damaged rickshaw and the pristine sedan, fear and frustration etched deep. The harsh late afternoon sun glares off the dented metal, highlighting the disparity in their vehicles and fortunes. Horns blare relentlessly in the background, a relentless assault on the already thick, humid air.",
+      "content": "The soft glow of the airport's fluorescent lights casts an unforgiving beam on Uncle Farooq's stern face as he keeps a watchful eye on Noor, his hands clasped tightly behind his back, the sound of rain droplets pattering against the airport's glass façade a constant reminder of the chaos outside.",
       "turn": 0
     },
     {
       "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Arre bhai, yeh kya ho gaya! You came out of nowhere, cutting me off! My rickshaw, yaar, this is my rozi-roti! It's not my fault, I swear, you suddenly brake lagaya!",
+      "speaker": "Uncle Farooq",
+      "content": "Kya bhai sahab, yeh kya mazaaq hai? Meri beti ki zaroorat nahi hai aaj kisi ladke se.",
       "turn": 1
     },
     {
       "type": "narration",
-      "content": "CLOSE UP on a dent near the rear wheel arch of a gleaming black sedan, then PULL BACK to reveal Ahmed Malik, immaculately dressed but visibly seething. He gestures dismissively at Saleem, his eyes darting to his watch, the glint of the setting sun reflecting off his expensive timepiece as the heat makes his collar feel a little too tight.",
+      "content": "The rain drums against the glass as Noor folds her arms, her eyes fixed on the departures board. The dim airport lights cast a melancholic glow on her determined face. She glances over at Uncle Farooq, her father's stern expression reflected in her own, as the soft murmur of delayed flight announcements fills the air.",
       "turn": 1
     },
     {
       "type": "dialogue",
-      "speaker": "Ahmed Malik",
-      "content": "That is an utterly absurd accusation! You clearly swerved into my lane, Saleem, and now you have damaged my vehicle. I am already running critically late for an international flight, and this delay is simply unacceptable.",
+      "speaker": "Noor",
+      "content": "Bhai, tu kya kar raha hai? Yeh kyun le kar aaya hai?",
       "turn": 2
     },
     {
       "type": "narration",
-      "content": "The camera pans across the chaotic scene, the golden light of late afternoon casting long shadows behind the vehicles, as Constable Raza steps forward, his worn leather boots scuffling against the pavement, his eyes squinting with a mix of boredom and anticipation, his hand resting on the hip where his baton is holstered, ready to intervene.",
+      "content": "A sudden gust of wind blows, whipping Daniyal's hair into a frenzy as he nonchalantly adjusts his backpack, his fingers brushing against the worn leather straps. The dim airport lights cast long shadows across his face, accentuating his mischievous grin. The distant hum of the airport's speakers and the patter of raindrops on the pavement create a dissonant melody that contrasts with Daniyal's relaxed demeanor.",
       "turn": 2
     },
     {
       "type": "action",
-      "content": "I step forward, my hand resting on my hip, and my eyes fixed on the two arguing men, my voice firm as I prepare to take control of the situation, the crowd's noise dies down slightly as they wait to see what I'll do, I take a deep breath, ready to assert my authority",
-      "speaker": "Constable Raza",
+      "content": "Daniyal steps forward to confront the other party directly.",
+      "speaker": "Daniyal",
       "turn": 3,
       "metadata": {
         "action": {
           "type": "CONFRONT",
-          "actor": "Constable Raza"
+          "actor": "Daniyal"
         }
       }
     },
     {
       "type": "narration",
-      "content": "The camera pans to Uncle Jameel, who is standing at the edge of the crowd, his eyes wide with excitement as he watches the confrontation unfold, the golden light of the late afternoon sun casting a dramatic glow on his face. His hands are clasped together in front of him, and he takes a step forward, his body language screaming to be involved in the drama. The air is thick with tension as he opens his mouth to speak, the murmurs of the crowd dying down in anticipation of his words.",
+      "content": "The camera pans across the rain-soaked airport, the sound of droplets hitting the pavement a rhythmic accompaniment to the tension building between Noor and Daniyal. Hamza's hands fidget nervously in his pocket as he stands frozen, his eyes darting between the two. A faint hum of fluorescent lights and the distant muffled announcements from the airport's PA system create a sense of disorientation, and Hamza's anxious breathing is the only sound that breaks the silence.",
       "turn": 3
     },
     {
       "type": "dialogue",
-      "speaker": "Uncle Jameel",
-      "content": "Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole thing, and I think I can help you both, my friend in the police department will vouch for me",
+      "speaker": "Hamza",
+      "content": "Bhai sahab, yeh flight kaise delay ho gaya hai? Sab log isse wait kar rahe hain.",
       "turn": 4
     },
     {
       "type": "narration",
-      "content": "The camera zooms in on Constable Raza's stern face, his eyes narrowing as he surveys the scene, the golden light of the setting sun casting a glow on his worn uniform. The air is thick with tension, the sound of horns honking and people shouting filling the air as the crowd grows larger. With a deep breath, Constable Raza takes a step forward, his hand resting on his hip, ready to take control of the situation.",
+      "content": "The dim airport lights cast a faint glow on Noor's determined face as she turns to Hamza, her eyes narrowing slightly as she scrutinizes the book in his hand. The soft patter of raindrops on the roof above creates a soothing melody, but her voice is laced with a hint of wariness as she asks, 'What took you so long, Hamza?' Her fingers are clasped together, a gentle pressure that betrays the tension simmering beneath her calm exterior.",
       "turn": 4
     },
     {
-      "type": "action",
-      "content": "I step forward, holding up my hands to quiet the crowd, and firmly tell Saleem and Ahmed Malik to stop arguing, my eyes scanning the scene to take in all the details.",
-      "speaker": "Constable Raza",
-      "turn": 5,
-      "metadata": {
-        "action": {
-          "type": "INTERVENE",
-          "actor": "Constable Raza"
-        }
-      }
-    },
-    {
-      "type": "narration",
-      "content": "A tight shot on Ahmed Malik's face reveals a muscle twitching in his jaw, his eyes narrowed as he cuts Constable Raza off mid-sentence. He checks his watch again, a gesture of profound impatience. The ambient noise of honking horns and murmuring crowd seems to amplify his rising frustration.",
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Arey, bhai sahab, yeh to thik hai nahi? Aapki beti ko Canada jaane se rokne ke liye aaya hai, lekin yeh to sirf ek book hai!",
       "turn": 5
     },
     {
-      "type": "dialogue",
-      "speaker": "Ahmed Malik",
-      "content": "This is completely unacceptable! Do you understand the gravity of this situation? I am on an extremely tight schedule for an international flight, and now my bespoke automobile is marred.",
-      "turn": 6
-    },
-    {
       "type": "narration",
-      "content": "A bead of sweat trickles down Saleem's temple, reflecting the harsh afternoon sun. His eyes dart between the furious Ahmed Malik and the impassive Constable Raza, the weight of his family's survival pressing down on him, visible in his slumped shoulders amidst the growing, impatient crowd.",
-      "turn": 6
-    },
-    {
-      "type": "dialogue",
-      "speaker": "Saleem",
-      "content": "Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than your big gaadi, yaar. Please, I have nothing, my family depends on me.",
-      "turn": 7
-    },
-    {
-      "type": "narration",
-      "content": "Constable Raza's patience snaps. He strides purposefully towards",
-      "turn": 7
+      "content": "The camera pans across the crowded terminal, the soft hum of fluorescent lights overhead casting an unforgiving glow on the anxious faces around Noor. As Uncle Farooq steps forward, his eyes narrow behind wire-rimmed glasses, his thick eyebrows furrowed in displeasure. The sound of rain pattering against the large windows creates a discordant melody, punctuated by the soft murmur of passengers checking their boarding passes.",
+      "turn": 5
     },
     {
       "type": "action",
-      "content": "Constable Raza carefully examines the scene, inspecting every detail, taking control of the moment.",
-      "speaker": "Constable Raza",
-      "turn": 8,
+      "content": "Uncle Farooq turns and leaves the scene.",
+      "speaker": "Uncle Farooq",
+      "turn": 6,
       "metadata": {
         "action": {
-          "type": "INVESTIGATE",
-          "actor": "Constable Raza"
+          "type": "EXIT_SCENE",
+          "actor": "Uncle Farooq"
         }
       }
     },
     {
       "type": "narration",
-      "content": "A close-up on Ahmed's expensive watch, ticking relentlessly, then his eyes dart from the constable to the growing crowd, his face a mask of escalating frustration. He clutches his phone, clearly calculating the shrinking window to his flight. The harsh afternoon sun glints off his brow, highlighting his desperation.",
-      "turn": 8
+      "content": "The camera zooms in on Hamza's sweaty palms as he nervously fidgets with the book in his hands, the dim airport lights casting an eerie glow on his face. Noor's skeptical gaze lingers on him, her eyes narrowing as she leans in, her hair slightly mussed from the humid air. The faint hum of the airport's fluorescent lights provides a tense background hum, underscoring the mounting awkwardness between them.",
+      "turn": 6
     },
     {
       "type": "dialogue",
-      "speaker": "Ahmed Malik",
-      "content": "This is absolutely unacceptable! Do you comprehend the critical nature of my international flight, which I am now undeniably late for, all while my S-Class sits here with such appalling damage? I expect immediate resolution, as every second counts towards missing my connection.",
-      "turn": 9
+      "speaker": "Hamza",
+      "content": "Bhai sahab, yeh kya baat hai? Kyun aapne yeh baat keh di? Main to sirf us book ko vapas karne aaya tha. Kya aapke paas koi masla hai? Kya maine kuch galat kiya hai?",
+      "turn": 7
     },
     {
       "type": "narration",
-      "content": "Constable Raza, having assessed the damage and the escalating tempers, finally makes a decision, his stern gaze silencing both men. Ahmed Malik, fuming but with no other recourse, grudgingly dials a number on his phone, his international trip now undoubtedly jeopardized. Saleem, shoulders slumped but clutching the few rupees Raza has extracted from Ahmed as a gesture of goodwill, begins to push his battered rickshaw to the side of the road, the crowd slowly dispersing as the afternoon sun casts long shadows over the bustling street. The constable stands for a moment, watching them both, before turning to walk away, the sounds of the city quickly swallowing the echo of the recent dispute.",
+      "content": "As Noor's voice fills the humid airport air, the dim airport lights cast a faint glow on her determined expression, her hands clasped tightly together in her lap. The sound of rain pattering against the large glass windows behind her creates a sense of urgency, while her eyes flash with a mix of annoyance and sadness. The camera pans across her face, the light catching the faint hint of tears welling up in her eyes.",
+      "turn": 7
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Kya aapne aisi cheezein seekh kar rakhi hain, ki main apni gaadi ko rokein? Maine aapko kabhi kuch bhi nahi kaha tha, lekin aapne mujhe Canada bhejna seekha hai.",
+      "turn": 8
+    },
+    {
+      "type": "narration",
+      "content": "Daniyal saunters towards the group, his hands stuffed deep into the pockets of his worn jeans. The dim airport lights cast a warm glow on his smirking face as he leans against a pillar, his voice low and smooth, like a summer breeze on a Karachi evening. The distant rumble of thunder outside and the muffled chatter of passengers waiting on the delayed flights provide a background hum, like a restless insect buzzing in the corner.",
+      "turn": 8
+    },
+    {
+      "type": "action",
+      "content": "I walk over to Hamza and Noor, placing a calming hand on Hamza's shoulder. 'Bhai sahab, chalo, thoda relax karo. Yeh sab hi tension hai.' I glance at Noor, trying to reassure her with a gentle smile.",
+      "speaker": "Daniyal",
       "turn": 9,
+      "metadata": {
+        "action": {
+          "type": "INTERVENE",
+          "actor": "Daniyal"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "As Noor's gaze lingers on Daniyal's hand still resting on Hamza's shoulder, the airport's fluorescent lights hum in the background, casting an artificial glow on the trio's tense faces. The rain outside intensifies, drumming against the windows in a relentless beat. Noor's eyes narrow slightly, her fingers instinctively clenched into a tight fist in her pocket, as she prepares to speak.",
+      "turn": 9
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Bhai sahab, aapne toh sirf ek book vapas karne aaya tha, lekin aapke paas koi aur cheezein thi? Aapne mujhe itni si baat ke liye Canada bhejna seekha hai, lekin kya aapne socha tha ki main aapko pata hai ki hamne apni gaadi ko rokee hai? Aapne toh sirf apni aakarshit karne ki koshish ki hai!",
+      "turn": 10
+    },
+    {
+      "type": "narration",
+      "content": "The camera lingers on Hamza's flustered expression, his eyes darting back and forth as he fidgets with the book's cover, releasing a faint scent of leather into the damp airport air. The dim airport lights cast long shadows behind him, while the sound of raindrops pattering against the windows creates a sense of urgency. As he opens his mouth to respond, his voice trembles ever so slightly, betraying his composure.",
+      "turn": 10
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Hamza",
+      "content": "Noor, main toh sirf teri wajah se chinta mehsoos kar raha hoon. Mainne kabhi bhi teri baat ko ignore nahin kiya. Yeh sab galat hai, main tujhe sach mein pyaar karta hoon, aur maine kabhi bhi tera Canada bhejna seekha nahin.",
+      "turn": 11
+    },
+    {
+      "type": "narration",
+      "content": "The dim airport lights cast long shadows across Uncle Farooq's stern face, his eyes narrowing as he watches the unfolding scene with growing unease. The distant hum of delayed flights and the patter of rain against the terminal's windows create a tense atmosphere. His hands are clasped behind his back, a habitual gesture betraying his underlying anxiety as he prepares to intervene.",
+      "turn": 11
+    },
+    {
+      "type": "action",
+      "content": "I walk closer to Hamza and Noor, my eyes fixed on the book in Hamza's hand. It's a worn-out copy of a novel, its pages dog-eared and creased. I take a closer look, my mind racing with possibilities.",
+      "speaker": "Uncle Farooq",
+      "turn": 12,
+      "metadata": {
+        "action": {
+          "type": "INVESTIGATE",
+          "actor": "Uncle Farooq"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "The camera lingers on Noor's face, her eyes narrowing slightly as she raises an eyebrow, her fingers drumming a staccato beat on the armrest of her chair. The fluorescent lights above flicker, casting an eerie glow on the rain-soaked tarmac outside, while the sound of distant thunder rumbles through the airport. Noor's voice takes on a measured tone, a subtle warning that she's ready to defend herself.",
+      "turn": 12
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Bhai sahab, aapne mujhe itni si baat ke liye Canada bhejna seekha hai, lekin aapne mujhe kabhi nahin puchha tha ki main apne career ke liye aaya hu. Aapke pas toh sirf ek book hai, lekin maine apne sapne aur aapke na hone se pehle se kuch aur sapne kheench liye hain.",
+      "turn": 13
+    },
+    {
+      "type": "narration",
+      "content": "Uncle Farooq's eyes narrow slightly as he scrutinizes the worn-out novel in Hamza's hand, the dim airport lights casting an unforgiving glare on his stern expression. His hands are clasped behind his back, exuding an air of quiet authority, as he takes a step closer to Hamza and Noor. The sound of distant thunder rumbles through the airport, echoing the tension in the air.",
+      "turn": 13
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Uncle Farooq",
+      "content": "Noor, beta, main aapki baat samajh gaya, lekin main aapke papa kee zaroorat hai. Aap kyun aapke career ke liye Canada jaanna chahti hain?",
+      "turn": 14
+    },
+    {
+      "type": "narration",
+      "content": "The camera zooms in on Hamza's anxious face, his hands fidgeting in his pockets as he tries to calm himself down. The dim airport lights cast a warm glow on his features, and the sound of raindrops pounding on the airfield roof creates a soothing melody in the background. Hamza's eyes lock onto Noor, his words trembling as he takes a step closer to her.",
+      "turn": 14
+    },
+    {
+      "type": "action",
+      "content": "Maine ek aisi cheez khariji ki jo meri baat ko zyada zaroorat hai. Maine ek check kiya aur unhen diya, \"Noor, mera dil deta hai. Mere paas bas yeh ek cheez hai jo main tujhse chahta hu. Meri zindagi ke liye yeh sahi hai.\"",
+      "speaker": "Hamza",
+      "turn": 15,
+      "metadata": {
+        "action": {
+          "type": "MAKE_PAYMENT",
+          "actor": "Hamza"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "Uncle Farooq takes a step closer, the dim airport lights casting a golden glow on his stern face, his eyes squinting as he scrutinizes the worn-out novel in Hamza's hand. The sound of rain pattering on the airport's metal roof echoes through the air, punctuating the tense silence. His hands, knotted into fists, hover inches from Hamza's face, the air thick with unspoken warning.",
+      "turn": 15
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Uncle Farooq",
+      "content": "Noor, beta, ab samajh gaya ki hamara beta aapki zaroorat hai. Lekin maine dekh liya ki aapne hamare liye kuchh bhi nahin kiya. Aapne hamare dil par hawa nahin lagai.",
+      "turn": 16
+    },
+    {
+      "type": "narration",
+      "content": "As the dim airport lights flicker in the downpour, Noor's eyes narrow, her fingers instinctively tightening around the straps of her suitcase, her gaze drifting to Hamza, who stands frozen, the book still clutched in his hand, the sound of raindrops pattering against the pavement the only accompaniment to the palpable tension between them.",
+      "turn": 16
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Bhai sahab, aap yeh kyun kar rahay hain? Main aapke saath se doori se guzar rahi thi, aur aapne mujhe kabhi nahin puchha tha ki main aapke dil ke liye kayi dard pa rahi thi. Aapke paas to pata tha ki main Canada chali ja rahi hoon, lekin aapne mujhe kabhi nahin puchha tha.",
+      "turn": 17
+    },
+    {
+      "type": "narration",
+      "content": "The camera zooms in on Hamza's sweaty palms as he nervously fidgets with the straps of his backpack. Low-key lighting casts a dim glow on his anxious face, accentuating the deep creases between his eyebrows. In the background, the sound of distant thunder rumbles ominously, matching Hamza's frantic heartbeat.",
+      "turn": 17
+    },
+    {
+      "type": "action",
+      "content": "Hamza rushes to the airport's speakers and presses the emergency button, shouting 'Attention, ismein koi shayad yeh janta hai ki hum yeh raat pahle kaam karte the, ismein humein ek naya mauka hai?' as the loudspeaker echoes through the airport.",
+      "speaker": "Hamza",
+      "turn": 18,
+      "metadata": {
+        "action": {
+          "type": "TAKE_DECISIVE_ACTION",
+          "actor": "Hamza"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "As the airport's speakers crackle with Hamza's frantic announcement, Daniyal's eyes widen in a mix of alarm and amusement, his hands instinctively rising to his mouth as if to stifle a laugh. The overhead lights cast an eerie glow on his face, illuminating the faint stubble on his chin. The muffled sound of whispers and murmurs from the crowd provides a stark contrast to Hamza's desperate shout, while the scent of wet earth and rain-soaked concrete wafts through the air.",
+      "turn": 18
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Daniyal",
+      "content": "Bhai sahab, kya aapki ye koshish hai ki main usse yeh samajhne do ki aap abhi bhi usse pyaar karte hain? Aapne kabhi bhi yeh nahi kaha ki aap usse chhod chuke hain.",
+      "turn": 19
+    },
+    {
+      "type": "narration",
+      "content": "As the tension hangs in the air, the dim airport lights dance across Noor's determined face, casting a shadow on her left cheekbone. Her fingers drum a staccato beat on the armrest of the chair, a testament to her pent-up emotions. The soft hum of the airport's speakers and the patter of rain outside create a disorienting symphony, but Noor's eyes remain fixed intently on Daniyal, her expression a mix of shock and unease.",
+      "turn": 19
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Haan, kya zaroorat hai? Aapke dil tak hum toh abhi tak nahin pahunche. Main aapke dil ke liye kayi chunautiyon ka saamna karne gayi thi, lekin aapne kabhi nahin puchha tha ki main aapke dil ke liye kayi dard rahi, bhai sahab. Ab, aapne kya kehne ke liye aaya hai?",
+      "turn": 20
+    },
+    {
+      "type": "narration",
+      "content": "As Daniyal steps forward, the dim airport lights dance across the water droplets on his jacket, illuminating his sheepish grin. His hands rest in his pockets, fingers drumming an uncertain rhythm. The sound of distant thunder rumbles through the airport, a constant reminder of the storm brewing between the characters.",
+      "turn": 20
+    },
+    {
+      "type": "action",
+      "content": "Daniyal calls for help, reaching out to bring someone to the scene.",
+      "speaker": "Daniyal",
+      "turn": 21,
+      "metadata": {
+        "action": {
+          "type": "SUMMON_HELP",
+          "actor": "Daniyal"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "The camera pans to Uncle Farooq, standing in the shadows, his eyes fixed intently on the scene unfolding before him, the warm glow of the airport's fluorescent lights casting an ominous shadow on his face as the steady patter of the rain outside creates a sense of urgency. His hands are clenched into fists, a testament to his growing unease. The air is thick with tension as he takes a step forward, his eyes locked on Hamza and Noor.",
+      "turn": 21
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Uncle Farooq",
+      "content": "Bhai sahab, tum yeh kya kar rahe ho? Tumne kabhi bhi yeh nahi kaha ki tum Noor se chhod chuke ho. Main ab yeh nahin dekh saktaa ki tum hamaare ghar ke liye kya zaroorat hai. Tumne Noor ko pyaar kiya, ab tum usey kabool karne ke liye aa gaye ho?",
+      "turn": 22
+    },
+    {
+      "type": "narration",
+      "content": "The camera pans to Noor, her eyes downcast, hands fidgeting with the strap of her carry-on luggage, as she stands under the airport's dimly lit exit signs. The rain patters against the glass above, casting a melancholic rhythm.",
+      "turn": 22
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Bhai sahab, tumne kabhi bhi yeh nahi kaha ki tum meri zaroorat mein kabhi bhi nahin thi? Mainne kabhi kuch bhi nahin kaha, lekin tumne kabhi bhi yeh nahin kaha ki tum mujhe chhod chuke ho. Ab kya hoga?",
+      "turn": 23
+    },
+    {
+      "type": "narration",
+      "content": "The security lights of the airport's terminal cast a dim glow on Hamza's anxious face as he shifts his weight from one foot to the other, his hands clenched into fists inside his pockets. The sound of raindrops pattering against the glass walls of the waiting area creates a sense of oppressive urgency. As Hamza's eyes dart towards Noor, the dim lighting accentuates the desperate hope etched on his features.",
+      "turn": 23
+    },
+    {
+      "type": "action",
+      "content": "Hamza proposes terms to resolve the situation.",
+      "speaker": "Hamza",
+      "turn": 24,
+      "metadata": {
+        "action": {
+          "type": "NEGOTIATE",
+          "actor": "Hamza"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "content": "The rain drums against the airport's roof as Noor, her eyes fixed on Hamza, takes a step forward, her right hand clenched into a fist, her left hand absently smoothing the sleeve of her jacket. The fluorescent lights overhead cast a cold glow on her face, her dark hair a damp tangle down her back. The hum of the airport's announcements provides a distant background hum, a stark contrast to the intense moment unfolding before the camera.",
+      "turn": 24
+    },
+    {
+      "type": "dialogue",
+      "speaker": "Noor",
+      "content": "Tumne kabhi bhi yeh nahi kaha ki tum mere liye khush ho, Hamza. Tumne kabhi bhi yeh nahi kaha ki tum meri zaroorat mein kabhi bhi na ho. Main yeh pata lagana chahti hoon ki vah sach me meri zaroorat mein nahin tha.",
+      "turn": 25
+    },
+    {
+      "type": "narration",
+      "content": "As the rain slows to a drizzle, Hamza takes a deep breath and opens his heart, revealing his true feelings to Noor. With tears streaming down her face, she finally understands that he never moved on and has been waiting for her all along. Daniyal, the well-meaning but clumsy friend, looks on in relief as the truth is finally revealed. Noor's father, Uncle Farooq, storms back onto the scene, but it's too late – the love between Hamza and Noor has been rekindled. As the airport's speakers announce the flight's departure, Hamza and Noor share a tender kiss, defying the odds and embracing a second chance. The camera pans out, capturing the rain-soaked airport, the sound of sobbing, and the faint smile on Daniyal's face.",
+      "turn": 25,
       "metadata": {
         "conclusion": true
       }
     }
   ],
   "conclusion": {
-    "reason": "Constable Raza, having assessed the damage and the escalating tempers, finally makes a decision, his stern gaze silencing both men. Ahmed Malik, fuming but with no other recourse, grudgingly dials a number on his phone, his international trip now undoubtedly jeopardized. Saleem, shoulders slumped but clutching the few rupees Raza has extracted from Ahmed as a gesture of goodwill, begins to push his battered rickshaw to the side of the road, the crowd slowly dispersing as the afternoon sun casts long shadows over the bustling street. The constable stands for a moment, watching them both, before turning to walk away, the sounds of the city quickly swallowing the echo of the recent dispute.",
-    "final_turn": 9,
-    "actions_completed": 3,
+    "reason": "As the rain slows to a drizzle, Hamza takes a deep breath and opens his heart, revealing his true feelings to Noor. With tears streaming down her face, she finally understands that he never moved on and has been waiting for her all along. Daniyal, the well-meaning but clumsy friend, looks on in relief as the truth is finally revealed. Noor's father, Uncle Farooq, storms back onto the scene, but it's too late – the love between Hamza and Noor has been rekindled. As the airport's speakers announce the flight's departure, Hamza and Noor share a tender kiss, defying the odds and embracing a second chance. The camera pans out, capturing the rain-soaked airport, the sound of sobbing, and the faint smile on Daniyal's face.",
+    "final_turn": 25,
+    "actions_completed": 8,
     "world_state": {
       "confrontation_occurred": true,
+      "Uncle Farooq_departed": true,
       "intervention_made": true,
-      "investigation_done": true
+      "investigation_done": true,
+      "payment_made": true,
+      "decisive_action_taken": true,
+      "help_summoned": true,
+      "negotiation_proposed": true
     }
   },
   "metadata": {
-    "total_turns": 9,
-    "conclusion_reason": "Constable Raza, having assessed the damage and the escalating tempers, finally makes a decision, his stern gaze silencing both men. Ahmed Malik, fuming but with no other recourse, grudgingly dials a number on his phone, his international trip now undoubtedly jeopardized. Saleem, shoulders slumped but clutching the few rupees Raza has extracted from Ahmed as a gesture of goodwill, begins to push his battered rickshaw to the side of the road, the crowd slowly dispersing as the afternoon sun casts long shadows over the bustling street. The constable stands for a moment, watching them both, before turning to walk away, the sounds of the city quickly swallowing the echo of the recent dispute.",
-    "distinct_actions": 3,
+    "total_turns": 25,
+    "conclusion_reason": "As the rain slows to a drizzle, Hamza takes a deep breath and opens his heart, revealing his true feelings to Noor. With tears streaming down her face, she finally understands that he never moved on and has been waiting for her all along. Daniyal, the well-meaning but clumsy friend, looks on in relief as the truth is finally revealed. Noor's father, Uncle Farooq, storms back onto the scene, but it's too late – the love between Hamza and Noor has been rekindled. As the airport's speakers announce the flight's departure, Hamza and Noor share a tender kiss, defying the odds and embracing a second chance. The camera pans out, capturing the rain-soaked airport, the sound of sobbing, and the faint smile on Daniyal's face.",
+    "distinct_actions": 8,
     "actions_taken": [
       "CONFRONT",
+      "EXIT_SCENE",
       "INTERVENE",
-      "INVESTIGATE"
+      "INVESTIGATE",
+      "MAKE_PAYMENT",
+      "TAKE_DECISIVE_ACTION",
+      "SUMMON_HELP",
+      "NEGOTIATE"
     ],
     "world_state": {
       "confrontation_occurred": true,
+      "Uncle Farooq_departed": true,
       "intervention_made": true,
-      "investigation_done": true
+      "investigation_done": true,
+      "payment_made": true,
+      "decisive_action_taken": true,
+      "help_summoned": true,
+      "negotiation_proposed": true
     },
     "emotion_history": [
       {
         "turn": 1,
-        "character": "Saleem",
-        "emotion": "panicked"
+        "character": "Uncle Farooq",
+        "emotion": "doubt"
       },
       {
         "turn": 2,
-        "character": "Ahmed Malik",
-        "emotion": "Frustration"
+        "character": "Noor",
+        "emotion": "caution"
       },
       {
         "turn": 3,
-        "character": "Constable Raza",
-        "emotion": "irritation"
+        "character": "Daniyal",
+        "emotion": "awkwardness and concern"
       },
       {
         "turn": 4,
-        "character": "Uncle Jameel",
-        "emotion": "concern"
+        "character": "Hamza",
+        "emotion": "curious"
       },
       {
         "turn": 5,
-        "character": "Constable Raza",
-        "emotion": "irritation"
+        "character": "Noor",
+        "emotion": "anger"
       },
       {
         "turn": 6,
-        "character": "Ahmed Malik",
-        "emotion": "Exasperation, intense urgency, controlled fury."
+        "character": "Uncle Farooq",
+        "emotion": "concern"
       },
       {
         "turn": 7,
-        "character": "Saleem",
-        "emotion": "Extreme panic and defensive fear"
+        "character": "Hamza",
+        "emotion": "desperation"
       },
       {
         "turn": 8,
-        "character": "Constable Raza",
-        "emotion": "frustration"
+        "character": "Noor",
+        "emotion": "anger"
       },
       {
         "turn": 9,
-        "character": "Ahmed Malik",
-        "emotion": "Impatient, exasperated, entitled"
+        "character": "Daniyal",
+        "emotion": "concern"
+      },
+      {
+        "turn": 10,
+        "character": "Noor",
+        "emotion": "anger"
+      },
+      {
+        "turn": 11,
+        "character": "Hamza",
+        "emotion": "desperation"
+      },
+      {
+        "turn": 12,
+        "character": "Uncle Farooq",
+        "emotion": "concern"
+      },
+      {
+        "turn": 13,
+        "character": "Noor",
+        "emotion": "anger"
+      },
+      {
+        "turn": 14,
+        "character": "Uncle Farooq",
+        "emotion": "chinta"
+      },
+      {
+        "turn": 15,
+        "character": "Hamza",
+        "emotion": "desperation"
+      },
+      {
+        "turn": 16,
+        "character": "Uncle Farooq",
+        "emotion": "protection"
+      },
+      {
+        "turn": 17,
+        "character": "Noor",
+        "emotion": "anger"
+      },
+      {
+        "turn": 18,
+        "character": "Hamza",
+        "emotion": "desperation"
+      },
+      {
+        "turn": 19,
+        "character": "Daniyal",
+        "emotion": "concern"
+      },
+      {
+        "turn": 20,
+        "character": "Noor",
+        "emotion": "confusion"
+      },
+      {
+        "turn": 21,
+        "character": "Daniyal",
+        "emotion": "dil chaahta hai ki isse khush karo"
+      },
+      {
+        "turn": 22,
+        "character": "Uncle Farooq",
+        "emotion": "krodh aur shok"
+      },
+      {
+        "turn": 23,
+        "character": "Noor",
+        "emotion": "shararat aur sharm"
+      },
+      {
+        "turn": 24,
+        "character": "Hamza",
+        "emotion": "desperation"
+      },
+      {
+        "turn": 25,
+        "character": "Noor",
+        "emotion": "shararat aur sharm"
       }
     ],
     "character_memories": {
-      "Saleem": {
+      "Hamza": {
         "knowledge": [
-          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+          "[FACT] CONFRONT by Daniyal | confrontation occurred",
+          "[FACT] EXIT_SCENE by Uncle Farooq | confrontation occurred | Uncle Farooq departed",
+          "[FACT] INTERVENE by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made",
+          "[FACT] INVESTIGATE by Uncle Farooq | confrontation occurred | Uncle Farooq departed | intervention made | investigation done",
+          "I performed MAKE_PAYMENT at turn 15",
+          "[FACT] MAKE_PAYMENT by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made",
+          "I performed TAKE_DECISIVE_ACTION at turn 18",
+          "[FACT] TAKE_DECISIVE_ACTION by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken",
+          "[FACT] SUMMON_HELP by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned",
+          "I performed NEGOTIATE at turn 24",
+          "[FACT] NEGOTIATE by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned | negotiation proposed"
         ],
         "inventory": [],
-        "emotional_state": "Extreme panic and defensive fear",
+        "emotional_state": "desperation",
         "perceptions": {},
         "recent_events": [
-          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
-          "T5: Constable Raza performed INTERVENE",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
-          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
-          "T8: Constable Raza performed INVESTIGATE",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
-          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+          "T20: Noor said: \"Haan, kya zaroorat hai? Aapke dil tak hum toh abhi tak nahin pahunche. Main aapk\"",
+          "T21: Daniyal performed SUMMON_HELP",
+          "[FACT] SUMMON_HELP by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned",
+          "T22: Uncle Farooq said: \"Bhai sahab, tum yeh kya kar rahe ho? Tumne kabhi bhi yeh nahi kaha ki tum Noor s\"",
+          "T23: Noor said: \"Bhai sahab, tumne kabhi bhi yeh nahi kaha ki tum meri zaroorat mein kabhi bhi na\"",
+          "T24: Hamza performed NEGOTIATE",
+          "[FACT] NEGOTIATE by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned | negotiation proposed",
+          "T25: Noor said: \"Tumne kabhi bhi yeh nahi kaha ki tum mere liye khush ho, Hamza. Tumne kabhi bhi \""
         ]
       },
-      "Ahmed Malik": {
+      "Noor": {
         "knowledge": [
-          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+          "[FACT] CONFRONT by Daniyal | confrontation occurred",
+          "[FACT] EXIT_SCENE by Uncle Farooq | confrontation occurred | Uncle Farooq departed",
+          "[FACT] INTERVENE by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made",
+          "[FACT] INVESTIGATE by Uncle Farooq | confrontation occurred | Uncle Farooq departed | intervention made | investigation done",
+          "[FACT] MAKE_PAYMENT by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made",
+          "[FACT] TAKE_DECISIVE_ACTION by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken",
+          "[FACT] SUMMON_HELP by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned",
+          "[FACT] NEGOTIATE by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned | negotiation proposed"
         ],
         "inventory": [],
-        "emotional_state": "Impatient, exasperated, entitled",
+        "emotional_state": "shararat aur sharm",
         "perceptions": {},
         "recent_events": [
-          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
-          "T5: Constable Raza performed INTERVENE",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
-          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
-          "T8: Constable Raza performed INVESTIGATE",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
-          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+          "T20: Noor said: \"Haan, kya zaroorat hai? Aapke dil tak hum toh abhi tak nahin pahunche. Main aapk\"",
+          "T21: Daniyal performed SUMMON_HELP",
+          "[FACT] SUMMON_HELP by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned",
+          "T22: Uncle Farooq said: \"Bhai sahab, tum yeh kya kar rahe ho? Tumne kabhi bhi yeh nahi kaha ki tum Noor s\"",
+          "T23: Noor said: \"Bhai sahab, tumne kabhi bhi yeh nahi kaha ki tum meri zaroorat mein kabhi bhi na\"",
+          "T24: Hamza performed NEGOTIATE",
+          "[FACT] NEGOTIATE by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned | negotiation proposed",
+          "T25: Noor said: \"Tumne kabhi bhi yeh nahi kaha ki tum mere liye khush ho, Hamza. Tumne kabhi bhi \""
         ]
       },
-      "Constable Raza": {
+      "Daniyal": {
         "knowledge": [
           "I performed CONFRONT at turn 3",
-          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
-          "I performed INTERVENE at turn 5",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "I performed INVESTIGATE at turn 8",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+          "[FACT] CONFRONT by Daniyal | confrontation occurred",
+          "[FACT] EXIT_SCENE by Uncle Farooq | confrontation occurred | Uncle Farooq departed",
+          "I performed INTERVENE at turn 9",
+          "[FACT] INTERVENE by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made",
+          "[FACT] INVESTIGATE by Uncle Farooq | confrontation occurred | Uncle Farooq departed | intervention made | investigation done",
+          "[FACT] MAKE_PAYMENT by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made",
+          "[FACT] TAKE_DECISIVE_ACTION by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken",
+          "I performed SUMMON_HELP at turn 21",
+          "[FACT] SUMMON_HELP by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned",
+          "[FACT] NEGOTIATE by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned | negotiation proposed"
         ],
         "inventory": [],
-        "emotional_state": "frustration",
+        "emotional_state": "dil chaahta hai ki isse khush karo",
         "perceptions": {},
         "recent_events": [
-          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
-          "T5: Constable Raza performed INTERVENE",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
-          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
-          "T8: Constable Raza performed INVESTIGATE",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
-          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+          "T20: Noor said: \"Haan, kya zaroorat hai? Aapke dil tak hum toh abhi tak nahin pahunche. Main aapk\"",
+          "T21: Daniyal performed SUMMON_HELP",
+          "[FACT] SUMMON_HELP by Daniyal | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned",
+          "T22: Uncle Farooq said: \"Bhai sahab, tum yeh kya kar rahe ho? Tumne kabhi bhi yeh nahi kaha ki tum Noor s\"",
+          "T23: Noor said: \"Bhai sahab, tumne kabhi bhi yeh nahi kaha ki tum meri zaroorat mein kabhi bhi na\"",
+          "T24: Hamza performed NEGOTIATE",
+          "[FACT] NEGOTIATE by Hamza | confrontation occurred | Uncle Farooq departed | intervention made | investigation done | payment made | decisive action taken | help summoned | negotiation proposed",
+          "T25: Noor said: \"Tumne kabhi bhi yeh nahi kaha ki tum mere liye khush ho, Hamza. Tumne kabhi bhi \""
         ]
       },
-      "Uncle Jameel": {
+      "Uncle Farooq": {
         "knowledge": [
-          "[FACT] CONFRONT by Constable Raza | confrontation occurred",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done"
+          "[FACT] CONFRONT by Daniyal | confrontation occurred",
+          "I performed EXIT_SCENE at turn 6",
+          "[FACT] EXIT_SCENE by Uncle Farooq | confrontation occurred | Uncle Farooq departed",
+          "I performed INVESTIGATE at turn 12",
+          "[FACT] INVESTIGATE by Uncle Farooq | confrontation occurred | Uncle Farooq departed | intervention made | investigation done"
         ],
         "inventory": [],
-        "emotional_state": "concern",
+        "emotional_state": "krodh aur shok",
         "perceptions": {},
         "recent_events": [
-          "T4: Uncle Jameel said: \"Arre bhai, Saleem, Ahmed sahab, thoda shaanti se baat karein, I saw the whole th\"",
-          "T5: Constable Raza performed INTERVENE",
-          "[FACT] INTERVENE by Constable Raza | confrontation occurred | intervention made",
-          "T6: Ahmed Malik said: \"This is completely unacceptable! Do you understand the gravity of this situation\"",
-          "T7: Saleem said: \"Arre bhai, dekho, it's just a small scratch! My rickshaw is more broken than you\"",
-          "T8: Constable Raza performed INVESTIGATE",
-          "[FACT] INVESTIGATE by Constable Raza | confrontation occurred | intervention made | investigation done",
-          "T9: Ahmed Malik said: \"This is absolutely unacceptable! Do you comprehend the critical nature of my int\""
+          "T5: Noor said: \"Arey, bhai sahab, yeh to thik hai nahi? Aapki beti ko Canada jaane se rokne ke l\"",
+          "T6: Uncle Farooq performed EXIT_SCENE",
+          "[FACT] EXIT_SCENE by Uncle Farooq | confrontation occurred | Uncle Farooq departed",
+          "T12: Uncle Farooq performed INVESTIGATE",
+          "[FACT] INVESTIGATE by Uncle Farooq | confrontation occurred | Uncle Farooq departed | intervention made | investigation done",
+          "T14: Uncle Farooq said: \"Noor, beta, main aapki baat samajh gaya, lekin main aapke papa kee zaroorat hai.\"",
+          "T16: Uncle Farooq said: \"Noor, beta, ab samajh gaya ki hamara beta aapki zaroorat hai. Lekin maine dekh l\"",
+          "T22: Uncle Farooq said: \"Bhai sahab, tum yeh kya kar rahe ho? Tumne kabhi bhi yeh nahi kaha ki tum Noor s\""
         ]
       }
     }

@@ -18,7 +18,7 @@ class StoryConfig:
 
     max_consecutive_same_character: int = 2
 
-    # Action system
-    min_actions: int = 5
+    # Action system - min_actions is dynamically calculated as ~20% of max_turns
+    min_actions: int = 5  # Default for 25 turns, will be recalculated
     memory_buffer_size: int = 8
     

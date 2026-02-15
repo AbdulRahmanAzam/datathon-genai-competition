@@ -147,7 +147,8 @@ def build_director_select_prompt(
     total = getattr(story_state, "total_turns", config.max_turns)
     distinct_actions = len(set(story_state.actions_taken))
     used_actions = sorted(set(story_state.actions_taken))
-    min_actions = max(5, total // 5)
+    # Scale min_actions proportionally: ~20% of total turns
+    min_actions = max(3, total // 5)
     remaining = total - story_state.current_turn
     phase = _get_phase(story_state.current_turn, total)
     phase_guide = _phase_guidance(phase)
@@ -241,6 +242,15 @@ AVAILABLE: {', '.join(available_characters)}
 
 Select the next character. Write cinematic narration (2-3 sentences):
 camera angles, lighting, body language, atmosphere.
+Narration must be unique and vivid — NEVER repeat the same narration twice.
+Describe specific visual details: what the character's hands are doing, their
+facial expression, the lighting, the sounds in the background.
+
+NARRATION STYLE:
+- Write narration in English (it's the camera direction / stage direction).
+- Make each narration UNIQUE — describe NEW visual details every turn.
+- Include at least one sensory detail (sound, light, texture, smell).
+- Reference the specific character who is about to speak.
 
 OUTPUT RULES (MANDATORY):
 - Return ONLY raw JSON. No backticks. No markdown. No prose.
@@ -273,9 +283,11 @@ def build_director_conclusion_prompt(story_state: StoryState, config) -> str:
     total = getattr(story_state, "total_turns", config.max_turns)
     distinct_actions = len(set(story_state.actions_taken))
     used_actions = sorted(set(story_state.actions_taken))
-    min_actions = max(5, total // 5)
+    # Scale min_actions proportionally: ~20% of total turns
+    min_actions = max(2, total // 5)
     remaining = total - story_state.current_turn
-    min_turns = max(3, int(total * 0.6))
+    # Conclusion can happen after 50% of turns (for movie-like pacing)
+    min_turns = max(3, total // 2)
 
     world = story_state.world_state or {}
     world_text = (

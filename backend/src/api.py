@@ -121,7 +121,8 @@ async def generate_story(req: GenerateRequest):
         }
 
         total_turns = config.max_turns
-        min_actions = max(2, total_turns // 5)
+        # Scale min_actions proportionally: ~20% of total turns
+        min_actions = max(3, total_turns // 5)
         config.min_actions = min_actions
 
         state = StoryState(
@@ -214,10 +215,17 @@ async def generate_story(req: GenerateRequest):
             if turn_num >= late_point and distinct_actions < min_actions:
                 force_act = True
 
+            endgame = remaining <= max(2, int(total_turns * 0.2))
+
+            # Endgame resolution push: force resolution-oriented actions
+            if endgame:
+                world = state.world_state or {}
+                has_resolution = any(world.get(k) for k in RESOLUTION_SIGNALS)
+                if not has_resolution:
+                    force_act = True
+
             if force_act and distinct_actions < min_actions:
                 suggested_action = _pick_suggested_action(state, action_system)
-
-            endgame = remaining <= max(2, int(total_turns * 0.2))
 
             # LLM speaker selection
             available = list(characters_agents.keys())
@@ -482,6 +490,7 @@ async def generate_story(req: GenerateRequest):
             should_conclude = False
             conclusion_reason = None
 
+            # Conclusion can happen after 50% of turns (for movie-like pacing)
             min_conclusion_turn = max(3, total_turns // 2)
             if state.current_turn >= config.max_turns:
                 should_conclude = True

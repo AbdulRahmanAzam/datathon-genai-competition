@@ -59,7 +59,8 @@ class DirectorAgent(BaseAgent):
         characters: list,
         total_turns: int,
     ) -> List[Dict[str, Any]]:
-        min_actions = max(5, total_turns // 5)
+        # Scale min_actions proportionally: ~20% of total turns
+        min_actions = max(3, total_turns // 5)
 
         prompt = build_arc_planning_prompt(
             seed_story=seed_story,
@@ -264,13 +265,41 @@ class DirectorAgent(BaseAgent):
                 if bt:
                     return bt
 
+        # Gather context for richer fallback
+        chars = list((story_state.character_profiles or {}).keys())
+        last_speaker = (
+            story_state.dialogue_history[-1].speaker
+            if story_state.dialogue_history
+            else None
+        )
+
         phase = _get_phase(turn, total)
+        # Rotate through varied fallbacks using turn number
         if phase == "setup":
-            return description[:200] if turn == 0 else "The characters survey the scene."
+            if turn == 0:
+                return description[:200]
+            setup_pool = [
+                f"The air is thick with anticipation as {chars[turn % len(chars)] if chars else 'the next character'} steps into the moment.",
+                f"A beat of silence hangs over the scene before the next voice cuts through.",
+                f"Eyes dart across the room. Everyone is measuring the situation.",
+            ]
+            return setup_pool[turn % len(setup_pool)]
         elif phase == "conflict":
-            return "Tension thickens as the confrontation deepens."
+            conflict_pool = [
+                f"The exchange grows heated. {last_speaker + ' stands firm, but the pressure is mounting.' if last_speaker else 'Voices rise as patience runs thin.'}",
+                f"Frustration crackles in the air — this confrontation is far from over.",
+                f"The balance of power shifts with every word. Something has to give.",
+                f"Tempers flare as the stakes become painfully clear.",
+                f"The scene tightens — no one is backing down.",
+            ]
+            return conflict_pool[turn % len(conflict_pool)]
         else:
-            return "The moment of truth — the situation must resolve."
+            resolution_pool = [
+                f"The moment of truth has arrived — someone must make the final move.",
+                f"The tension ebbs as the situation reaches its turning point.",
+                f"Everything has led to this. The scene hangs in the balance.",
+            ]
+            return resolution_pool[turn % len(resolution_pool)]
 
     # ════════════════════════════════════════════════════════════════
     #  CONCLUSION CHECK

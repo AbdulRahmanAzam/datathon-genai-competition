@@ -137,7 +137,8 @@ class NarrativeGraph:
         # ── Deterministic pacing rules ──────────────────────────────────
         distinct_actions = len(set(state.actions_taken))
         remaining = total - state.current_turn
-        min_actions = max(5, total // 5)
+        # Scale min_actions proportionally: ~20% of total turns
+        min_actions = max(3, total // 5)
         force_act = False
         suggested_action = None
 
@@ -187,8 +188,14 @@ class NarrativeGraph:
                 state, prefer_resolution=endgame
             )
 
-        # ── LLM-assisted speaker selection ──────────────────────────────
-        available = list(self.characters.keys())
+        # ── Filter out departed characters ───────────────────────────────
+        world = state.world_state or {}
+        available = [
+            name for name in self.characters.keys()
+            if not world.get(f"{name}_departed", False)
+        ]
+        if not available:
+            available = list(self.characters.keys())  # safety fallback
         next_speaker, narration = await self.director.select_next_speaker(
             state, available, force_act=force_act, endgame=endgame
         )
@@ -457,8 +464,10 @@ class NarrativeGraph:
         """
 
         total = state.total_turns or self.config.max_turns
-        min_actions = max(5, total // 5)
-        min_turns = max(3, int(total * 0.6))
+        # Scale min_actions proportionally: ~20% of total turns
+        min_actions = max(2, total // 5)
+        # Conclusion can happen after 50% of turns (for movie-like pacing)
+        min_turns = max(3, total // 2)
         distinct_actions = len(set(state.actions_taken))
 
         # hard stop — generate proper LLM conclusion
