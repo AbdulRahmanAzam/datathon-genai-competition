@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import config from '../config';
 import {
   FiClock, FiChevronLeft, FiUsers, FiMessageSquare, FiFilm,
   FiZap, FiTrash2, FiLoader, FiAlertCircle, FiPlay,
@@ -63,7 +64,7 @@ export default function HistoryPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/history');
+      const res = await fetch(`${config.apiUrl}/api/history`);
       if (!res.ok) throw new Error(`Server error ${res.status}`);
       const data = await res.json();
       setRuns(data.runs || []);
@@ -79,7 +80,7 @@ export default function HistoryPage() {
     setSelectedRun(run);
     setLoadingDetail(true);
     try {
-      const res = await fetch(`/api/history/${run.id}`);
+      const res = await fetch(`${config.apiUrl}/api/history/${run.id}`);
       if (!res.ok) throw new Error(`Server error ${res.status}`);
       const data = await res.json();
       setFullData(data);
@@ -94,7 +95,7 @@ export default function HistoryPage() {
   const deleteRun = async (e, runId) => {
     e.stopPropagation();
     try {
-      await fetch(`/api/history/${runId}`, { method: 'DELETE' });
+      await fetch(`${config.apiUrl}/api/history/${runId}`, { method: 'DELETE' });
       setRuns(prev => prev.filter(r => r.id !== runId));
       if (selectedRun?.id === runId) {
         setSelectedRun(null);

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import Navbar from '../components/Navbar';
+import config from '../config';
 import {
   FiPlay, FiLoader, FiChevronDown, FiChevronUp,
   FiUser, FiUsers, FiMessageSquare, FiZap, FiDatabase,
@@ -117,7 +118,7 @@ export default function LivePage() {
     abortRef.current = controller;
 
     try {
-      const res = await fetch('/api/generate', {
+      const res = await fetch(`${config.apiUrl}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
